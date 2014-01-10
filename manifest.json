@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+
+  "name": "Geocaching.com Friends Logs",
+  "description": "Shows your friends logs at the top of the window, so you don't need to View logbook>friends logs on every cache.",
+  "version": "0.0",
+
+  "content_scripts": [
+  {
+    "matches": ["<all_urls>"],
+    "js": ["jquery.js", "jquery.tmpl.js", "content_script.js"]
+  }],
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
