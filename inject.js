@@ -7,7 +7,7 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends) {
         if (response.status == "success") {
 
             if (response.pageInfo.rows > 0) {
-                var $newBody = $(document.createElement("TBODY"));
+                var $newBody = $(document.createElement("TBODYF")); //If we use tbody, the page will load the next content page right after this log
                 $.tmpl("tmplCacheLogRow", response.data).appendTo($newBody);
                 $newBody.find("a.tb_images").each(function () {
                     var $this = $(this);
@@ -18,7 +18,7 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends) {
                         titleFormat: function () { return $this.data('title'); }
                     });
                 });
-                $newBody.insertBefore($("#cache_logs_container")[0].firstChild);
+                $newBody.insertBefore($("#cache_logs_table")[0].firstChild);
             }
 
             isBusy = false;
