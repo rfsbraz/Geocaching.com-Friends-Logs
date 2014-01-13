@@ -11,6 +11,10 @@
     "js": ["content_script.js"]
   }],
 
+  "permissions": [
+    "storage"
+  ],
+
   "web_accessible_resources" : ["/inject.js"],
   
   "icons": { "16": "icon16.png",
