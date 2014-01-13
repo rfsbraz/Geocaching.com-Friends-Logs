@@ -1,7 +1,5 @@
 function loadLogbookPage(pageIdx, showPersonal, showFriends) {
 
-    isBusy = true;
-
     $.getJSON("/seek/geocache.logbook", { tkn: userToken, idx: pageIdx + 1, num: 10, sp: showPersonal, sf: showFriends, decrypt: decryptLogs },
     function (response) {
         if (response.status == "success") {
@@ -31,7 +29,6 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends) {
                 $("<h3></br>Logbook</h3>").insertBefore($("tbody"));
             }
 
-            isBusy = false;
         }
     });
 
