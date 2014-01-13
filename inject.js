@@ -7,10 +7,14 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends) {
             if (response.pageInfo.rows > 0) {
 
                 var logTbody = $("#cache_logs_table")[0].firstChild;
+
+                //This needs a unique class, otherwise insertBefore("tbody") would insert it before any tbody on this page
+                logTbody.nextSibling.className = "main_tbody";
+
                 var logContainer = $("#cache_logs_container")[0];
-                if(showPersonal){
+                if(showFriends){
                     $("<h3>Friends Logs</h3>").insertBefore(logContainer.firstChild);
-                } else if (showFriends){
+                } else if (showPersonal){
                     $("<h3>My Log</h3>").insertBefore(logContainer.firstChild);
                 }
 
@@ -26,7 +30,7 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends) {
                     });
                 });
 
-                $("<h3></br>Logbook</h3>").insertBefore($("tbody"));
+                $("<h3></br>Logbook</h3>").insertBefore($(".main_tbody"));
             }
 
         }
