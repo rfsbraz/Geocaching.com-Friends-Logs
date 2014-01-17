@@ -11,5 +11,12 @@ function injectScript(file, node, showFriendsLogs, showMyLogs, limit) {
 }
 
 chrome.storage.local.get(null, function(items) {
-    injectScript(chrome.extension.getURL('/inject.js'), 'body', items["showFriendsLogs"], items["showMyLogs"], items["limit"]);
+    // If we call the method with both showMyLogs and showFriendLogs false, the method just returns the logbook.
+    var showMyLogs = items["showMyLogs"];
+    var showFriendsLogs = items["showMyLogs"];
+
+    if !(showMyLogs === "false" && showFriendsLogs === "false") {
+        //only inject it if they aren't both false
+        injectScript(chrome.extension.getURL('/inject.js'), 'body', showMyLogs, showFriendsLogs, items["limit"]);
+    }
 });

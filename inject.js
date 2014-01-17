@@ -80,5 +80,4 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends, limit) {
 
 }
 
-
-loadLogbookPage(0, $("#inject").attr("showmylogs"), $("#inject").attr("showfriendslogs"), $("#inject").attr("limit"));
+loadLogbookPage(0, , , $("#inject").attr("limit"));
