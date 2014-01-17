@@ -53,6 +53,11 @@ function loadLogbookPage(pageIdx, showPersonal, showFriends, limit) {
                     }
 
                     var logs = $.tmpl("tmplCacheLogRow", response.data);
+
+                    //There is an issue of logs being loaded inside the images section, as a patch is better to remove them
+                    //https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/1
+                    $(logs).find("table").remove();
+                    
                     logs.insertBefore(logTbody);
                     logs.find("a.tb_images").each(function() {
                         var $this = $(this);
