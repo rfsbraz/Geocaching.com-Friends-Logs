@@ -10,7 +10,6 @@ function injectScript(file, node, showFriendsLogs, showMyLogs, limit) {
     th.appendChild(s);
 }
 
- chrome.storage.local.get(null, function(items) {
-	injectScript( chrome.extension.getURL('/inject.js'), 'body', items["showFriendsLogs"], items["showMyLogs"], items["limit"]);
- });
-
+chrome.storage.local.get(null, function(items) {
+    injectScript(chrome.extension.getURL('/inject.js'), 'body', items["showFriendsLogs"], items["showMyLogs"], items["limit"]);
+});
