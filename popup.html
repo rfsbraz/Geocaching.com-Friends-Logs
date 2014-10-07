@@ -2,21 +2,21 @@
 <html>
   <head>
     <title>Geocaching.com Friends Logs</title>
-    <style>
-      body {
-        min-width: 357px;
-        overflow-x: hidden;
-      }
-    </style>
     <script src="popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="square.css" rel="stylesheet">
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="icheck.min.js"></script>
+    <script src="init.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <h4>Geocaching.com Friends Logs</h4>
+    <h3 class="title">Geocaching.com Friends Logs</h3>
     <form action="">
       <input type="checkbox" id="own">Show my log</input><br>
       <input type="checkbox" id="friends">Show my friends logs</input><br>
       Friends logs limit 
-      <select id="limit">
+      <select class="limit" id="limit">
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -24,5 +24,10 @@
         <option value="100">100</option>
       </select>
     </form>
+
+    <div class="footer">
+          <a class="issues" href="https://github.com/rfsbraz/Geocaching.com-Friends-Logs" target="_blank">Report a problem</a>
+          <a class="rate" href="https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam" target="_blank">Rate it</a>
+    </div>
   </body>
 </html>

@@ -1,0 +1,42 @@
+body {
+    min-width: 357px;
+    min-height: 175px;
+    overflow-x: hidden;
+    background: rgb(247, 245, 239);
+    font-family: 'Open Sans', sans-serif;
+}
+
+.title {
+	width: center;
+	text-align: center;
+	font-size: 22px;
+}
+
+.footer {
+	position: fixed;
+	bottom: 5px;
+	height: 20px;
+	width: 100%;
+}
+
+.limit {
+	margin-top: 20px;
+}
+
+.issues {
+	position: relative;
+	float: right;
+	margin-right: 20px;
+	font-variant: small-caps;
+}
+
+.rate {
+	position: relative;
+	float: left;
+	margin-left: 0px;
+	font-variant: small-caps;
+}
+
+div.icheckbox_square {
+	margin-right: 10px;
+}

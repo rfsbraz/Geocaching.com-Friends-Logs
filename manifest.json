@@ -3,12 +3,13 @@
 
   "name": "Geocaching.com Friends Logs",
   "description": "Shows your friends logs at the top of the window, so you don't need to View logbook>friends logs on every cache.",
-  "version": "0.0.2",
+  "version": "1.0.0",
 
   "content_scripts": [
   {
-    "matches": ["http://www.geocaching.com/geocache/GC*"],
-    "js": ["content_script.js"]
+    "matches": ["http://www.geocaching.com/geocache/GC*", "http://*.geocaching.com/geocache/GC*"],
+    "css": ["square.css", "style.css"],
+    "js": [ "jquery-1.11.1.min.js", "icheck.min.js", "init.js","content_script.js"]
   }],
 
   "permissions": [
