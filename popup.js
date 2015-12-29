@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', function() {
   limit.val(5);
 
 
-  chrome.storage.local.get(null, function(items) {
+  chrome.storage.local.get(DEFAULT_VALUES, function(items) {
     if (typeof items["showFriendsLogs"] != 'undefined') {
       if (items["showFriendsLogs"]) {
         friends.iCheck('check');

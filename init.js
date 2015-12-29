@@ -5,3 +5,5 @@ $(document).ready(function() {
 		increaseArea: '20%' // optional
 	});
 });
+
+const DEFAULT_VALUES = {showFriendsLogs: true, showMyLogs: false, limit: 5};
