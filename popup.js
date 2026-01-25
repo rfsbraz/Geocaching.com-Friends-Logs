@@ -1,73 +1,52 @@
-window.addEventListener('DOMContentLoaded', function() {
-  var friends = $('#friends');
-  var own = $('#own');
-  var limit = $('#limit');
-  limit.val(5);
+/* global DEFAULT_VALUES */
 
+/**
+ * Popup script for extension settings.
+ */
 
-  chrome.storage.local.get(DEFAULT_VALUES, function(items) {
-    if (typeof items["showFriendsLogs"] != 'undefined') {
-      if (items["showFriendsLogs"]) {
-        friends.iCheck('check');
-      } else {
-        friends.iCheck('unchecked');
-      }
-    } else {
+window.addEventListener('DOMContentLoaded', function () {
+  const friends = $('#friends');
+  const own = $('#own');
+  const limit = $('#limit');
+
+  // Load saved settings
+  chrome.storage.local.get(DEFAULT_VALUES, function (items) {
+    // Friends logs checkbox
+    if (items.showFriendsLogs) {
       friends.iCheck('check');
-      chrome.storage.local.set({
-        'showFriendsLogs': true
-      }, null);
+    } else {
+      friends.iCheck('uncheck');
     }
-    if (typeof items["showMyLogs"] != 'undefined') {
-      if (items["showMyLogs"]) {
-        own.iCheck('check');
-      } else {
-        own.iCheck('unchecked');
-      }
+
+    // My logs checkbox
+    if (items.showMyLogs) {
+      own.iCheck('check');
     } else {
       own.iCheck('uncheck');
-      chrome.storage.local.set({
-        'showMyLogs': false
-      }, null);
     }
 
-    if (typeof items["limit"] != 'undefined') {
-      limit.val(items["limit"]);
-    } else {
-      limit.val(5);
-      chrome.storage.local.set({
-        'limit': "5"
-      }, null);
-    }
+    // Limit dropdown
+    limit.val(items.limit || 5);
   });
 
-  friends.on('ifChecked', function() {
-    chrome.storage.local.set({
-      'showFriendsLogs': true
-    }, null);
+  // Save settings on change
+  friends.on('ifChecked', function () {
+    chrome.storage.local.set({ showFriendsLogs: true });
   });
 
-  friends.on('ifUnchecked', function() {
-    chrome.storage.local.set({
-      'showFriendsLogs': false
-    }, null);
+  friends.on('ifUnchecked', function () {
+    chrome.storage.local.set({ showFriendsLogs: false });
   });
 
-  own.on('ifChecked', function() {
-    chrome.storage.local.set({
-      'showMyLogs': true
-    }, null);
+  own.on('ifChecked', function () {
+    chrome.storage.local.set({ showMyLogs: true });
   });
 
-  own.on('ifUnchecked', function() {
-    chrome.storage.local.set({
-      'showMyLogs': false
-    }, null);
+  own.on('ifUnchecked', function () {
+    chrome.storage.local.set({ showMyLogs: false });
   });
 
-  limit.on('change', function() {
-    chrome.storage.local.set({
-      'limit': limit.val()
-    }, null);
+  limit.on('change', function () {
+    chrome.storage.local.set({ limit: parseInt(limit.val(), 10) });
   });
 });

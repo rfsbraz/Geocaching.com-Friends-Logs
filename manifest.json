@@ -1,27 +1,36 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Geocaching.com Friends Logs",
   "description": "Shows your friends logs at the top of the window, so you don't need to View logbook>friends logs on every cache.",
-  "version": "1.0.1",
+  "version": "2.0.0",
 
   "content_scripts": [
-  {
-    "matches": ["https://www.geocaching.com/seek/cache_details.aspx?wp=GC*", "https://*.geocaching.com/seek/cache_details.aspx?wp=GC*"],
-    "css": ["square.css", "style.css"],
-    "js": [ "jquery-1.11.1.min.js", "icheck.min.js", "init.js","content_script.js"]
-  }],
-
-  "permissions": [
-    "storage"
+    {
+      "matches": [
+        "https://www.geocaching.com/geocache/GC*",
+        "https://*.geocaching.com/geocache/GC*"
+      ],
+      "css": ["square.css", "style.css"],
+      "js": ["init.js", "content_script.js"]
+    }
   ],
 
-  "web_accessible_resources" : ["/inject.js"],
-  
-  "icons": { "16": "icon16.png",
-           "48": "icon48.png" },
+  "permissions": ["storage"],
 
-  "browser_action": {
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["https://*.geocaching.com/*"]
+    }
+  ],
+
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png"
+  },
+
+  "action": {
     "default_icon": "icon48.png",
     "default_popup": "popup.html"
   }
