@@ -1,52 +1,36 @@
-/* global DEFAULT_VALUES */
-
 /**
  * Popup script for extension settings.
+ * Handles loading and saving user preferences.
  */
 
-window.addEventListener('DOMContentLoaded', function () {
-  const friends = $('#friends');
-  const own = $('#own');
-  const limit = $('#limit');
+const DEFAULT_VALUES = {
+  showFriendsLogs: true,
+  showMyLogs: false,
+  limit: 5
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const friendsCheckbox = document.getElementById('friends');
+  const ownCheckbox = document.getElementById('own');
+  const limitSelect = document.getElementById('limit');
 
   // Load saved settings
-  chrome.storage.local.get(DEFAULT_VALUES, function (items) {
-    // Friends logs checkbox
-    if (items.showFriendsLogs) {
-      friends.iCheck('check');
-    } else {
-      friends.iCheck('uncheck');
-    }
-
-    // My logs checkbox
-    if (items.showMyLogs) {
-      own.iCheck('check');
-    } else {
-      own.iCheck('uncheck');
-    }
-
-    // Limit dropdown
-    limit.val(items.limit || 5);
+  chrome.storage.local.get(DEFAULT_VALUES, items => {
+    friendsCheckbox.checked = items.showFriendsLogs;
+    ownCheckbox.checked = items.showMyLogs;
+    limitSelect.value = items.limit || 5;
   });
 
   // Save settings on change
-  friends.on('ifChecked', function () {
-    chrome.storage.local.set({ showFriendsLogs: true });
+  friendsCheckbox.addEventListener('change', () => {
+    chrome.storage.local.set({ showFriendsLogs: friendsCheckbox.checked });
   });
 
-  friends.on('ifUnchecked', function () {
-    chrome.storage.local.set({ showFriendsLogs: false });
+  ownCheckbox.addEventListener('change', () => {
+    chrome.storage.local.set({ showMyLogs: ownCheckbox.checked });
   });
 
-  own.on('ifChecked', function () {
-    chrome.storage.local.set({ showMyLogs: true });
-  });
-
-  own.on('ifUnchecked', function () {
-    chrome.storage.local.set({ showMyLogs: false });
-  });
-
-  limit.on('change', function () {
-    chrome.storage.local.set({ limit: parseInt(limit.val(), 10) });
+  limitSelect.addEventListener('change', () => {
+    chrome.storage.local.set({ limit: parseInt(limitSelect.value, 10) });
   });
 });

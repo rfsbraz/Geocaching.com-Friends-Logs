@@ -20,13 +20,10 @@ const EXTENSION_FILES = [
   'init.js',
   'popup.html',
   'popup.js',
+  'popup.css',
   'style.css',
-  'square.css',
-  'square.png',
-  'square@2x.png',
-  'icheck.min.js',
   'icon16.png',
-  'icon48.png'
+  'icon48.png',
 ];
 
 async function createZip() {
