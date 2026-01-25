@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.1.0...v2.1.1) (2026-01-25)
+
+
+### Bug Fixes
+
+* add build-time version sync for manifest.json ([#25](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/25)) ([5ded90e](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/5ded90eb7fa15459147dbecd9060171a6c774e7c))
+* sync manifest.json version with package.json ([#23](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/23)) ([cbc3c5e](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/cbc3c5eb2dff8f2f95b6267e8afc4fdaadeec80e))
+
 ## [2.1.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.0.1...v2.1.0) (2026-01-25)
 
 
