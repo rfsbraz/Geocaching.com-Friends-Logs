@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.0.1...v2.1.0) (2026-01-25)
+
+
+### Features
+
+* modernize popup UI with toggle switches and cleaner design ([#20](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/20)) ([05b1c0a](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/05b1c0a4dd7adf9c3e0da70cc60f9ff965092a45))
+
 ## [2.0.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.0.0...v2.0.1) (2026-01-25)
 
 
