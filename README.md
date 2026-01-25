@@ -6,7 +6,7 @@
 
 A Chrome extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
 
-![Example Screenshot](http://i.imgur.com/JT7nlw4.png)
+![Example Screenshot](.github/screenshot.png)
 
 ## Features
 
