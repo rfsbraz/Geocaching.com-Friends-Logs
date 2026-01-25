@@ -1,0 +1,29 @@
+{
+  "name": "geocaching-friends-logs",
+  "version": "2.0.0",
+  "description": "Chrome extension that shows your friends logs at the top of geocaching.com cache pages",
+  "private": true,
+  "scripts": {
+    "lint": "eslint *.js --ignore-pattern *.min.js",
+    "lint:fix": "eslint *.js --fix --ignore-pattern *.min.js",
+    "format": "prettier --write *.js *.json *.html *.css --ignore-path .prettierignore",
+    "format:check": "prettier --check *.js *.json *.html *.css --ignore-path .prettierignore",
+    "build": "node scripts/build.js",
+    "build:zip": "node scripts/zip.js",
+    "test": "echo \"No tests configured yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rfsbraz/Geocaching.com-Friends-Logs"
+  },
+  "author": "rfsbraz",
+  "license": "MIT",
+  "devDependencies": {
+    "archiver": "^7.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
