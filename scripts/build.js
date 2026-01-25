@@ -19,11 +19,10 @@ const REQUIRED_FILES = [
   'init.js',
   'popup.html',
   'popup.js',
+  'popup.css',
   'style.css',
-  'square.css',
-  'icheck.min.js',
   'icon16.png',
-  'icon48.png'
+  'icon48.png',
 ];
 
 function validateManifest() {

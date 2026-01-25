@@ -2,46 +2,75 @@
 <html>
   <head>
     <title>Geocaching.com Friends Logs</title>
-    <script src="popup.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <link href="square.css" rel="stylesheet" />
-    <script src="jquery-1.11.1.min.js"></script>
-    <script src="icheck.min.js"></script>
-    <script src="init.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link rel="stylesheet" type="text/css" href="popup.css" />
   </head>
   <body>
-    <h3 class="title">Geocaching.com Friends Logs</h3>
-    <form action="">
-      <input type="checkbox" id="own" /><label for="own">Show my log</label><br />
-      <input type="checkbox" id="friends" /><label for="friends">Show my friends logs</label><br />
-      Friends logs limit
-      <select class="limit" id="limit">
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-        <option value="50">50</option>
-        <option value="100">100</option>
-      </select>
-    </form>
+    <header class="header">
+      <img src="icon48.png" alt="" class="header-icon" />
+      <h1 class="header-title">Friends Logs</h1>
+    </header>
 
-    <div class="footer">
+    <main class="settings">
+      <div class="setting-group">
+        <label class="toggle">
+          <input type="checkbox" id="friends" />
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Show friends' logs</span>
+        </label>
+        <p class="setting-description">Highlight logs from your friends list</p>
+      </div>
+
+      <div class="setting-group">
+        <label class="toggle">
+          <input type="checkbox" id="own" />
+          <span class="toggle-slider"></span>
+          <span class="toggle-label">Show my logs</span>
+        </label>
+        <p class="setting-description">Highlight your own logs on cache pages</p>
+      </div>
+
+      <div class="setting-group">
+        <label class="select-label" for="limit">Friends logs limit</label>
+        <div class="select-wrapper">
+          <select class="select" id="limit">
+            <option value="5">5 logs</option>
+            <option value="10">10 logs</option>
+            <option value="20">20 logs</option>
+            <option value="50">50 logs</option>
+            <option value="100">100 logs</option>
+          </select>
+        </div>
+        <p class="setting-description">Maximum number of friends' logs to display</p>
+      </div>
+    </main>
+
+    <footer class="footer">
       <a
-        class="issues"
-        href="https://github.com/rfsbraz/Geocaching.com-Friends-Logs"
-        target="_blank"
-        >Report a problem</a
-      >
-      <a
-        class="rate"
+        class="footer-link"
         href="https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam"
         target="_blank"
-        >Rate it</a
       >
-    </div>
+        <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+          />
+        </svg>
+        Rate extension
+      </a>
+      <a
+        class="footer-link"
+        href="https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues"
+        target="_blank"
+      >
+        <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+          />
+        </svg>
+        Report issue
+      </a>
+    </footer>
+
+    <script src="popup.js"></script>
   </body>
 </html>
