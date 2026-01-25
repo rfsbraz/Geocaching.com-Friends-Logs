@@ -11,7 +11,7 @@
         "https://www.geocaching.com/geocache/GC*",
         "https://*.geocaching.com/geocache/GC*"
       ],
-      "css": ["square.css", "style.css"],
+      "css": ["style.css"],
       "js": ["init.js", "content_script.js"]
     }
   ],
