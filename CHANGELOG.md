@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.0.0...v2.0.1) (2026-01-25)
+
+
+### Bug Fixes
+
+* enable glob for Chrome Web Store upload path ([#16](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/16)) ([3e9cb59](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/3e9cb595e67a7946e930bf37525c5c5c7eac27ad))
+
 ## [2.0.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v1.0.1...v2.0.0) (2026-01-25)
 
 
