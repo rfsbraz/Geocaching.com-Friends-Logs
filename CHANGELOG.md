@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0 (2026-01-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* Converted to trunk-based development on main branch
+
+### Features
+
+* modernize build system and CI/CD pipeline ([ee6a4c5](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/ee6a4c56b1a951cdeeabaa07b3c8d643913578c2))
+* modernize build system and CI/CD pipeline ([ee6a4c5](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/ee6a4c56b1a951cdeeabaa07b3c8d643913578c2))
+* modernize build system and CI/CD pipeline ([13b7c99](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/13b7c99d2cf93557d9c474c67f5238281965f19a))
+
 ## [2.0.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v1.0.1...v2.0.0) (2025-01-24)
 
 ### ⚠ BREAKING CHANGES
