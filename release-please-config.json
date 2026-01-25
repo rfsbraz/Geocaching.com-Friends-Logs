@@ -3,16 +3,8 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "release-as": "2.0.0",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
-      "extra-files": [
-        {
-          "type": "json",
-          "path": "manifest.json",
-          "jsonpath": "$.version"
-        }
-      ],
       "changelog-sections": [
         { "type": "feat", "section": "Features" },
         { "type": "fix", "section": "Bug Fixes" },

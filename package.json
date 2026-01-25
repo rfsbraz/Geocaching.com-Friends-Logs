@@ -8,8 +8,9 @@
     "lint:fix": "eslint *.js --fix",
     "format": "prettier --write *.js *.json *.html *.css --ignore-path .prettierignore",
     "format:check": "prettier --check *.js *.json *.html *.css --ignore-path .prettierignore",
-    "build": "node scripts/build.js",
-    "build:zip": "node scripts/zip.js",
+    "sync-version": "node scripts/sync-version.js",
+    "build": "npm run sync-version && node scripts/build.js",
+    "build:zip": "npm run sync-version && node scripts/zip.js",
     "test": "echo \"No tests configured yet\" && exit 0"
   },
   "repository": {

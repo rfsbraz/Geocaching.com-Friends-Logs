@@ -3,7 +3,7 @@
 
   "name": "Geocaching.com Friends Logs",
   "description": "Shows your friends logs at the top of the window, so you don't need to View logbook>friends logs on every cache.",
-  "version": "2.0.0",
+  "version": "2.1.0",
 
   "content_scripts": [
     {
