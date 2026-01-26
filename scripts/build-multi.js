@@ -29,8 +29,8 @@ const EXTENSION_FILES = [
   'popup.js',
   'popup.css',
   'style.css',
-  'icon16.png',
-  'icon48.png'
+  'icons/icon16.png',
+  'icons/icon48.png'
 ];
 
 const BROWSERS = ['chrome', 'firefox', 'opera', 'edge'];
@@ -111,6 +111,11 @@ async function createBrowserBuild(browser, manifest) {
     const destPath = path.join(browserDir, file);
 
     if (fs.existsSync(srcPath)) {
+      // Create subdirectory if needed (e.g., for icons/)
+      const destDir = path.dirname(destPath);
+      if (!fs.existsSync(destDir)) {
+        fs.mkdirSync(destDir, { recursive: true });
+      }
       fs.copyFileSync(srcPath, destPath);
     }
   }

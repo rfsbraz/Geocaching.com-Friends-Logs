@@ -30,11 +30,11 @@
     }
   ],
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png"
   },
   "action": {
-    "default_icon": "icon48.png",
+    "default_icon": "icons/icon48.png",
     "default_popup": "popup.html"
   }
 }
