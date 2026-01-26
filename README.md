@@ -2,9 +2,10 @@
 
 [![CI](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml/badge.svg)](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/bgildcbomgimjfoblhlhmaehaeieeaam)](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
+[![Firefox Add-ons](https://img.shields.io/amo/v/geocaching-friends-logs)](https://addons.mozilla.org/firefox/addon/geocaching-friends-logs/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Chrome extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
+A browser extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
 
 ![Example Screenshot](.github/screenshot.png)
 
@@ -18,17 +19,30 @@ A Chrome extension that displays your friends' geocaching logs at the top of eve
 
 ## Installation
 
-### Chrome Web Store (Recommended)
+### Browser Extension Stores (Recommended)
 
-Install directly from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam).
+- **Chrome**: [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
+- **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/geocaching-friends-logs/)
+- **Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/geocachingcom-friends-logs/)
+- **Opera**: [Opera Add-ons](https://addons.opera.com/extensions/details/geocachingcom-friends-logs/)
 
 ### Manual Installation
 
-1. Download the latest release from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
+#### Chrome / Edge / Opera
+1. Download the latest release for your browser from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
 2. Unzip the file
-3. Open Chrome and navigate to `chrome://extensions`
+3. Open your browser's extension page:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
+   - Opera: `opera://extensions`
 4. Enable "Developer mode" (toggle in top right)
 5. Click "Load unpacked" and select the unzipped folder
+
+#### Firefox
+1. Download the Firefox `.xpi` file from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
+2. Open Firefox and navigate to `about:addons`
+3. Click the gear icon and select "Install Add-on From File..."
+4. Select the downloaded `.xpi` file
 
 ## Usage
 
@@ -82,10 +96,14 @@ npm run build:zip
 ### Loading for Development
 
 1. Run `npm run build` to validate the extension
-2. Open `chrome://extensions` in Chrome
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the project folder
-5. Make changes and click the refresh icon on the extension card to reload
+2. Open your browser's extension page:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
+   - Firefox: `about:debugging#/runtime/this-firefox`
+   - Opera: `opera://extensions`
+3. Enable "Developer mode" (not required for Firefox)
+4. Click "Load unpacked" (or "Load Temporary Add-on" in Firefox) and select the project folder
+5. Make changes and reload the extension to see updates
 
 ## Contributing
 
