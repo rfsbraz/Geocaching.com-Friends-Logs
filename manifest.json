@@ -1,10 +1,17 @@
 {
   "manifest_version": 3,
-
   "name": "Geocaching.com Friends Logs",
   "description": "Shows your friends logs at the top of the window, so you don't need to View logbook>friends logs on every cache.",
-  "version": "2.1.0",
-
+  "version": "2.1.1",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "geocaching-friends-logs@rfsbraz.github.io",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
   "content_scripts": [
     {
       "matches": [
@@ -15,21 +22,17 @@
       "js": ["init.js", "content_script.js"]
     }
   ],
-
   "permissions": ["storage"],
-
   "web_accessible_resources": [
     {
       "resources": ["inject.js"],
       "matches": ["https://*.geocaching.com/*"]
     }
   ],
-
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png"
   },
-
   "action": {
     "default_icon": "icon48.png",
     "default_popup": "popup.html"

@@ -45,14 +45,32 @@ jobs:
       - name: Build validation
         run: npm run build
 
-      - name: Create extension package
-        run: npm run build:zip
+      - name: Build all browser packages
+        run: npm run build:all
 
-      - name: Upload release asset
+      - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
           files: dist/*.zip
+
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension
+          path: dist/*-chrome.zip
+
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-extension
+          path: dist/*-firefox.zip
+
+      - name: Upload Opera artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: opera-extension
+          path: dist/*-opera.zip
 
   publish-to-chrome:
     needs: [release-please, build-release]
@@ -72,19 +90,45 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build extension
-        run: npm run build
-
-      - name: Create extension package
-        run: npm run build:zip
+      - name: Build Chrome extension
+        run: npm run build:chrome
 
       - name: Upload to Chrome Web Store
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
-          file-path: dist/*.zip
+          file-path: dist/*-chrome.zip
           extension-id: bgildcbomgimjfoblhlhmaehaeieeaam
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
           publish: true
           glob: true
+
+  publish-to-firefox:
+    needs: [release-please, build-release]
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Firefox extension
+        run: npm run build:firefox
+
+      - name: Upload to Firefox Add-ons
+        uses: wdzeng/firefox-addon@v1
+        with:
+          addon-guid: 'geocaching-friends-logs@rfsbraz.github.io'
+          xpi-path: dist/*-firefox.zip
+          jwt-issuer: ${{ secrets.AMO_JWT_ISSUER }}
+          jwt-secret: ${{ secrets.AMO_JWT_SECRET }}
