@@ -4,7 +4,7 @@
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/bgildcbomgimjfoblhlhmaehaeieeaam)](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Chrome extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
+A browser extension for Chrome, Firefox, and Opera that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
 
 ![Example Screenshot](.github/screenshot.png)
 
@@ -18,17 +18,30 @@ A Chrome extension that displays your friends' geocaching logs at the top of eve
 
 ## Installation
 
-### Chrome Web Store (Recommended)
+### Chrome
 
 Install directly from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam).
 
+### Firefox
+
+Install directly from [Firefox Add-ons](https://addons.mozilla.org/) (coming soon).
+
+### Opera
+
+Opera users can install the extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam) as Opera supports Chrome extensions.
+
 ### Manual Installation
 
-1. Download the latest release from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
+1. Download the latest release for your browser from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
 2. Unzip the file
-3. Open Chrome and navigate to `chrome://extensions`
-4. Enable "Developer mode" (toggle in top right)
-5. Click "Load unpacked" and select the unzipped folder
+3. **For Chrome/Opera:**
+   - Open your browser and navigate to `chrome://extensions` (Chrome) or `opera://extensions` (Opera)
+   - Enable "Developer mode" (toggle in top right)
+   - Click "Load unpacked" and select the unzipped folder
+4. **For Firefox:**
+   - Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
+   - Click "Load Temporary Add-on"
+   - Select the `manifest.json` file from the unzipped folder
 
 ## Usage
 
@@ -82,10 +95,16 @@ npm run build:zip
 ### Loading for Development
 
 1. Run `npm run build` to validate the extension
-2. Open `chrome://extensions` in Chrome
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the project folder
-5. Make changes and click the refresh icon on the extension card to reload
+2. **For Chrome/Opera:**
+   - Open `chrome://extensions` (Chrome) or `opera://extensions` (Opera)
+   - Enable "Developer mode"
+   - Click "Load unpacked" and select the project folder
+   - Make changes and click the refresh icon on the extension card to reload
+3. **For Firefox:**
+   - Open `about:debugging#/runtime/this-firefox`
+   - Click "Load Temporary Add-on"
+   - Select the `manifest.json` file from the project folder
+   - Make changes and click the "Reload" button to reload the extension
 
 ## Contributing
 
