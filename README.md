@@ -24,7 +24,7 @@ Install directly from the [Chrome Web Store](https://chrome.google.com/webstore/
 
 ### Firefox
 
-Install directly from [Firefox Add-ons](https://addons.mozilla.org/) (coming soon).
+Install directly from [Firefox Add-ons](https://addons.mozilla.org/) (link will be updated when published).
 
 ### Opera
 
