@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.1.1...v2.2.0) (2026-01-29)
+
+
+### Features
+
+* add Firefox, Opera, and Edge browser support ([#26](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/26)) ([2324e81](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/2324e8155a49b74fbf5d12f4374ed6b1b3f0cb4c))
+
 ## [2.1.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.1.0...v2.1.1) (2026-01-25)
 
 
