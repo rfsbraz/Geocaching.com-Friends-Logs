@@ -5,9 +5,9 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-  pull-requests: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   release-please:
@@ -22,6 +22,7 @@ jobs:
         id: release
         uses: googleapis/release-please-action@v4
         with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
 
   build-release:
@@ -31,19 +32,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build validation
-        run: npm run build
 
       - name: Build all browser packages
         run: npm run build:all
@@ -54,29 +52,12 @@ jobs:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
           files: dist/*.zip
 
-      - name: Upload Chrome artifact
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: chrome-extension
-          path: dist/*-chrome.zip
-
-      - name: Upload Firefox artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: firefox-extension
-          path: dist/*-firefox.zip
-
-      - name: Upload Opera artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: opera-extension
-          path: dist/*-opera.zip
-
-      - name: Upload Edge artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: edge-extension
-          path: dist/*-edge.zip
+          name: browser-extensions
+          path: dist/*.zip
+          retention-days: 1
 
   publish-to-chrome:
     needs: [release-please, build-release]
@@ -84,20 +65,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Chrome extension
-        run: npm run build:chrome
+          name: browser-extensions
+          path: dist
 
       - name: Upload to Chrome Web Store
         uses: mnao305/chrome-extension-upload@v5.0.0
@@ -116,20 +88,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Firefox extension
-        run: npm run build:firefox
+          name: browser-extensions
+          path: dist
 
       - name: Upload to Firefox Add-ons
         uses: wdzeng/firefox-addon@v1
@@ -145,25 +108,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Edge extension
-        run: npm run build:edge
+          name: browser-extensions
+          path: dist
 
       - name: Upload to Edge Add-ons
         uses: wdzeng/edge-addon@v2
         with:
           product-id: ${{ secrets.EDGE_PRODUCT_ID }}
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
-          client-secret: ${{ secrets.EDGE_CLIENT_SECRET }}
+          api-key: ${{ secrets.EDGE_API_KEY }}
           zip-path: dist/*-edge.zip
