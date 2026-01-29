@@ -30,7 +30,7 @@ This extension follows security best practices:
 - **No remote code** — All JavaScript is bundled within the extension
 - **No data collection** — User preferences are stored locally only
 - **No external requests** — The extension does not communicate with any external servers
-- **Content Security Policy** — Follows Chrome's Manifest V3 security requirements
+- **Content Security Policy** — Follows Manifest V3 security requirements
 
 ## Scope
 

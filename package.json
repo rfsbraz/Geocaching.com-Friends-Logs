@@ -1,7 +1,7 @@
 {
   "name": "geocaching-friends-logs",
   "version": "2.1.1",
-  "description": "Chrome extension that shows your friends logs at the top of geocaching.com cache pages",
+  "description": "Browser extension that shows your friends logs at the top of geocaching.com cache pages",
   "private": true,
   "scripts": {
     "lint": "eslint *.js",
@@ -11,6 +11,11 @@
     "sync-version": "node scripts/sync-version.js",
     "build": "npm run sync-version && node scripts/build.js",
     "build:zip": "npm run sync-version && node scripts/zip.js",
+    "build:chrome": "npm run sync-version && node scripts/build-multi.js --browser chrome",
+    "build:firefox": "npm run sync-version && node scripts/build-multi.js --browser firefox",
+    "build:opera": "npm run sync-version && node scripts/build-multi.js --browser opera",
+    "build:edge": "npm run sync-version && node scripts/build-multi.js --browser edge",
+    "build:all": "npm run sync-version && node scripts/build-multi.js --browser all",
     "test": "echo \"No tests configured yet\" && exit 0"
   },
   "repository": {

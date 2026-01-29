@@ -50,7 +50,7 @@ docs: update installation instructions
 ### Testing Changes
 
 1. Run `npm run build` to validate the extension
-2. Load the extension in Chrome (see README for instructions)
+2. Load the extension in your browser (see README for instructions)
 3. Test your changes on various geocache pages
 4. Verify the popup settings work correctly
 

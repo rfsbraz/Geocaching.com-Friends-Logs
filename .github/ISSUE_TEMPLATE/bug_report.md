@@ -24,7 +24,7 @@ What actually happened.
 If applicable, add screenshots to help explain the problem.
 
 ## Environment
-- **Browser**: Chrome [version]
+- **Browser**: [e.g., Chrome 120, Firefox 121, Edge 120]
 - **Extension Version**: [e.g., 2.0.0]
 - **OS**: [e.g., Windows 11, macOS 14]
 

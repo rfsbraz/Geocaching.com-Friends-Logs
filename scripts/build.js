@@ -21,8 +21,8 @@ const REQUIRED_FILES = [
   'popup.js',
   'popup.css',
   'style.css',
-  'icon16.png',
-  'icon48.png',
+  'icons/icon16.png',
+  'icons/icon48.png',
 ];
 
 function validateManifest() {
