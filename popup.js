@@ -17,7 +17,7 @@ const STORE_URLS = {
     'https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam',
   firefox: 'https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/',
   opera: 'https://addons.opera.com/extensions/details/geocaching-friends-logs/',
-  edge: 'https://microsoftedge.microsoft.com/addons/detail/geocachingcom-friends-logs/YOUR_EDGE_EXTENSION_ID'
+  edge: 'https://microsoftedge.microsoft.com/addons/detail/ddbfbobfccafkoabbcmpkbpofbkfgikc'
 };
 
 /**
