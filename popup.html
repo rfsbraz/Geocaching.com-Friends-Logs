@@ -45,31 +45,34 @@
     </main>
 
     <footer class="footer">
-      <a
-        class="footer-link"
-        id="rate-link"
-        href="https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam"
-        target="_blank"
-      >
-        <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-          />
-        </svg>
-        Rate extension
-      </a>
-      <a
-        class="footer-link"
-        href="https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues"
-        target="_blank"
-      >
-        <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
-          />
-        </svg>
-        Report issue
-      </a>
+      <div class="footer-links">
+        <a
+          class="footer-link"
+          id="rate-link"
+          href="https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam"
+          target="_blank"
+        >
+          <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+            />
+          </svg>
+          Rate extension
+        </a>
+        <a
+          class="footer-link"
+          href="https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues"
+          target="_blank"
+        >
+          <svg class="footer-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+            />
+          </svg>
+          Report issue
+        </a>
+      </div>
+      <span class="footer-version" id="version"></span>
     </footer>
 
     <script src="popup.js"></script>
