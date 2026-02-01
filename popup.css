@@ -223,11 +223,23 @@ body {
 /* Footer */
 .footer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
   margin-top: auto;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-version {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-align: center;
 }
 
 .footer-link {

@@ -50,6 +50,17 @@ function updateRateLink() {
   }
 }
 
+/**
+ * Displays the extension version in the footer
+ */
+function displayVersion() {
+  const versionElement = document.getElementById('version');
+  if (versionElement) {
+    const manifest = chrome.runtime.getManifest();
+    versionElement.textContent = `v${manifest.version}`;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const friendsCheckbox = document.getElementById('friends');
   const ownCheckbox = document.getElementById('own');
@@ -57,6 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update rate link to correct store
   updateRateLink();
+
+  // Display extension version
+  displayVersion();
 
   // Load saved settings
   chrome.storage.local.get(DEFAULT_VALUES, items => {
