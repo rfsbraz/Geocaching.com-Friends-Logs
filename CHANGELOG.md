@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.2.0...v2.3.0) (2026-02-01)
+
+
+### Features
+
+* display extension version in popup footer ([#34](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/34)) ([d7bc75f](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/d7bc75f1880e161ef91c2c430f89096cd1b73aa7))
+
+
+### Bug Fixes
+
+* show personal log when no friends' logs exist ([#32](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/32)) ([2662145](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/2662145b1dea83bf6245a20c58c9bebfc8939a77))
+
 ## [2.2.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.1.1...v2.2.0) (2026-01-29)
 
 
