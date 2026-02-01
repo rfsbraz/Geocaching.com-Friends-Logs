@@ -50,7 +50,7 @@
           return;
         }
 
-        if (response.pageInfo.rows === 0) {
+        if (response.pageInfo.rows === 0 && typeof loadPersonalAfter === 'undefined') {
           return;
         }
 
