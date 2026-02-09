@@ -24,7 +24,7 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 - **Chrome**: [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
 - **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/)
 - **Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/ddbfbobfccafkoabbcmpkbpofbkfgikc)
-- **Opera**: [Opera Add-ons](https://addons.opera.com/extensions/details/geocachingcom-friends-logs/)
+- **Opera**: [Opera Add-ons](https://addons.opera.com/en/extensions/details/geocachingcom-friends-logs/)
 
 ### Manual Installation
 
