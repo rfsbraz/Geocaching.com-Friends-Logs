@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.0...v2.3.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* correct Opera Add-ons store URL ([#40](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/40)) ([57f88ad](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/57f88ad76972c9e3065977c3823f8d3d7079476f))
+
 ## [2.3.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.2.0...v2.3.0) (2026-02-01)
 
 
