@@ -29,8 +29,9 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 
 ### Manual Installation
 
-#### Chrome / Edge / Opera / Brave
+#### Chrome (incl. Brave) / Edge / Opera
 1. Download the latest release for your browser from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
+   - For Brave, download the Chrome/Chromium release zip.
 2. Unzip the file
 3. Open your browser's extension page:
    - Chrome: `chrome://extensions`
