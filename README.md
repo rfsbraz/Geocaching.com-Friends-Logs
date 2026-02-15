@@ -25,16 +25,19 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 - **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/)
 - **Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/ddbfbobfccafkoabbcmpkbpofbkfgikc)
 - **Opera**: [Opera Add-ons](https://addons.opera.com/en/extensions/details/geocachingcom-friends-logs/)
+- **Brave**: Install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam) (Brave supports Chrome extensions natively)
 
 ### Manual Installation
 
-#### Chrome / Edge / Opera
+#### Chrome (incl. Brave) / Edge / Opera
 1. Download the latest release for your browser from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
+   - For Brave, download the Chrome/Chromium release zip.
 2. Unzip the file
 3. Open your browser's extension page:
    - Chrome: `chrome://extensions`
    - Edge: `edge://extensions`
    - Opera: `opera://extensions`
+   - Brave: `brave://extensions`
 4. Enable "Developer mode" (toggle in top right)
 5. Click "Load unpacked" and select the unzipped folder
 
@@ -101,6 +104,7 @@ npm run build:zip
    - Edge: `edge://extensions`
    - Firefox: `about:debugging#/runtime/this-firefox`
    - Opera: `opera://extensions`
+   - Brave: `brave://extensions`
 3. Enable "Developer mode" (not required for Firefox)
 4. Click "Load unpacked" (or "Load Temporary Add-on" in Firefox) and select the project folder
 5. Make changes and reload the extension to see updates
