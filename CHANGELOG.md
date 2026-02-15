@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.2](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.1...v2.3.2) (2026-02-15)
+
+
+### Bug Fixes
+
+* extension stops working after first use on Brave/Linux ([#46](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/46)) ([77ffb4f](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/77ffb4f6ed5aabd4ac6f653072fb0e6b4bb2a255))
+
 ## [2.3.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.0...v2.3.1) (2026-02-09)
 
 
