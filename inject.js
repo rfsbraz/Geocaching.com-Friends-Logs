@@ -6,6 +6,8 @@
 (function () {
   'use strict';
 
+  console.log('[Friends Logs] Inject script executing');
+
   /**
    * Load logs from the geocaching.com logbook API.
    * @param {number} pageIdx - Page index (0-based)
@@ -149,6 +151,26 @@
   const showFriendsLogs = injectElement.getAttribute('showFriendsLogs');
   const limit = injectElement.getAttribute('limit');
 
-  // Start loading logs
-  loadLogbookPage(0, showMyLogs, showFriendsLogs, limit);
+  /**
+   * Wait for page globals (userToken, jQuery) to be available before loading logs.
+   * Retries up to 10 times at 500ms intervals (5s total).
+   */
+  function waitForGlobalsAndLoad(retries) {
+    if (typeof userToken !== 'undefined' && typeof $ !== 'undefined') {
+      loadLogbookPage(0, showMyLogs, showFriendsLogs, limit);
+      return;
+    }
+
+    if (retries <= 0) {
+      console.error('[Friends Logs] Page globals not available after retries');
+      return;
+    }
+
+    console.log('[Friends Logs] Waiting for page globals (' + retries + ' retries left)');
+    setTimeout(function () {
+      waitForGlobalsAndLoad(retries - 1);
+    }, 500);
+  }
+
+  waitForGlobalsAndLoad(10);
 })();
