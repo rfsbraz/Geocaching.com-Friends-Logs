@@ -5,6 +5,10 @@ node_modules/
 dist/
 *.zip
 
+# Test output
+playwright-report/
+test-results/
+
 # IDE
 .vscode/
 .idea/

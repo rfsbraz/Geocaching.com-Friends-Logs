@@ -140,22 +140,15 @@
       });
   }
 
-  // Get settings from the injected script element
-  const injectElement = document.getElementById('inject');
-  if (!injectElement) {
-    console.error('[Friends Logs] Inject element not found');
-    return;
-  }
-
-  const showMyLogs = injectElement.getAttribute('showMyLogs');
-  const showFriendsLogs = injectElement.getAttribute('showFriendsLogs');
-  const limit = injectElement.getAttribute('limit');
-
   /**
    * Wait for page globals (userToken, jQuery) to be available before loading logs.
-   * Retries up to 10 times at 500ms intervals (5s total).
+   * Retries up to maxRetries times at 500ms intervals.
+   * @param {number} retries - Number of retries remaining
+   * @param {string} showMyLogs - "true" or "false"
+   * @param {string} showFriendsLogs - "true" or "false"
+   * @param {number|string} limit - Number of logs to fetch
    */
-  function waitForGlobalsAndLoad(retries) {
+  function waitForGlobalsAndLoad(retries, showMyLogs, showFriendsLogs, limit) {
     if (typeof userToken !== 'undefined' && typeof $ !== 'undefined') {
       loadLogbookPage(0, showMyLogs, showFriendsLogs, limit);
       return;
@@ -168,9 +161,26 @@
 
     console.log('[Friends Logs] Waiting for page globals (' + retries + ' retries left)');
     setTimeout(function () {
-      waitForGlobalsAndLoad(retries - 1);
+      waitForGlobalsAndLoad(retries - 1, showMyLogs, showFriendsLogs, limit);
     }, 500);
   }
 
-  waitForGlobalsAndLoad(10);
+  // Enable testing - this block is ignored in the browser
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { loadLogbookPage, waitForGlobalsAndLoad };
+    return; // Skip auto-execution in test environment
+  }
+
+  // Get settings from the injected script element
+  const injectElement = document.getElementById('inject');
+  if (!injectElement) {
+    console.error('[Friends Logs] Inject element not found');
+    return;
+  }
+
+  const showMyLogs = injectElement.getAttribute('showMyLogs');
+  const showFriendsLogs = injectElement.getAttribute('showFriendsLogs');
+  const limit = injectElement.getAttribute('limit');
+
+  waitForGlobalsAndLoad(10, showMyLogs, showFriendsLogs, limit);
 })();
