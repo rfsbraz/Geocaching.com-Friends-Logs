@@ -81,6 +81,32 @@ jobs:
       - name: Capture visual screenshots
         run: xvfb-run npx playwright test --project=screenshots
 
+      - name: Screenshot summary
+        if: always()
+        run: |
+          echo "## Visual Screenshots" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -d "tests/e2e/screenshots" ] && ls tests/e2e/screenshots/*.png 1>/dev/null 2>&1; then
+            echo "| Screenshot | Size | Description |" >> $GITHUB_STEP_SUMMARY
+            echo "|---|---|---|" >> $GITHUB_STEP_SUMMARY
+            for f in tests/e2e/screenshots/*.png; do
+              name=$(basename "$f")
+              size=$(du -h "$f" | cut -f1)
+              case "$name" in
+                popup-default.png) desc="Popup with default settings (friends only)" ;;
+                popup-all-enabled.png) desc="Popup with all options enabled" ;;
+                page-friends-logs.png) desc="Cache page showing friends logs section" ;;
+                page-friends-and-my-logs.png) desc="Cache page with friends + personal logs" ;;
+                *) desc="$name" ;;
+              esac
+              echo "| \`$name\` | $size | $desc |" >> $GITHUB_STEP_SUMMARY
+            done
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Download the **playwright-report** artifact and open \`index.html\` to view screenshots inline in the test report." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No screenshots were captured." >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Upload Playwright report
         uses: actions/upload-artifact@v6
         if: always()

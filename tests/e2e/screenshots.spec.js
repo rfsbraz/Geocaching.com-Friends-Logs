@@ -72,6 +72,16 @@ async function setupBothLogsRoutes(page) {
   });
 }
 
+/** Save screenshot to disk and attach to Playwright test report. */
+async function capture(page, testInfo, name, options) {
+  const filePath = path.join(SCREENSHOTS_DIR, name);
+  await page.screenshot({ path: filePath, ...options });
+  await testInfo.attach(name.replace('.png', ''), {
+    path: filePath,
+    contentType: 'image/png'
+  });
+}
+
 test.describe('Visual Screenshots', () => {
   /** @type {import('@playwright/test').BrowserContext} */
   let context;
@@ -95,9 +105,7 @@ test.describe('Visual Screenshots', () => {
     await expect(popupPage.locator('#friends')).toBeChecked();
     await expect(popupPage.locator('#own')).not.toBeChecked();
 
-    await popupPage.screenshot({
-      path: path.join(SCREENSHOTS_DIR, 'popup-default.png')
-    });
+    await capture(popupPage, test.info(), 'popup-default.png');
 
     await popupPage.close();
   });
@@ -114,9 +122,7 @@ test.describe('Visual Screenshots', () => {
 
     await expect(popupPage.locator('#own')).toBeChecked();
 
-    await popupPage.screenshot({
-      path: path.join(SCREENSHOTS_DIR, 'popup-all-enabled.png')
-    });
+    await capture(popupPage, test.info(), 'popup-all-enabled.png');
 
     // Reset for subsequent tests
     await popupPage.locator('label:has(#own)').click();
@@ -139,10 +145,7 @@ test.describe('Visual Screenshots', () => {
     await expect(page.locator('.gcfl-friends-log')).toHaveCount(2);
     await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
 
-    await page.screenshot({
-      path: path.join(SCREENSHOTS_DIR, 'page-friends-logs.png'),
-      fullPage: true
-    });
+    await capture(page, test.info(), 'page-friends-logs.png', { fullPage: true });
 
     await page.close();
   });
@@ -175,10 +178,7 @@ test.describe('Visual Screenshots', () => {
     await expect(page.locator('.gcfl-my-log')).toHaveCount(1);
     await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
 
-    await page.screenshot({
-      path: path.join(SCREENSHOTS_DIR, 'page-friends-and-my-logs.png'),
-      fullPage: true
-    });
+    await capture(page, test.info(), 'page-friends-and-my-logs.png', { fullPage: true });
 
     await page.close();
 
