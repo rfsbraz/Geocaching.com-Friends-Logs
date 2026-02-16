@@ -5,6 +5,7 @@ module.exports = defineConfig({
   testDir: './tests/e2e',
   timeout: 30000,
   retries: 1,
+  reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     headless: false
   },
