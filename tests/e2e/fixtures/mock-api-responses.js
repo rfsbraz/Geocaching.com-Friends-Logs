@@ -36,6 +36,26 @@ const friendsLogsResponse = {
   ]
 };
 
+const personalLogsResponse = {
+  status: 'success',
+  pageInfo: { rows: 1 },
+  data: [
+    {
+      LogID: 2001,
+      LogType: 'Found it',
+      LogTypeImage: 'icon_smile.gif',
+      LogText: 'My own find! Took me a while to spot.',
+      Created: '02/01/2024',
+      Visited: '01/31/2024',
+      UserName: 'MyUsername',
+      AccountID: 9001,
+      AvatarImage: '',
+      LogGuid: '11111111-2222-3333-4444-555555555555',
+      Images: []
+    }
+  ]
+};
+
 const emptyLogsResponse = {
   status: 'success',
   pageInfo: { rows: 0 },
@@ -48,4 +68,4 @@ const errorResponse = {
   data: []
 };
 
-module.exports = { friendsLogsResponse, emptyLogsResponse, errorResponse };
+module.exports = { friendsLogsResponse, personalLogsResponse, emptyLogsResponse, errorResponse };

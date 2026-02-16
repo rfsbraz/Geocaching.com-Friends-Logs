@@ -16,6 +16,10 @@ module.exports = defineConfig({
     {
       name: 'firefox',
       testMatch: /firefox\.spec\.js/
+    },
+    {
+      name: 'screenshots',
+      testMatch: /screenshots\.spec\.js/
     }
   ]
 });

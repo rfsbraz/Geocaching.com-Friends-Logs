@@ -78,10 +78,21 @@ jobs:
       - name: Run Firefox E2E tests
         run: xvfb-run npx playwright test --project=firefox
 
+      - name: Capture visual screenshots
+        run: xvfb-run npx playwright test --project=screenshots
+
       - name: Upload Playwright report
         uses: actions/upload-artifact@v6
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 30
+
+      - name: Upload visual screenshots
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: extension-screenshots
+          path: tests/e2e/screenshots/
           retention-days: 30

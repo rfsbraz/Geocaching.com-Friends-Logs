@@ -8,6 +8,7 @@ dist/
 # Test output
 playwright-report/
 test-results/
+tests/e2e/screenshots/
 
 # IDE
 .vscode/
