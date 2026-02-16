@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GC12345 - Test Cache</title>
+    <script>
+      // Minimal jQuery stub for testing
+      (function () {
+        'use strict';
+
+        function jQueryObj(elements) {
+          var obj = Array.isArray(elements) ? elements.slice() : [elements];
+          obj.insertBefore = function (target) {
+            var el =
+              target && !target.nodeType && typeof target.length === 'number' ? target[0] : target;
+            if (el && el.parentNode) {
+              for (var i = 0; i < obj.length; i++) {
+                el.parentNode.insertBefore(obj[i], el);
+              }
+            }
+            return obj;
+          };
+          obj.addClass = function (cls) {
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].classList) {
+                obj[i].classList.add(cls);
+              }
+            }
+            return obj;
+          };
+          obj.find = function (selector) {
+            var results = [];
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].querySelectorAll) {
+                var found = obj[i].querySelectorAll(selector);
+                for (var j = 0; j < found.length; j++) {
+                  results.push(found[j]);
+                }
+              }
+            }
+            return jQueryObj(results);
+          };
+          obj.remove = function () {
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].parentNode) {
+                obj[i].parentNode.removeChild(obj[i]);
+              }
+            }
+            return obj;
+          };
+          obj.each = function (fn) {
+            for (var i = 0; i < obj.length; i++) {
+              fn.call(obj[i], i, obj[i]);
+            }
+            return obj;
+          };
+          obj.data = function () {
+            return '';
+          };
+          return obj;
+        }
+
+        function $(selector) {
+          // Handle DOM elements
+          if (selector && selector.nodeType) {
+            return jQueryObj([selector]);
+          }
+          // Handle array-like objects (e.g., result of $.tmpl)
+          if (typeof selector === 'object' && typeof selector.length === 'number') {
+            var elems = [];
+            for (var i = 0; i < selector.length; i++) {
+              if (selector[i] && selector[i].nodeType) {
+                elems.push(selector[i]);
+              }
+            }
+            return jQueryObj(elems);
+          }
+          if (typeof selector === 'string' && selector.charAt(0) === '<') {
+            // Parse HTML string
+            var div = document.createElement('div');
+            div.innerHTML = selector;
+            var children = [];
+            while (div.firstChild) {
+              children.push(div.firstChild);
+              div.removeChild(div.firstChild);
+            }
+            return jQueryObj(children);
+          }
+          // CSS selector
+          var els = document.querySelectorAll(selector);
+          return jQueryObj(Array.from(els));
+        }
+
+        $.getJSON = function (url, params) {
+          var chain = {};
+          var doneCallback = null;
+          var failCallback = null;
+
+          chain.done = function (cb) {
+            doneCallback = cb;
+            return chain;
+          };
+          chain.fail = function (cb) {
+            failCallback = cb;
+            return chain;
+          };
+
+          // Build query string
+          var qs = Object.keys(params)
+            .map(function (k) {
+              return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+            })
+            .join('&');
+
+          fetch(url + '?' + qs)
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              if (doneCallback) {
+                doneCallback(data);
+              }
+            })
+            .catch(function (err) {
+              if (failCallback) {
+                failCallback({}, 'error', err.message);
+              }
+            });
+
+          return chain;
+        };
+
+        $.tmpl = function (_templateName, dataArray) {
+          var rows = [];
+          for (var i = 0; i < dataArray.length; i++) {
+            var item = dataArray[i];
+            var tr = document.createElement('tbody');
+            tr.className = 'log-row';
+            tr.setAttribute('data-log-id', item.LogID);
+            tr.innerHTML =
+              '<tr><td>' +
+              '<strong>' +
+              (item.UserName || 'Unknown') +
+              '</strong> - ' +
+              (item.LogType || '') +
+              ' - ' +
+              (item.LogText || '') +
+              '</td></tr>';
+            rows.push(tr);
+          }
+          return jQueryObj(rows);
+        };
+
+        $.fn = {};
+        window.$ = $;
+        window.jQuery = $;
+      })();
+
+      // Page globals that the extension expects
+      window.userToken = 'mock-user-token-12345';
+      window.decryptLogs = false;
+    </script>
+  </head>
+  <body>
+    <div id="ctl00_ContentBody_CacheName">
+      <h2>Test Cache</h2>
+    </div>
+
+    <div id="cache_logs_container">
+      <table id="cache_logs_table">
+        <tbody></tbody>
+        <tbody>
+          <tr>
+            <td>Existing log 1</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td>Existing log 2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script id="tmplCacheLogRow" type="text/x-jquery-tmpl">
+      <!-- Template placeholder - $.tmpl mock handles rendering -->
+    </script>
+  </body>
+</html>

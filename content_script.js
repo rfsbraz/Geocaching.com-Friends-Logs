@@ -63,3 +63,7 @@ window.addEventListener('pageshow', function (event) {
     doInject();
   }
 });
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { injectScript, doInject };
+}

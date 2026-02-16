@@ -3,7 +3,7 @@ import js from '@eslint/js';
 
 export default [
   {
-    ignores: ['**/*.min.js', 'node_modules/**', 'dist/**'],
+    ignores: ['**/*.min.js', 'node_modules/**', 'dist/**', 'playwright-report/**', 'test-results/**'],
   },
   js.configs.recommended,
   {
@@ -17,6 +17,7 @@ export default [
         ...globals.jquery,
         userToken: 'readonly',
         decryptLogs: 'readonly',
+        module: 'readonly',
       },
     },
     rules: {
@@ -28,6 +29,16 @@ export default [
       curly: ['error', 'all'],
       semi: ['error', 'always'],
       quotes: ['error', 'single', { avoidEscape: true }],
+    },
+  },
+  {
+    files: ['tests/**/*.js', 'jest.config.js', 'playwright.config.js'],
+    languageOptions: {
+      sourceType: 'commonjs',
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
     },
   },
 ];

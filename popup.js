@@ -61,6 +61,10 @@ function displayVersion() {
   }
 }
 
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { DEFAULT_VALUES, STORE_URLS, detectBrowser, updateRateLink, displayVersion };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const friendsCheckbox = document.getElementById('friends');
   const ownCheckbox = document.getElementById('own');
