@@ -21,6 +21,10 @@ module.exports = defineConfig({
     {
       name: 'screenshots',
       testMatch: /screenshots\.spec\.js/
+    },
+    {
+      name: 'real-page',
+      testMatch: /real-page\.spec\.js/
     }
   ]
 });
