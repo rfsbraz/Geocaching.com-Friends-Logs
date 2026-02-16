@@ -1,6 +1,6 @@
 {
   "name": "geocaching-friends-logs",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Browser extension that shows your friends logs at the top of geocaching.com cache pages",
   "private": true,
   "scripts": {
