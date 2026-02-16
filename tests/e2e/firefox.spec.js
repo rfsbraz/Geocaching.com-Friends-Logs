@@ -83,6 +83,22 @@ test.describe('Firefox E2E', () => {
     await page.close();
   });
 
+  test('friend log rows match API response count', async () => {
+    const page = await context.newPage();
+    await setupRoutes(page);
+
+    await page.goto('https://www.geocaching.com/geocache/GC12345');
+    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+
+    // Verify exact count matches mock response
+    await expect(page.locator('.gcfl-friends-log')).toHaveCount(friendsLogsResponse.data.length);
+
+    // Verify Logbook header appears after friend logs
+    await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
+
+    await page.close();
+  });
+
   test('does not duplicate injection on same page', async () => {
     const page = await context.newPage();
     await setupRoutes(page);

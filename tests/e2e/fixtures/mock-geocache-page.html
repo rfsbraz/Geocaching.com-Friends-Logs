@@ -10,9 +10,11 @@
         function jQueryObj(elements) {
           var obj = Array.isArray(elements) ? elements.slice() : [elements];
           obj.insertBefore = function (target) {
-            if (target && target.parentNode) {
-              for (var i = obj.length - 1; i >= 0; i--) {
-                target.parentNode.insertBefore(obj[i], target);
+            var el =
+              target && !target.nodeType && typeof target.length === 'number' ? target[0] : target;
+            if (el && el.parentNode) {
+              for (var i = 0; i < obj.length; i++) {
+                el.parentNode.insertBefore(obj[i], el);
               }
             }
             return obj;

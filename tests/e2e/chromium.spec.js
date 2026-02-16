@@ -87,6 +87,68 @@ test.describe('Chromium E2E', () => {
     await page.close();
   });
 
+  test('API is called with correct parameters', async () => {
+    const page = await context.newPage();
+    const apiCalls = [];
+
+    await page.route('**/geocache/GC*', async route => {
+      const url = route.request().url();
+      if (url.includes('/seek/geocache.logbook')) {
+        apiCalls.push(new URL(url));
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(friendsLogsResponse)
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: 'text/html',
+          body: mockPageHTML
+        });
+      }
+    });
+
+    await page.route('**/seek/geocache.logbook*', async route => {
+      apiCalls.push(new URL(route.request().url()));
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(friendsLogsResponse)
+      });
+    });
+
+    await page.goto('https://www.geocaching.com/geocache/GC12345');
+    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+
+    // Verify at least one API call was made
+    expect(apiCalls.length).toBeGreaterThan(0);
+
+    // Verify the API call includes expected parameters
+    const params = apiCalls[0].searchParams;
+    expect(params.get('tkn')).toBe('mock-user-token-12345');
+    expect(params.get('sf')).toBe('true');
+    expect(params.get('num')).toBeTruthy();
+
+    await page.close();
+  });
+
+  test('friend log rows contain data from API response', async () => {
+    const page = await context.newPage();
+    await setupRoutes(page);
+
+    await page.goto('https://www.geocaching.com/geocache/GC12345');
+    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+
+    // Verify exact count matches mock response (2 friends logs)
+    await expect(page.locator('.gcfl-friends-log')).toHaveCount(friendsLogsResponse.data.length);
+
+    // Verify Logbook header appears after friend logs
+    await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
+
+    await page.close();
+  });
+
   test('popup UI loads with correct defaults', async () => {
     const popupPage = await context.newPage();
     await popupPage.goto(`chrome-extension://${extensionId}/popup.html`);
