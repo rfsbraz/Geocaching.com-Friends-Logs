@@ -6,6 +6,13 @@
 (function () {
   'use strict';
 
+  // Guard against duplicate execution (e.g. Firefox bfcache re-injection race)
+  if (window.__gcflExecuted) {
+    console.log('[Friends Logs] Already executed, skipping');
+    return;
+  }
+  window.__gcflExecuted = true;
+
   console.log('[Friends Logs] Inject script executing');
 
   /**
@@ -73,7 +80,8 @@
 
         // Add section header with styling
         if (showFriends === 'true') {
-          const breakLine = typeof loadPersonalAfter !== 'undefined' ? '<br>' : '';
+          const breakLine =
+            typeof loadPersonalAfter !== 'undefined' ? '<br class="gcfl-break">' : '';
           const count = response.pageInfo.rows;
           const label = count === 1 ? '1 Friend Log' : count + ' Friends Logs';
           $(
@@ -125,9 +133,9 @@
 
         // Add main logbook header if not loading personal logs after
         if (typeof loadPersonalAfter === 'undefined') {
-          $('<br><h3 class="gcfl-header gcfl-logbook-header">Logbook</h3>').insertBefore(
-            $('.main_tbody')
-          );
+          $(
+            '<br class="gcfl-break"><h3 class="gcfl-header gcfl-logbook-header">Logbook</h3>'
+          ).insertBefore($('.main_tbody'));
         }
 
         // Load personal logs after friends if both were requested
