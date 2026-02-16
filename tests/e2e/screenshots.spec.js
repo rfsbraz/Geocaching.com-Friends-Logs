@@ -3,6 +3,7 @@ const fs = require('fs');
 const { test, expect } = require('@playwright/test');
 const { launchChromiumWithExtension } = require('./helpers/extension');
 const { friendsLogsResponse, personalLogsResponse } = require('./fixtures/mock-api-responses');
+const { discoverRealPages, prepareRealPage } = require('./helpers/real-page');
 
 const MOCK_PAGE_PATH = path.resolve(__dirname, 'fixtures', 'mock-geocache-page.html');
 const SCREENSHOTS_DIR = path.resolve(__dirname, 'screenshots');
@@ -190,4 +191,100 @@ test.describe('Visual Screenshots', () => {
     await resetPage.waitForTimeout(500);
     await resetPage.close();
   });
+
+  // --- Real page screenshots (conditional, local-only) ---
+
+  const realPages = discoverRealPages();
+
+  for (const htmlFile of realPages) {
+    const gcMatch = htmlFile.match(/GC[A-Z0-9]+/i);
+    const gcCode = gcMatch ? gcMatch[0].toUpperCase() : 'GCTEST';
+
+    test(`capture real page with friends logs: ${gcCode}`, async () => {
+      const { htmlContent } = prepareRealPage(htmlFile);
+
+      const page = await context.newPage();
+
+      await page.route(`**/geocache/${gcCode}`, async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'text/html',
+          body: htmlContent
+        });
+      });
+
+      await page.route('**/seek/geocache.logbook*', async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(friendsLogsResponse)
+        });
+      });
+
+      await page.goto(`https://www.geocaching.com/geocache/${gcCode}`);
+      await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 15000 });
+      await page.waitForTimeout(500);
+
+      await expect(page.locator('.gcfl-friends-header')).toContainText(/Friends? Log/);
+      await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
+
+      await capture(page, test.info(), `real-page-${gcCode}-friends.png`, { fullPage: true });
+
+      await page.close();
+    });
+
+    test(`capture real page with friends + my logs: ${gcCode}`, async () => {
+      // Enable "Show my logs"
+      const popupPage = await context.newPage();
+      await popupPage.goto(`chrome-extension://${extensionId}/popup.html`);
+      await popupPage.waitForTimeout(300);
+      await popupPage.locator('label:has(#own)').click();
+      await popupPage.waitForTimeout(500);
+      await expect(popupPage.locator('#own')).toBeChecked();
+      await popupPage.close();
+
+      const { htmlContent } = prepareRealPage(htmlFile);
+
+      const page = await context.newPage();
+
+      await page.route(`**/geocache/${gcCode}`, async route => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'text/html',
+          body: htmlContent
+        });
+      });
+
+      await page.route('**/seek/geocache.logbook*', async route => {
+        const params = new URL(route.request().url()).searchParams;
+        const response = params.get('sp') === 'true' ? personalLogsResponse : friendsLogsResponse;
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(response)
+        });
+      });
+
+      await page.goto(`https://www.geocaching.com/geocache/${gcCode}`);
+      await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 15000 });
+      await expect(page.locator('.gcfl-my-header')).toBeVisible({ timeout: 10000 });
+      await page.waitForTimeout(500);
+
+      await expect(page.locator('.gcfl-friends-header')).toContainText(/Friends? Log/);
+      await expect(page.locator('.gcfl-my-header')).toContainText('My Log');
+      await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
+
+      await capture(page, test.info(), `real-page-${gcCode}-all.png`, { fullPage: true });
+
+      await page.close();
+
+      // Reset: disable "Show my logs"
+      const resetPage = await context.newPage();
+      await resetPage.goto(`chrome-extension://${extensionId}/popup.html`);
+      await resetPage.waitForTimeout(300);
+      await resetPage.locator('label:has(#own)').click();
+      await resetPage.waitForTimeout(500);
+      await resetPage.close();
+    });
+  }
 });
