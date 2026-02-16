@@ -55,6 +55,15 @@ doInject();
 window.addEventListener('pageshow', function (event) {
   if (event.persisted) {
     console.log('[Friends Logs] Page restored from bfcache, re-injecting');
+
+    // Reset execution guard and clean up old content in page context
+    const cleanup = document.createElement('script');
+    cleanup.textContent =
+      'window.__gcflExecuted = false;' +
+      "document.querySelectorAll('.gcfl-header, .gcfl-break, .gcfl-friends-log, .gcfl-my-log').forEach(function(e){e.remove()});";
+    document.documentElement.appendChild(cleanup);
+    cleanup.remove();
+
     // Remove old inject element so the guard check passes
     const old = document.getElementById('inject');
     if (old) {
