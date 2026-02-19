@@ -55,10 +55,10 @@ test.describe('Chromium E2E', () => {
     await page.goto('https://www.geocaching.com/geocache/GC12345');
 
     // Wait for the extension to inject friends logs header
-    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.gcfl-friends-header td')).toBeVisible({ timeout: 10000 });
 
     // Verify friends logs header shows correct count
-    await expect(page.locator('.gcfl-friends-header')).toContainText('Friends Logs');
+    await expect(page.locator('.gcfl-friends-header td')).toContainText('Friends Logs');
 
     // Verify the inject script element was created
     const injectScript = page.locator('script#inject');
@@ -76,7 +76,7 @@ test.describe('Chromium E2E', () => {
     await setupRoutes(page);
 
     await page.goto('https://www.geocaching.com/geocache/GC12345');
-    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.gcfl-friends-header td')).toBeVisible({ timeout: 10000 });
 
     // There should be exactly one inject script element
     await expect(page.locator('script#inject')).toHaveCount(1);
@@ -119,7 +119,7 @@ test.describe('Chromium E2E', () => {
     });
 
     await page.goto('https://www.geocaching.com/geocache/GC12345');
-    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.gcfl-friends-header td')).toBeVisible({ timeout: 10000 });
 
     // Verify at least one API call was made
     expect(apiCalls.length).toBeGreaterThan(0);
@@ -138,13 +138,13 @@ test.describe('Chromium E2E', () => {
     await setupRoutes(page);
 
     await page.goto('https://www.geocaching.com/geocache/GC12345');
-    await expect(page.locator('.gcfl-friends-header')).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.gcfl-friends-header td')).toBeVisible({ timeout: 10000 });
 
     // Verify exact count matches mock response (2 friends logs)
     await expect(page.locator('.gcfl-friends-log')).toHaveCount(friendsLogsResponse.data.length);
 
     // Verify Logbook header appears after friend logs
-    await expect(page.locator('.gcfl-logbook-header')).toBeVisible();
+    await expect(page.locator('.gcfl-logbook-header td')).toBeVisible();
 
     await page.close();
   });
