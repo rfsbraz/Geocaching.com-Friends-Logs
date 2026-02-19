@@ -54,8 +54,16 @@ doInject();
 // Handle pages restored from bfcache (back/forward cache)
 window.addEventListener('pageshow', function (event) {
   if (event.persisted) {
-    console.log('[Friends Logs] Page restored from bfcache, re-injecting');
-    // Remove old inject element so the guard check passes
+    console.log('[Friends Logs] Page restored from bfcache');
+
+    // If injected content was preserved by bfcache, no action needed
+    if (document.querySelector('.gcfl-header')) {
+      console.log('[Friends Logs] Content preserved, skipping re-injection');
+      return;
+    }
+
+    // Content was lost (some browsers discard injected content), re-inject
+    console.log('[Friends Logs] Content lost, re-injecting');
     const old = document.getElementById('inject');
     if (old) {
       old.remove();
