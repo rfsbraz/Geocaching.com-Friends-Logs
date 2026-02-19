@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.4](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.3...v2.3.4) (2026-02-19)
+
+
+### Bug Fixes
+
+* prevent duplicate friend logs on Firefox ([#56](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/56)) ([288c247](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/288c247f5ee33be38a4a77125adf9d9c3de0f329))
+* use valid table HTML for section headers on Firefox ([#54](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/54)) ([025936d](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/025936d63f1fd5659ee73aa45d6763a2d2f9d220))
+
 ## [2.3.3](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.2...v2.3.3) (2026-02-16)
 
 
