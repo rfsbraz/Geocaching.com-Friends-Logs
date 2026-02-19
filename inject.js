@@ -6,6 +6,18 @@
 (function () {
   'use strict';
 
+  // Guard against duplicate execution (e.g. Firefox bfcache re-injection race)
+  if (window.__gcflExecuted) {
+    console.log('[Friends Logs] Already executed, skipping');
+    return;
+  }
+  // DOM-based guard: catches races where two script loads execute before either sets the flag
+  if (document.querySelector('.gcfl-header')) {
+    console.log('[Friends Logs] Content already exists, skipping');
+    return;
+  }
+  window.__gcflExecuted = true;
+
   console.log('[Friends Logs] Inject script executing');
 
   /**
@@ -71,20 +83,23 @@
           logTbody.nextSibling.className = 'main_tbody';
         }
 
-        // Add section header with styling
+        // Add section header with styling (using <tbody> for valid table HTML)
         if (showFriends === 'true') {
-          const breakLine = typeof loadPersonalAfter !== 'undefined' ? '<br>' : '';
           const count = response.pageInfo.rows;
           const label = count === 1 ? '1 Friend Log' : count + ' Friends Logs';
           $(
-            breakLine + '<h3 class="gcfl-header gcfl-friends-header">' + label + '</h3>'
+            '<tbody class="gcfl-header gcfl-friends-header"><tr><td colspan="2">' +
+              label +
+              '</td></tr></tbody>'
           ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
         } else if (showPersonal === 'true') {
           const count = response.pageInfo.rows;
           const label = count === 1 ? 'My Log' : 'My Logs';
-          $('<h3 class="gcfl-header gcfl-my-header">' + label + '</h3>').insertBefore(
-            logContainer.firstChild.nextSibling.firstChild
-          );
+          $(
+            '<tbody class="gcfl-header gcfl-my-header"><tr><td colspan="2">' +
+              label +
+              '</td></tr></tbody>'
+          ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
         }
 
         // Check for template function
@@ -125,9 +140,9 @@
 
         // Add main logbook header if not loading personal logs after
         if (typeof loadPersonalAfter === 'undefined') {
-          $('<br><h3 class="gcfl-header gcfl-logbook-header">Logbook</h3>').insertBefore(
-            $('.main_tbody')
-          );
+          $(
+            '<tbody class="gcfl-header gcfl-logbook-header"><tr><td colspan="2">Logbook</td></tr></tbody>'
+          ).insertBefore($('.main_tbody'));
         }
 
         // Load personal logs after friends if both were requested
@@ -138,6 +153,37 @@
       .fail(function (jqXHR, textStatus, errorThrown) {
         console.error('[Friends Logs] API request failed:', textStatus, errorThrown);
       });
+  }
+
+  /**
+   * Wait for page globals (userToken, jQuery) to be available before loading logs.
+   * Retries up to maxRetries times at 500ms intervals.
+   * @param {number} retries - Number of retries remaining
+   * @param {string} showMyLogs - "true" or "false"
+   * @param {string} showFriendsLogs - "true" or "false"
+   * @param {number|string} limit - Number of logs to fetch
+   */
+  function waitForGlobalsAndLoad(retries, showMyLogs, showFriendsLogs, limit) {
+    if (typeof userToken !== 'undefined' && typeof $ !== 'undefined') {
+      loadLogbookPage(0, showMyLogs, showFriendsLogs, limit);
+      return;
+    }
+
+    if (retries <= 0) {
+      console.error('[Friends Logs] Page globals not available after retries');
+      return;
+    }
+
+    console.log('[Friends Logs] Waiting for page globals (' + retries + ' retries left)');
+    setTimeout(function () {
+      waitForGlobalsAndLoad(retries - 1, showMyLogs, showFriendsLogs, limit);
+    }, 500);
+  }
+
+  // Enable testing - this block is ignored in the browser
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { loadLogbookPage, waitForGlobalsAndLoad };
+    return; // Skip auto-execution in test environment
   }
 
   // Get settings from the injected script element
@@ -151,26 +197,5 @@
   const showFriendsLogs = injectElement.getAttribute('showFriendsLogs');
   const limit = injectElement.getAttribute('limit');
 
-  /**
-   * Wait for page globals (userToken, jQuery) to be available before loading logs.
-   * Retries up to 10 times at 500ms intervals (5s total).
-   */
-  function waitForGlobalsAndLoad(retries) {
-    if (typeof userToken !== 'undefined' && typeof $ !== 'undefined') {
-      loadLogbookPage(0, showMyLogs, showFriendsLogs, limit);
-      return;
-    }
-
-    if (retries <= 0) {
-      console.error('[Friends Logs] Page globals not available after retries');
-      return;
-    }
-
-    console.log('[Friends Logs] Waiting for page globals (' + retries + ' retries left)');
-    setTimeout(function () {
-      waitForGlobalsAndLoad(retries - 1);
-    }, 500);
-  }
-
-  waitForGlobalsAndLoad(10);
+  waitForGlobalsAndLoad(10, showMyLogs, showFriendsLogs, limit);
 })();

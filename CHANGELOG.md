@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.3](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.2...v2.3.3) (2026-02-16)
+
+
+### Bug Fixes
+
+* prevent duplicate friend logs on Firefox ([#50](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/50)) ([f28d337](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/f28d337f315170e220a0c77921faf8fa0c34cb0d))
+
 ## [2.3.2](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.1...v2.3.2) (2026-02-15)
 
 

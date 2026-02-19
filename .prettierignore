@@ -3,3 +3,7 @@ dist/
 *.min.js
 *.min.css
 package-lock.json
+playwright-report/
+test-results/
+tests/e2e/screenshots/
+tests/e2e/fixtures/real-pages/
