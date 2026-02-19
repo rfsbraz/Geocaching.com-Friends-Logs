@@ -60,7 +60,7 @@ window.addEventListener('pageshow', function (event) {
     const cleanup = document.createElement('script');
     cleanup.textContent =
       'window.__gcflExecuted = false;' +
-      "document.querySelectorAll('.gcfl-header, .gcfl-break, .gcfl-friends-log, .gcfl-my-log').forEach(function(e){e.remove()});";
+      "document.querySelectorAll('.gcfl-header, .gcfl-friends-log, .gcfl-my-log').forEach(function(e){e.remove()});";
     document.documentElement.appendChild(cleanup);
     cleanup.remove();
 

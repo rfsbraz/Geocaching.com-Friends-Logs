@@ -11,6 +11,11 @@
     console.log('[Friends Logs] Already executed, skipping');
     return;
   }
+  // DOM-based guard: catches races where two script loads execute before either sets the flag
+  if (document.querySelector('.gcfl-header')) {
+    console.log('[Friends Logs] Content already exists, skipping');
+    return;
+  }
   window.__gcflExecuted = true;
 
   console.log('[Friends Logs] Inject script executing');
@@ -78,21 +83,23 @@
           logTbody.nextSibling.className = 'main_tbody';
         }
 
-        // Add section header with styling
+        // Add section header with styling (using <tbody> for valid table HTML)
         if (showFriends === 'true') {
-          const breakLine =
-            typeof loadPersonalAfter !== 'undefined' ? '<br class="gcfl-break">' : '';
           const count = response.pageInfo.rows;
           const label = count === 1 ? '1 Friend Log' : count + ' Friends Logs';
           $(
-            breakLine + '<h3 class="gcfl-header gcfl-friends-header">' + label + '</h3>'
+            '<tbody class="gcfl-header gcfl-friends-header"><tr><td colspan="2">' +
+              label +
+              '</td></tr></tbody>'
           ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
         } else if (showPersonal === 'true') {
           const count = response.pageInfo.rows;
           const label = count === 1 ? 'My Log' : 'My Logs';
-          $('<h3 class="gcfl-header gcfl-my-header">' + label + '</h3>').insertBefore(
-            logContainer.firstChild.nextSibling.firstChild
-          );
+          $(
+            '<tbody class="gcfl-header gcfl-my-header"><tr><td colspan="2">' +
+              label +
+              '</td></tr></tbody>'
+          ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
         }
 
         // Check for template function
@@ -134,7 +141,7 @@
         // Add main logbook header if not loading personal logs after
         if (typeof loadPersonalAfter === 'undefined') {
           $(
-            '<br class="gcfl-break"><h3 class="gcfl-header gcfl-logbook-header">Logbook</h3>'
+            '<tbody class="gcfl-header gcfl-logbook-header"><tr><td colspan="2">Logbook</td></tr></tbody>'
           ).insertBefore($('.main_tbody'));
         }
 

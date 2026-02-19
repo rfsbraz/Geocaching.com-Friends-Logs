@@ -75,13 +75,17 @@
             return jQueryObj(elems);
           }
           if (typeof selector === 'string' && selector.charAt(0) === '<') {
-            // Parse HTML string
-            var div = document.createElement('div');
-            div.innerHTML = selector;
+            // Parse HTML string — use <table> wrapper for table elements so the
+            // browser doesn't strip <tbody>/<tr>/<td> tags
+            var isTableContent = /^<(tbody|thead|tfoot|tr|td|th|caption|colgroup|col)\b/i.test(
+              selector
+            );
+            var wrapper = document.createElement(isTableContent ? 'table' : 'div');
+            wrapper.innerHTML = selector;
             var children = [];
-            while (div.firstChild) {
-              children.push(div.firstChild);
-              div.removeChild(div.firstChild);
+            while (wrapper.firstChild) {
+              children.push(wrapper.firstChild);
+              wrapper.removeChild(wrapper.firstChild);
             }
             return jQueryObj(children);
           }
