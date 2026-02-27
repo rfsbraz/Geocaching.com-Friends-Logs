@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Build script for Geocaching.com Friends Logs extension.
+ * Build script for Geocaching Friends Logs extension.
  * Validates the manifest and prepares the extension for packaging.
  */
 
@@ -70,7 +70,7 @@ function checkRequiredFiles() {
 }
 
 function main() {
-  console.log('Building Geocaching.com Friends Logs extension...\n');
+  console.log('Building Geocaching Friends Logs extension...\n');
 
   try {
     validateManifest();

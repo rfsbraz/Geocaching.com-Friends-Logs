@@ -1,4 +1,4 @@
-# Contributing to Geocaching.com Friends Logs
+# Contributing to Geocaching Friends Logs
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to the project.
 

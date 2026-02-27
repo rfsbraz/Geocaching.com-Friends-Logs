@@ -1,4 +1,4 @@
-# Geocaching.com Friends Logs
+# Geocaching Friends Logs
 
 [![CI](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml/badge.svg)](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/bgildcbomgimjfoblhlhmaehaeieeaam)](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
