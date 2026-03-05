@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.5](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.4...v2.3.5) (2026-03-05)
+
+
+### Bug Fixes
+
+* use node release type in release-please config ([#67](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/67)) ([7c7ed0b](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/7c7ed0baa94147ee216b678881f049d72cd77b0c))
+
 ## [2.3.4](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.3...v2.3.4) (2026-02-19)
 
 
