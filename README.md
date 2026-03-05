@@ -125,3 +125,7 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 - [iCheck](http://icheck.fronteed.com/) for the checkbox styling
 - All the geocachers who provided feedback and feature requests
+
+## Support
+
+If you find this useful and want to support development, you can [buy me a coffee](https://buymeacoffee.com/rfsbraz) - no pressure at all, just a nice way to say thanks.

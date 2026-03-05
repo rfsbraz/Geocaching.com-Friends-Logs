@@ -49,8 +49,20 @@ docs: update installation instructions
 
 ### Testing Changes
 
+```bash
+# Run unit tests
+npm test
+
+# Validate the build
+npm run build
+```
+
+To test the extension in your browser:
+
 1. Run `npm run build` to validate the extension
-2. Load the extension in your browser (see README for instructions)
+2. Load the extension in your browser:
+   - **Chrome/Edge/Opera/Brave**: Open the extensions page (`chrome://extensions`, `edge://extensions`, etc.), enable "Developer mode", click "Load unpacked", and select the project folder
+   - **Firefox**: Open `about:debugging#/runtime/this-firefox`, click "Load Temporary Add-on", and select `manifest.json`
 3. Test your changes on various geocache pages
 4. Verify the popup settings work correctly
 
