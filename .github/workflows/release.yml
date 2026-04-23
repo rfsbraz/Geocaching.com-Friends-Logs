@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Release Please
         id: release
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
@@ -47,7 +47,7 @@ jobs:
         run: npm run build:all
 
       - name: Upload release assets
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.release-please.outputs.tag_name }}
           files: dist/*.zip
@@ -72,7 +72,7 @@ jobs:
           path: dist
 
       - name: Upload to Chrome Web Store
-        uses: mnao305/chrome-extension-upload@v5.0.0
+        uses: mnao305/chrome-extension-upload@v6.0.0
         with:
           file-path: dist/*-chrome.zip
           extension-id: bgildcbomgimjfoblhlhmaehaeieeaam
