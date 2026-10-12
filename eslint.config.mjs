@@ -32,7 +32,7 @@ export default [
     },
   },
   {
-    files: ['tests/**/*.js', 'jest.config.js', 'playwright.config.js'],
+    files: ['tests/**/*.js', 'jest.config.js', 'playwright.config.js', 'scripts/check-site-contract.js'],
     languageOptions: {
       sourceType: 'commonjs',
       globals: {

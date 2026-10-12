@@ -20,6 +20,179 @@
 
   console.log('[Friends Logs] Inject script executing');
 
+  // Logbook table selectors, newest first, with the legacy id as the primary contract.
+  const LOG_TABLE_SELECTORS = [
+    '#cache_logs_table',
+    'table.LogsTable',
+    '#cache_logs_container table'
+  ];
+  const LOG_TABLE_TIMEOUT_MS = 20000;
+
+  /**
+   * Find the site's logbook table (never our own .gcfl-table).
+   * @returns {HTMLTableElement|null}
+   */
+  function findLogTable() {
+    for (const selector of LOG_TABLE_SELECTORS) {
+      const match = Array.from(document.querySelectorAll(selector)).find(function (el) {
+        return el.tagName === 'TABLE' && !el.classList.contains('gcfl-table');
+      });
+      if (match) {
+        return match;
+      }
+    }
+    const row = Array.from(document.querySelectorAll('.log-row')).find(function (el) {
+      return !el.closest('.gcfl-table');
+    });
+    return row ? row.closest('table') : null;
+  }
+
+  /**
+   * Run callback with the logbook table, waiting for it if the page adds it later.
+   * @param {function(HTMLTableElement): void} callback
+   */
+  function whenLogTable(callback) {
+    const found = findLogTable();
+    if (found) {
+      callback(found);
+      return;
+    }
+    if (typeof MutationObserver === 'undefined') {
+      console.error('[Friends Logs] Logbook table not found');
+      return;
+    }
+    let timer = null;
+    const observer = new MutationObserver(function () {
+      const table = findLogTable();
+      if (table) {
+        observer.disconnect();
+        clearTimeout(timer);
+        callback(table);
+      }
+    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    timer = setTimeout(function () {
+      observer.disconnect();
+      console.error(
+        '[Friends Logs] Logbook table not found (logged out, or the site markup changed)'
+      );
+    }, LOG_TABLE_TIMEOUT_MS);
+  }
+
+  /**
+   * Our own table, placed right before the site's logbook table. The site lazy-loads
+   * the logbook on scroll and clears every .log-row and tbody in its table first,
+   * so anything injected inside it was wiped (#85). A sibling table survives that.
+   * @param {HTMLTableElement} logTable
+   * @returns {HTMLTableElement}
+   */
+  function getOwnTable(logTable) {
+    const existing = document.querySelector('table.gcfl-table');
+    if (existing) {
+      return existing;
+    }
+    const own = document.createElement('table');
+    own.className = (logTable.className ? logTable.className + ' ' : '') + 'gcfl-table';
+    logTable.parentNode.insertBefore(own, logTable);
+    return own;
+  }
+
+  /**
+   * Append a section header tbody to our table.
+   */
+  function appendHeader(own, className, label) {
+    const tbody = document.createElement('tbody');
+    tbody.className = 'gcfl-header ' + className;
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 2;
+    td.textContent = label;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    own.appendChild(tbody);
+  }
+
+  /**
+   * Render one API response (friends or personal logs) into our table.
+   */
+  function renderSection(logTable, response, showFriends, showPersonal, loadPersonalAfter) {
+    const own = getOwnTable(logTable);
+    const count = response.pageInfo.rows;
+
+    if (showFriends === 'true') {
+      appendHeader(
+        own,
+        'gcfl-friends-header',
+        count === 1 ? '1 Friend Log' : count + ' Friends Logs'
+      );
+    } else if (showPersonal === 'true') {
+      appendHeader(own, 'gcfl-my-header', count === 1 ? 'My Log' : 'My Logs');
+    }
+
+    // Check for template function
+    if (typeof $.tmpl !== 'function') {
+      console.error('[Friends Logs] jQuery template plugin not found');
+      return;
+    }
+
+    const logs = $.tmpl('tmplCacheLogRow', response.data);
+
+    // Fix: remove nested tables that cause display issues
+    // https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/1
+    $(logs).find('table').remove();
+
+    // Add styling class to log rows
+    if (showFriends === 'true') {
+      logs.addClass('gcfl-friends-log');
+    } else if (showPersonal === 'true') {
+      logs.addClass('gcfl-my-log');
+    }
+
+    // The template renders <tr class="log-row"> today; older markup used <tbody> rows.
+    const rowsBody = document.createElement('tbody');
+    rowsBody.className = 'gcfl-rows';
+    for (let i = 0; i < logs.length; i++) {
+      const el = logs[i];
+      if (!el || !el.nodeType || el.nodeType !== 1) {
+        continue;
+      }
+      if (el.tagName === 'TBODY') {
+        own.appendChild(el);
+      } else {
+        rowsBody.appendChild(el);
+      }
+    }
+    if (rowsBody.children.length) {
+      // The site's infinite scroll measures $('.log-row:last-child'); keep our rows from
+      // ever being a last child so it keeps tracking the real logbook.
+      const spacer = document.createElement('tr');
+      spacer.className = 'gcfl-spacer';
+      spacer.setAttribute('aria-hidden', 'true');
+      rowsBody.appendChild(spacer);
+      own.appendChild(rowsBody);
+    }
+
+    // Initialize fancybox for log images if available
+    if (typeof $.fn !== 'undefined' && typeof $.fn.fancybox === 'function') {
+      logs.find('a.tb_images').each(function () {
+        const $this = $(this);
+        $this.fancybox({
+          type: 'image',
+          titlePosition: 'inside',
+          padding: 10,
+          titleFormat: function () {
+            return $this.data('title');
+          }
+        });
+      });
+    }
+
+    // Add main logbook header if not loading personal logs after
+    if (typeof loadPersonalAfter === 'undefined') {
+      appendHeader(own, 'gcfl-logbook-header', 'Logbook');
+    }
+  }
+
   /**
    * Load logs from the geocaching.com logbook API.
    * @param {number} pageIdx - Page index (0-based)
@@ -68,87 +241,14 @@
           return;
         }
 
-        const logTable = document.getElementById('cache_logs_table');
-        const logContainer = document.getElementById('cache_logs_container');
+        whenLogTable(function (logTable) {
+          renderSection(logTable, response, showFriends, showPersonal, loadPersonalAfter);
 
-        if (!logTable || !logContainer) {
-          console.error('[Friends Logs] Required DOM elements not found');
-          return;
-        }
-
-        const logTbody = logTable.firstChild;
-
-        // Mark the main tbody for reference (only once)
-        if ($('.main_tbody').length === 0 && logTbody.nextSibling) {
-          logTbody.nextSibling.className = 'main_tbody';
-        }
-
-        // Add section header with styling (using <tbody> for valid table HTML)
-        if (showFriends === 'true') {
-          const count = response.pageInfo.rows;
-          const label = count === 1 ? '1 Friend Log' : count + ' Friends Logs';
-          $(
-            '<tbody class="gcfl-header gcfl-friends-header"><tr><td colspan="2">' +
-              label +
-              '</td></tr></tbody>'
-          ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
-        } else if (showPersonal === 'true') {
-          const count = response.pageInfo.rows;
-          const label = count === 1 ? 'My Log' : 'My Logs';
-          $(
-            '<tbody class="gcfl-header gcfl-my-header"><tr><td colspan="2">' +
-              label +
-              '</td></tr></tbody>'
-          ).insertBefore(logContainer.firstChild.nextSibling.firstChild);
-        }
-
-        // Check for template function
-        if (typeof $.tmpl !== 'function') {
-          console.error('[Friends Logs] jQuery template plugin not found');
-          return;
-        }
-
-        const logs = $.tmpl('tmplCacheLogRow', response.data);
-
-        // Fix: remove nested tables that cause display issues
-        // https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/1
-        $(logs).find('table').remove();
-
-        // Add styling class to log rows
-        if (showFriends === 'true') {
-          logs.addClass('gcfl-friends-log');
-        } else if (showPersonal === 'true') {
-          logs.addClass('gcfl-my-log');
-        }
-
-        logs.insertBefore(logTbody);
-
-        // Initialize fancybox for log images if available
-        if (typeof $.fn.fancybox === 'function') {
-          logs.find('a.tb_images').each(function () {
-            const $this = $(this);
-            $this.fancybox({
-              type: 'image',
-              titlePosition: 'inside',
-              padding: 10,
-              titleFormat: function () {
-                return $this.data('title');
-              }
-            });
-          });
-        }
-
-        // Add main logbook header if not loading personal logs after
-        if (typeof loadPersonalAfter === 'undefined') {
-          $(
-            '<tbody class="gcfl-header gcfl-logbook-header"><tr><td colspan="2">Logbook</td></tr></tbody>'
-          ).insertBefore($('.main_tbody'));
-        }
-
-        // Load personal logs after friends if both were requested
-        if (loadPersonalAfter === 'true') {
-          loadLogbookPage(pageIdx, 'true', 'false', limit);
-        }
+          // Load personal logs after friends if both were requested
+          if (loadPersonalAfter === 'true') {
+            loadLogbookPage(pageIdx, 'true', 'false', limit);
+          }
+        });
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
         console.error('[Friends Logs] API request failed:', textStatus, errorThrown);
@@ -182,7 +282,7 @@
 
   // Enable testing - this block is ignored in the browser
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { loadLogbookPage, waitForGlobalsAndLoad };
+    module.exports = { loadLogbookPage, waitForGlobalsAndLoad, findLogTable, whenLogTable };
     return; // Skip auto-execution in test environment
   }
 
