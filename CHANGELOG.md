@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.6](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.5...v2.3.6) (2026-10-12)
+
+
+### Bug Fixes
+
+* **inject:** render friend logs outside the lazy-loaded logbook table ([#94](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/94)) ([bde574d](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/bde574ded20ef8f9cd964f4ad7e01e52e22b6d0f))
+
 ## [2.3.5](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.4...v2.3.5) (2026-03-05)
 
 
