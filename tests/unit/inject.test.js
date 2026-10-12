@@ -1,4 +1,4 @@
-const { loadLogbookPage, waitForGlobalsAndLoad } = require('../../inject');
+const { loadLogbookPage, waitForGlobalsAndLoad, findLogTable } = require('../../inject');
 
 /**
  * Creates a jQuery-like wrapper that performs REAL DOM operations.
@@ -219,8 +219,9 @@ describe('inject.js', () => {
       });
 
       // Verify ACTUAL DOM: friend log rows exist with correct class
-      const logTable = document.getElementById('cache_logs_table');
-      const friendLogs = logTable.querySelectorAll('.gcfl-friends-log');
+      const ownTable = document.querySelector('table.gcfl-table');
+      expect(ownTable.nextElementSibling.id).toBe('cache_logs_table');
+      const friendLogs = ownTable.querySelectorAll('.gcfl-friends-log');
       expect(friendLogs).toHaveLength(2);
       expect(friendLogs[0].getAttribute('data-log-id')).toBe('1');
       expect(friendLogs[1].getAttribute('data-log-id')).toBe('2');
@@ -269,20 +270,78 @@ describe('inject.js', () => {
       expect(logbookHeader.textContent).toContain('Logbook');
     });
 
-    test('marks second tbody as main_tbody', () => {
-      // Remove the pre-set class to test the auto-detection
-      const secondTbody = document.querySelector('#cache_logs_table tbody:nth-child(2)');
-      secondTbody.className = '';
-
+    test('keeps injected logs outside the site logbook table', () => {
       loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
 
-      triggerDone({
-        status: 'success',
-        pageInfo: { rows: 1 },
-        data: [{ logID: 1 }]
+      const siteTable = document.getElementById('cache_logs_table');
+      expect(siteTable.querySelector('.gcfl-header, .gcfl-friends-log')).toBeNull();
+      expect(siteTable.querySelector('#first-tbody').textContent).toContain('Existing log');
+    });
+
+    test('injected logs survive the site clearing its logbook on lazy load (#85)', () => {
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 2 }, data: [{ logID: 1 }, { logID: 2 }] });
+
+      // cachedetails-main: n.find("tbody").empty(), n.find(".log-row").remove(), then append rows
+      const siteTable = document.getElementById('cache_logs_table');
+      siteTable.querySelectorAll('tbody').forEach(tb => (tb.innerHTML = ''));
+      siteTable.querySelectorAll('.log-row').forEach(r => r.remove());
+      siteTable.insertAdjacentHTML('beforeend', '<tr class="log-row"><td>Lazy log</td></tr>');
+
+      expect(document.querySelectorAll('.gcfl-friends-log')).toHaveLength(2);
+      expect(document.querySelector('.gcfl-friends-header').textContent).toContain(
+        '2 Friends Logs'
+      );
+      expect(document.querySelector('.gcfl-logbook-header')).not.toBeNull();
+    });
+
+    test('renders <tr> template rows inside a tbody with a trailing spacer', () => {
+      global.$.tmpl = jest.fn((_t, data) => {
+        const rows = data.map(item => {
+          const tr = document.createElement('tr');
+          tr.className = 'log-row';
+          tr.setAttribute('data-log-id', String(item.logID));
+          tr.innerHTML = '<td>row</td>';
+          return tr;
+        });
+        const arr = rows.slice();
+        arr.addClass = cls => (rows.forEach(r => r.classList.add(cls)), arr);
+        arr.find = () => Object.assign([], { remove() {}, each() {} });
+        return arr;
       });
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 2 }, data: [{ logID: 1 }, { logID: 2 }] });
 
-      expect(secondTbody.className).toBe('main_tbody');
+      const body = document.querySelector('.gcfl-table tbody.gcfl-rows');
+      expect(body.querySelectorAll('tr.gcfl-friends-log')).toHaveLength(2);
+      // The site's infinite scroll uses $('.log-row:last-child'); ours must never match.
+      expect(body.lastElementChild.className).toBe('gcfl-spacer');
+      expect(document.querySelectorAll('.gcfl-table .log-row:last-child')).toHaveLength(0);
+    });
+
+    test('falls back to table.LogsTable when the legacy id is gone', () => {
+      document.body.innerHTML =
+        '<div><table class="LogsTable"><tbody><tr class="log-row"><td>x</td></tr></tbody></table></div>';
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+
+      const own = document.querySelector('table.gcfl-table');
+      expect(own.nextElementSibling.classList.contains('LogsTable')).toBe(true);
+      expect(findLogTable().classList.contains('gcfl-table')).toBe(false);
+    });
+
+    test('waits for a logbook table that is added after the API responds', async () => {
+      document.body.innerHTML = '<div id="logbook-slot"></div>';
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+      expect(document.querySelector('.gcfl-friends-header')).toBeNull();
+
+      document.getElementById('logbook-slot').innerHTML = '<table id="cache_logs_table"></table>';
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(document.querySelector('.gcfl-friends-header')).not.toBeNull();
+      expect(document.querySelectorAll('.gcfl-friends-log')).toHaveLength(1);
     });
 
     test('inserts personal log elements with correct class', () => {

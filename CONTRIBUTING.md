@@ -55,6 +55,9 @@ npm test
 
 # Validate the build
 npm run build
+
+# Check the live geocaching.com page still matches what inject.js expects
+node scripts/check-site-contract.js [cache-page-url]
 ```
 
 To test the extension in your browser:
