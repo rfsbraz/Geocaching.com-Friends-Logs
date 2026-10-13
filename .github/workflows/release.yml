@@ -71,11 +71,25 @@ jobs:
           name: browser-extensions
           path: dist
 
+      # Chrome Web Store API V2. V1.1 stops working on 2026-10-15.
+      # https://developer.chrome.com/blog/cws-api-v2
+      - name: Check Chrome publisher ID
+        env:
+          CHROME_PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
+        run: |
+          if [ -z "$CHROME_PUBLISHER_ID" ]; then
+            echo "::error title=Chrome::Repository variable CHROME_PUBLISHER_ID is not set. Find it in the Chrome Web Store Developer Dashboard under Publisher > Settings."
+            exit 1
+          fi
+
+      # Uploads, waits up to 60 seconds for the upload to finish, then publishes with
+      # DEFAULT_PUBLISH. Visibility comes from the Developer Dashboard.
       - name: Upload to Chrome Web Store
-        uses: mnao305/chrome-extension-upload@v5.0.0
+        uses: mnao305/chrome-extension-upload@v7.0.0
         with:
           file-path: dist/*-chrome.zip
           extension-id: bgildcbomgimjfoblhlhmaehaeieeaam
+          publisher-id: ${{ vars.CHROME_PUBLISHER_ID }}
           client-id: ${{ secrets.CHROME_CLIENT_ID }}
           client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
           refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
