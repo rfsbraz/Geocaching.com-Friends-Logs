@@ -30,7 +30,13 @@ const EXTENSION_FILES = [
   'popup.css',
   'style.css',
   'icons/icon16.png',
-  'icons/icon48.png'
+  'icons/icon48.png',
+  '_locales/en/messages.json',
+  '_locales/nl/messages.json',
+  '_locales/de/messages.json',
+  '_locales/cs/messages.json',
+  '_locales/fr/messages.json',
+  '_locales/sv/messages.json'
 ];
 
 const BROWSERS = ['chrome', 'firefox', 'opera', 'edge'];
