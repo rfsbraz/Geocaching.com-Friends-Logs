@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.6...v2.4.0) (2026-10-13)
+
+
+### Features
+
+* **i18n:** localize extension name and description ([#109](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/109)) ([3b263e2](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/3b263e2480c502d734f6ed29810e24e3f1628552))
+* **manifest:** rename to Geocaching.com Friends Logs and update description ([#106](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/106)) ([bbc1ea1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/bbc1ea1e4f47fbaf1495205deaff15020ad0b735))
+
 ## [2.3.6](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.5...v2.3.6) (2026-10-12)
 
 
