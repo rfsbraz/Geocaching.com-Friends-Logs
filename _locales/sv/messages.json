@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Geocaching.com Friends Logs",
+    "description": "Extension name. Keep the brand name as is."
+  },
+  "extDescription": {
+    "message": "Se dina vänners loggar högst upp på varje cachesida på Geocaching.com. Slipp leta igenom loggboken för att hitta dem.",
+    "description": "Store summary and extension description. 132 characters or fewer."
+  }
+}
