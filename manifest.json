@@ -8,9 +8,7 @@
       "id": "geocaching-friends-logs@rfsbraz.github.io",
       "strict_min_version": "109.0",
       "data_collection_permissions": {
-        "required": [
-          "none"
-        ]
+        "required": ["none"]
       }
     }
   },
@@ -20,26 +18,15 @@
         "https://www.geocaching.com/geocache/GC*",
         "https://*.geocaching.com/geocache/GC*"
       ],
-      "css": [
-        "style.css"
-      ],
-      "js": [
-        "init.js",
-        "content_script.js"
-      ]
+      "css": ["style.css"],
+      "js": ["init.js", "content_script.js"]
     }
   ],
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["storage"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "inject.js"
-      ],
-      "matches": [
-        "https://*.geocaching.com/*"
-      ]
+      "resources": ["inject.js"],
+      "matches": ["https://*.geocaching.com/*"]
     }
   ],
   "icons": {
