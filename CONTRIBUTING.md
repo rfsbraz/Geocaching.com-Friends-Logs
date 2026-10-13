@@ -69,6 +69,23 @@ To test the extension in your browser:
 3. Test your changes on various geocache pages
 4. Verify the popup settings work correctly
 
+## Store credentials check
+
+`.github/workflows/store-credentials.yml` runs every Monday and on demand (Actions > Store credentials > Run workflow). It runs `scripts/check-store-credentials.sh`, which only reads from the stores:
+
+- Chrome: exchanges `CHROME_REFRESH_TOKEN` for an access token with `CHROME_CLIENT_ID` and `CHROME_CLIENT_SECRET`, then reads item `bgildcbomgimjfoblhlhmaehaeieeaam`. The weekly exchange keeps the refresh token in use. `invalid_grant` means the token expired or was revoked: create a new one and update the secret.
+- Chrome API version: the check uses the V1.1 API, like the publish action, unless the repository variable `CHROME_PUBLISHER_ID` is set. Then it uses the V2 `fetchStatus` call. Google ends V1.1 on 2026-10-15, so set the variable. The publisher ID is in the Developer Dashboard under Publisher > Settings.
+- Edge: calls the Add-ons API with `EDGE_CLIENT_ID`, `EDGE_API_KEY` and `EDGE_PRODUCT_ID`. The API has no plain product read, so it asks for an operation that does not exist. 404 means the key was accepted. 401 or 403 means it was rejected. A 404 would also hide a wrong product id.
+- Edge key expiry: `EDGE_API_KEY_EXPIRES` at the top of the workflow. Within 30 days of that date the run adds a warning. After it, the run fails. When you create a new key, update both the secret and this date.
+
+The script prints only status codes and error codes, never tokens or response bodies.
+
+On a failure or an expiry warning, the workflow comments on the open issue titled "Store credentials need renewal", or creates it. When a later run passes with no warnings, it closes that issue with a comment.
+
+GitHub disables scheduled workflows after 60 days without repository activity. The `keepalive` job calls the API to enable the workflow on every run, which resets that timer without commits. If the workflow still ends up disabled, enable it again under Actions > Store credentials.
+
+To test locally with fake values, export the secrets above plus `EDGE_API_KEY_EXPIRES=2026-12-24` and run `./scripts/check-store-credentials.sh`. It should fail with status codes only.
+
 ## Submitting a Pull Request
 
 1. Ensure all checks pass (`npm run lint && npm run format:check && npm run build`)
