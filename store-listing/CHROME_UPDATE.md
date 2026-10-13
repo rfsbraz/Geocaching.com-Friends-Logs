@@ -1,0 +1,274 @@
+# Chrome Web Store listing update
+
+Everything needed to refresh the Geocaching.com Friends Logs listing in the Chrome Web Store developer dashboard. Files live next to this guide in `assets/` and `locales/`.
+
+Dashboard: https://chrome.google.com/webstore/devconsole , pick the extension, then open the **Store listing** tab.
+
+## 1. Title and summary (from the package)
+
+Chrome does not let you edit these in the dashboard. They come from `manifest.json`:
+
+- `name`: `Geocaching.com Friends Logs`
+- `description` (max 132 characters, this one is 119):
+
+  > See your friends' logs at the top of every Geocaching.com cache page. No more digging through the logbook to find them.
+
+These change only after a new version with the updated manifest is uploaded and approved. The manifest change is being done in a separate PR.
+
+## 2. Description (English)
+
+Paste this into **Description** on the Store listing tab:
+
+```text
+See your friends' logs at the top of every Geocaching.com cache page. No more digging through the logbook to find them.
+
+Never miss a friend's geocaching adventure again!
+
+This extension enhances Geocaching.com by moving your friends' logs to the top of every cache listing page. Instantly see who among your friends has visited a cache and what they thought about it, without scrolling through hundreds of logs.
+
+FEATURES
+  • Friends logs appear at the top of cache pages
+  • See your own logs highlighted separately
+  • Configurable display limit (5, 10, 20, 50, or 100 logs)
+  • Toggle friends logs and your own logs independently
+  • Clean, non-intrusive design that matches Geocaching.com
+
+PERFECT FOR
+  • Planning group caching trips with friends
+  • Discovering caches your friends recommend
+  • Avoiding spoilers from strangers while reading trusted reviews
+  • Quickly checking if friends have already found a cache
+
+HOW IT WORKS
+  Simply install the extension, visit any cache page on Geocaching.com, and your friends' logs will automatically appear at the top. Use the popup menu to customize your preferences.
+
+PRIVACY
+  This extension only runs on Geocaching.com and does not collect or transmit any personal data.
+
+Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+## 3. Category and language
+
+- Category: **Social & Communication** (fallback: **Productivity**, if you think it fits the store better)
+- Language: English (default)
+
+## 4. Graphics
+
+| Dashboard field | File | Size |
+|---|---|---|
+| Store icon | `assets/icon128.png` | 128x128 (normally taken from the package, only upload if asked) |
+| Screenshots | `assets/screenshot-1.png` | 1280x800 |
+| Small promo tile | `assets/promo_small_440x280.png` | 440x280, PNG with no alpha |
+| Marquee promo tile | `assets/promo_marquee_1400x560.png` | 1400x560, PNG with no alpha |
+
+The marquee shows a real friend log; the username and avatar are blurred.
+
+Chrome allows up to 5 screenshots. More are planned (popup settings, before and after on a cache page). Add them as `screenshot-2.png` and so on when ready.
+
+## 5. Translations
+
+How Chrome handles languages:
+
+- The **description** can be set per language in the dashboard. Use the language picker at the top of the Store listing tab, choose the language, paste the description, save.
+- The **summary** and title per language only work if the package ships `_locales/<lang>/messages.json` and the manifest uses `__MSG_...__` with a `default_locale`. Without that, every language shows the English summary. The localized summaries below are ready for when `_locales` is added.
+
+Full texts are also in `locales/<lang>.md`. None of them have been checked by a native speaker yet.
+
+### Dutch (Nederlands)
+
+Summary (only used if the package has `_locales/nl/messages.json`):
+
+> Zie de logs van je vrienden bovenaan elke cachepagina op Geocaching.com. Nooit meer het logboek doorzoeken om ze te vinden.
+
+Description:
+
+```text
+Zie de logs van je vrienden bovenaan elke cachepagina op Geocaching.com. Nooit meer het logboek doorzoeken om ze te vinden.
+
+Mis nooit meer een geocache-avontuur van je vrienden!
+
+Deze extensie verbetert Geocaching.com door de logs van je vrienden bovenaan elke cachepagina te zetten. Zie meteen welke vrienden een cache hebben bezocht en wat ze ervan vonden, zonder door honderden logs te scrollen.
+
+FUNCTIES
+  • Logs van vrienden verschijnen bovenaan de cachepagina
+  • Je eigen logs worden apart gemarkeerd
+  • Instelbaar aantal logs (5, 10, 20, 50 of 100)
+  • Logs van vrienden en je eigen logs los van elkaar aan- of uitzetten
+  • Strak, onopvallend ontwerp dat past bij Geocaching.com
+
+IDEAAL VOOR
+  • Samen met vrienden een cachetocht plannen
+  • Caches ontdekken die je vrienden aanraden
+  • Spoilers van onbekenden vermijden en alleen logs lezen van mensen die je vertrouwt
+  • Snel zien of vrienden een cache al gevonden hebben
+
+ZO WERKT HET
+  Installeer de extensie, open een willekeurige cachepagina op Geocaching.com en de logs van je vrienden staan automatisch bovenaan. Via het pop-upmenu pas je de instellingen aan.
+
+PRIVACY
+  Deze extensie werkt alleen op Geocaching.com en verzamelt of verstuurt geen persoonsgegevens.
+
+Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+### German (Deutsch)
+
+Summary (only used if the package has `_locales/de/messages.json`):
+
+> Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein Durchsuchen des Logbuchs mehr.
+
+Description:
+
+```text
+Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein mühsames Durchsuchen des Logbuchs mehr.
+
+Verpasse nie wieder ein Geocaching-Abenteuer deiner Freunde!
+
+Diese Erweiterung verbessert Geocaching.com, indem sie die Logs deiner Freunde an den Anfang jeder Cache-Seite verschiebt. Du siehst sofort, wer von deinen Freunden einen Cache besucht hat und was er davon hielt, ganz ohne Scrollen durch Hunderte von Logs.
+
+FUNKTIONEN
+  • Logs deiner Freunde erscheinen oben auf der Cache-Seite
+  • Deine eigenen Logs werden separat hervorgehoben
+  • Einstellbare Anzahl (5, 10, 20, 50 oder 100 Logs)
+  • Freundes-Logs und eigene Logs unabhängig voneinander ein- und ausschalten
+  • Schlichtes, unaufdringliches Design, passend zu Geocaching.com
+
+IDEAL FÜR
+  • Gemeinsame Cachertouren mit Freunden planen
+  • Caches entdecken, die deine Freunde empfehlen
+  • Spoiler von Fremden vermeiden und nur Logs von Leuten lesen, denen du vertraust
+  • Schnell prüfen, ob Freunde einen Cache schon gefunden haben
+
+SO FUNKTIONIERT ES
+  Installiere die Erweiterung, öffne eine beliebige Cache-Seite auf Geocaching.com, und die Logs deiner Freunde erscheinen automatisch ganz oben. Über das Popup-Menü passt du die Einstellungen an.
+
+DATENSCHUTZ
+  Diese Erweiterung läuft nur auf Geocaching.com und sammelt oder überträgt keinerlei personenbezogene Daten.
+
+Open Source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+### Czech (Čeština)
+
+Summary (only used if the package has `_locales/cs/messages.json`):
+
+> Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com. Už je nemusíte hledat v logbooku.
+
+Description:
+
+```text
+Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com. Už je nemusíte pracně hledat v logbooku.
+
+Už vám neunikne žádné kačerské dobrodružství vašich přátel!
+
+Toto rozšíření vylepšuje Geocaching.com tím, že přesune logy vašich přátel na začátek každého listingu keše. Hned uvidíte, kdo z přátel keš navštívil a jak se mu líbila, bez procházení stovek logů.
+
+FUNKCE
+  • Logy přátel se zobrazí nahoře na stránce keše
+  • Vaše vlastní logy jsou zvýrazněné zvlášť
+  • Nastavitelný počet zobrazených logů (5, 10, 20, 50 nebo 100)
+  • Logy přátel a vlastní logy lze zapnout či vypnout nezávisle
+  • Čistý, nenápadný vzhled, který ladí s Geocaching.com
+
+IDEÁLNÍ PRO
+  • Plánování společných kešovacích výletů s přáteli
+  • Objevování keší, které doporučují vaši přátelé
+  • Vyhnutí se spoilerům od cizích lidí a čtení logů od těch, kterým věříte
+  • Rychlou kontrolu, jestli už přátelé keš odlovili
+
+JAK TO FUNGUJE
+  Stačí rozšíření nainstalovat, otevřít libovolnou stránku keše na Geocaching.com a logy přátel se automaticky objeví nahoře. Nastavení upravíte ve vyskakovacím menu.
+
+SOUKROMÍ
+  Rozšíření běží pouze na Geocaching.com a nesbírá ani neodesílá žádné osobní údaje.
+
+Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+### French (Français)
+
+Summary (only used if the package has `_locales/fr/messages.json`):
+
+> Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.
+
+Description:
+
+```text
+Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.
+
+Ne manquez plus aucune aventure de géocaching de vos amis !
+
+Cette extension améliore Geocaching.com en plaçant les logs de vos amis en haut de chaque page de cache. Voyez tout de suite lesquels de vos amis ont visité une cache et ce qu'ils en ont pensé, sans faire défiler des centaines de logs.
+
+FONCTIONNALITÉS
+  • Les logs de vos amis s'affichent en haut des pages de cache
+  • Vos propres logs sont mis en évidence séparément
+  • Nombre de logs affichés réglable (5, 10, 20, 50 ou 100)
+  • Activez ou désactivez séparément les logs de vos amis et les vôtres
+  • Design sobre et discret, assorti à Geocaching.com
+
+IDÉAL POUR
+  • Préparer des sorties géocaching entre amis
+  • Découvrir les caches que vos amis recommandent
+  • Éviter les spoilers d'inconnus en lisant les avis de personnes de confiance
+  • Vérifier rapidement si vos amis ont déjà trouvé une cache
+
+COMMENT ÇA MARCHE
+  Installez l'extension, ouvrez n'importe quelle page de cache sur Geocaching.com et les logs de vos amis apparaissent automatiquement en haut. Le menu contextuel de l'extension vous permet de régler vos préférences.
+
+CONFIDENTIALITÉ
+  Cette extension fonctionne uniquement sur Geocaching.com et ne collecte ni ne transmet aucune donnée personnelle.
+
+Open source : github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+### Swedish (Svenska)
+
+Summary (only used if the package has `_locales/sv/messages.json`):
+
+> Se dina vänners loggar högst upp på varje cachesida på Geocaching.com. Slipp leta igenom loggboken för att hitta dem.
+
+Description:
+
+```text
+Se dina vänners loggar högst upp på varje cachesida på Geocaching.com. Slipp leta igenom loggboken för att hitta dem.
+
+Missa aldrig mer en väns geocachingäventyr!
+
+Det här tillägget förbättrar Geocaching.com genom att flytta dina vänners loggar högst upp på varje cachesida. Se direkt vilka av dina vänner som har besökt en cache och vad de tyckte, utan att scrolla igenom hundratals loggar.
+
+FUNKTIONER
+  • Vänners loggar visas högst upp på cachesidan
+  • Dina egna loggar markeras separat
+  • Valfritt antal loggar (5, 10, 20, 50 eller 100)
+  • Slå på eller av vänners loggar och dina egna loggar var för sig
+  • Stilren, diskret design som passar Geocaching.com
+
+PERFEKT FÖR
+  • Att planera cachingturer tillsammans med vänner
+  • Att hitta cacher som dina vänner rekommenderar
+  • Att slippa spoilers från okända och läsa loggar från folk du litar på
+  • Att snabbt se om vänner redan har hittat en cache
+
+SÅ FUNGERAR DET
+  Installera tillägget, öppna valfri cachesida på Geocaching.com så visas dina vänners loggar automatiskt högst upp. Ändra inställningarna i popup-menyn.
+
+INTEGRITET
+  Tillägget körs bara på Geocaching.com och samlar inte in eller skickar några personuppgifter.
+
+Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+```
+
+## 6. Privacy practices tab
+
+- **Single purpose**: Shows your friends' logs and your own logs at the top of Geocaching.com cache pages, so you do not have to search the logbook for them.
+- **storage permission**: Used only to save display settings (how many logs to show, and whether friends' logs and your own logs are shown). Nothing else is stored.
+- **Host permissions** (`geocaching.com/geocache/GC*`): Needed to read the logs on the cache page you are viewing and show your friends' logs at the top.
+- **Remote code**: No, the extension does not use remote code.
+- **Data usage**: No user data is collected. Leave every data type unchecked and tick the three certifications (no selling data, no unrelated use, no creditworthiness use).
+
+## 7. Save and submit
+
+1. Click **Save draft**.
+2. Click **Submit for review**. Listing-only changes usually go through faster than code changes.

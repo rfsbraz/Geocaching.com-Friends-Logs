@@ -1,0 +1,34 @@
+# de
+
+## Summary
+
+Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein Durchsuchen des Logbuchs mehr.
+
+## Description
+
+Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein mühsames Durchsuchen des Logbuchs mehr.
+
+Verpasse nie wieder ein Geocaching-Abenteuer deiner Freunde!
+
+Diese Erweiterung verbessert Geocaching.com, indem sie die Logs deiner Freunde an den Anfang jeder Cache-Seite verschiebt. Du siehst sofort, wer von deinen Freunden einen Cache besucht hat und was er davon hielt, ganz ohne Scrollen durch Hunderte von Logs.
+
+FUNKTIONEN
+  • Logs deiner Freunde erscheinen oben auf der Cache-Seite
+  • Deine eigenen Logs werden separat hervorgehoben
+  • Einstellbare Anzahl (5, 10, 20, 50 oder 100 Logs)
+  • Freundes-Logs und eigene Logs unabhängig voneinander ein- und ausschalten
+  • Schlichtes, unaufdringliches Design, passend zu Geocaching.com
+
+IDEAL FÜR
+  • Gemeinsame Cachertouren mit Freunden planen
+  • Caches entdecken, die deine Freunde empfehlen
+  • Spoiler von Fremden vermeiden und nur Logs von Leuten lesen, denen du vertraust
+  • Schnell prüfen, ob Freunde einen Cache schon gefunden haben
+
+SO FUNKTIONIERT ES
+  Installiere die Erweiterung, öffne eine beliebige Cache-Seite auf Geocaching.com, und die Logs deiner Freunde erscheinen automatisch ganz oben. Über das Popup-Menü passt du die Einstellungen an.
+
+DATENSCHUTZ
+  Diese Erweiterung läuft nur auf Geocaching.com und sammelt oder überträgt keinerlei personenbezogene Daten.
+
+Open Source: github.com/rfsbraz/Geocaching.com-Friends-Logs
