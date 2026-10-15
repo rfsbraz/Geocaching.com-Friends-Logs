@@ -13,7 +13,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const archiver = require('archiver');
 
 const ROOT_DIR = path.join(__dirname, '..');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
@@ -134,7 +133,9 @@ async function createBrowserBuild(browser, manifest) {
   console.log(`\nBuilding for ${browser}...`);
 
   const output = fs.createWriteStream(zipPath);
-  const archive = archiver('zip', { zlib: { level: 9 } });
+  // archiver 8 is ESM only and exports one class per format.
+  const { ZipArchive } = await import('archiver');
+  const archive = new ZipArchive({ zlib: { level: 9 } });
 
   return new Promise((resolve, reject) => {
     output.on('close', () => {
