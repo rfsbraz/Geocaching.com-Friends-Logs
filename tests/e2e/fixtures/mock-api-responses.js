@@ -68,4 +68,71 @@ const errorResponse = {
   data: []
 };
 
-module.exports = { friendsLogsResponse, personalLogsResponse, emptyLogsResponse, errorResponse };
+const LONG_LOG_TEXT =
+  'Absolutely spectacular cache with a long walk through dense woods, a cave to explore ' +
+  'and a final that took us a while to find. This text is long on purpose so it fills the ' +
+  'whole log column, wraps onto several lines and reaches the right edge of the row.';
+
+/** Friend logs for the layout check (#141): one long and one short log text. */
+const layoutFriendsLogsResponse = {
+  status: 'success',
+  pageInfo: { rows: 2 },
+  data: [
+    {
+      LogID: 3001,
+      LogType: 'Found it',
+      LogTypeImage: 'icon_smile.gif',
+      LogText: LONG_LOG_TEXT,
+      Created: '12/23/2011',
+      Visited: '12/23/2011',
+      UserName: 'LongLogFriend',
+      AccountID: 6001,
+      AvatarImage: '',
+      LogGuid: '33333333-aaaa-bbbb-cccc-dddddddddddd',
+      Images: []
+    },
+    {
+      LogID: 3002,
+      LogType: 'Found it',
+      LogTypeImage: 'icon_smile.gif',
+      LogText: 'TFTC',
+      Created: '01/10/2024',
+      Visited: '01/09/2024',
+      UserName: 'ShortLogFriend',
+      AccountID: 6002,
+      AvatarImage: '',
+      LogGuid: '44444444-aaaa-bbbb-cccc-dddddddddddd',
+      Images: []
+    }
+  ]
+};
+
+/** My log for the layout check (#141), with long log text. */
+const layoutPersonalLogsResponse = {
+  status: 'success',
+  pageInfo: { rows: 1 },
+  data: [
+    {
+      LogID: 3003,
+      LogType: 'Found it',
+      LogTypeImage: 'icon_smile.gif',
+      LogText: LONG_LOG_TEXT,
+      Created: '12/23/2011',
+      Visited: '12/23/2011',
+      UserName: 'MyUsername',
+      AccountID: 9001,
+      AvatarImage: '',
+      LogGuid: '55555555-aaaa-bbbb-cccc-dddddddddddd',
+      Images: []
+    }
+  ]
+};
+
+module.exports = {
+  friendsLogsResponse,
+  personalLogsResponse,
+  emptyLogsResponse,
+  errorResponse,
+  layoutFriendsLogsResponse,
+  layoutPersonalLogsResponse
+};

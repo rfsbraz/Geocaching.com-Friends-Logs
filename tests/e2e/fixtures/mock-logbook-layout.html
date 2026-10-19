@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+  <head>
+    <title>GC12345 - Logbook layout</title>
+    <script>
+      // Minimal jQuery stub for testing
+      (function () {
+        'use strict';
+
+        function jQueryObj(elements) {
+          var obj = Array.isArray(elements) ? elements.slice() : [elements];
+          obj.insertBefore = function (target) {
+            var el =
+              target && !target.nodeType && typeof target.length === 'number' ? target[0] : target;
+            if (el && el.parentNode) {
+              for (var i = 0; i < obj.length; i++) {
+                el.parentNode.insertBefore(obj[i], el);
+              }
+            }
+            return obj;
+          };
+          obj.addClass = function (cls) {
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].classList) {
+                obj[i].classList.add(cls);
+              }
+            }
+            return obj;
+          };
+          obj.find = function (selector) {
+            var results = [];
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].querySelectorAll) {
+                var found = obj[i].querySelectorAll(selector);
+                for (var j = 0; j < found.length; j++) {
+                  results.push(found[j]);
+                }
+              }
+            }
+            return jQueryObj(results);
+          };
+          obj.remove = function () {
+            for (var i = 0; i < obj.length; i++) {
+              if (obj[i] && obj[i].parentNode) {
+                obj[i].parentNode.removeChild(obj[i]);
+              }
+            }
+            return obj;
+          };
+          obj.each = function (fn) {
+            for (var i = 0; i < obj.length; i++) {
+              fn.call(obj[i], i, obj[i]);
+            }
+            return obj;
+          };
+          obj.data = function () {
+            return '';
+          };
+          return obj;
+        }
+
+        function $(selector) {
+          // Handle DOM elements
+          if (selector && selector.nodeType) {
+            return jQueryObj([selector]);
+          }
+          // Handle array-like objects (e.g., result of $.tmpl)
+          if (typeof selector === 'object' && typeof selector.length === 'number') {
+            var elems = [];
+            for (var i = 0; i < selector.length; i++) {
+              if (selector[i] && selector[i].nodeType) {
+                elems.push(selector[i]);
+              }
+            }
+            return jQueryObj(elems);
+          }
+          if (typeof selector === 'string' && selector.charAt(0) === '<') {
+            // Parse HTML string — use <table> wrapper for table elements so the
+            // browser doesn't strip <tbody>/<tr>/<td> tags
+            var isTableContent = /^<(tbody|thead|tfoot|tr|td|th|caption|colgroup|col)\b/i.test(
+              selector
+            );
+            var wrapper = document.createElement(isTableContent ? 'table' : 'div');
+            wrapper.innerHTML = selector;
+            var children = [];
+            while (wrapper.firstChild) {
+              children.push(wrapper.firstChild);
+              wrapper.removeChild(wrapper.firstChild);
+            }
+            return jQueryObj(children);
+          }
+          // CSS selector
+          var els = document.querySelectorAll(selector);
+          return jQueryObj(Array.from(els));
+        }
+
+        $.getJSON = function (url, params) {
+          var chain = {};
+          var doneCallback = null;
+          var failCallback = null;
+
+          chain.done = function (cb) {
+            doneCallback = cb;
+            return chain;
+          };
+          chain.fail = function (cb) {
+            failCallback = cb;
+            return chain;
+          };
+
+          // Build query string
+          var qs = Object.keys(params)
+            .map(function (k) {
+              return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+            })
+            .join('&');
+
+          fetch(url + '?' + qs)
+            .then(function (res) {
+              return res.json();
+            })
+            .then(function (data) {
+              if (doneCallback) {
+                doneCallback(data);
+              }
+            })
+            .catch(function (err) {
+              if (failCallback) {
+                failCallback({}, 'error', err.message);
+              }
+            });
+
+          return chain;
+        };
+
+        // Renders the row markup of the site's tmpl_CacheLogRow template
+        // (tests/fixtures/logbook-logged-out.html): one <tr class="log-row"> with one <td>.
+        $.tmpl = function (_templateName, dataArray) {
+          var rows = [];
+          for (var i = 0; i < dataArray.length; i++) {
+            var item = dataArray[i];
+            var holder = document.createElement('tbody');
+            holder.innerHTML =
+              '<tr class="log-row l-' +
+              item.LogID +
+              '"><td><div class="log-row-body">' +
+              '<div class="LogDisplayLeft"><a class="h5">' +
+              (item.UserName || 'Unknown') +
+              '</a><p class="log-meta small">Member</p></div>' +
+              '<div class="LogDisplayRight"><div class="log-row-header">' +
+              '<div class="LogType"><span class="h4 log-meta flex">' +
+              (item.LogType || '') +
+              '</span></div><div class="LogDate"><span class="minorDetails">' +
+              (item.Visited || '') +
+              '</span></div></div>' +
+              '<div class="LogContent markdown-output"><div class="LogText">' +
+              (item.LogText || '') +
+              '</div></div></div></div></td></tr>';
+            rows.push(holder.firstElementChild);
+          }
+          return jQueryObj(rows);
+        };
+
+        $.fn = {};
+        window.$ = $;
+        window.jQuery = $;
+      })();
+
+      // Page globals that the extension expects
+      window.userToken = 'mock-user-token-12345';
+      window.decryptLogs = false;
+    </script>
+    <style>
+      /* Logbook rules copied from the live geocaching.com /bundle/cachedetails stylesheet,
+         fetched logged out on 2026-10-19. Our own table copies the logbook table's class,
+         so these rules apply to it too. */
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 13px;
+        background-color: #fff;
+      }
+      #cache_logs_container {
+        width: 950px;
+        margin: 20px auto;
+      }
+      .LogsTable {
+        table-layout: fixed;
+        border-collapse: collapse;
+        background-color: #fff;
+        width: 100%;
+      }
+      .LogsTable td {
+        border-top: 2px solid #4a4a4a;
+        border-bottom: 2px solid #4a4a4a;
+        padding-top: 1em;
+        padding-bottom: 1em;
+        width: 100%;
+        word-wrap: break-word;
+      }
+      .LogsTable table td {
+        border: none;
+        padding: 0;
+      }
+      .log-row-body {
+        align-items: flex-start;
+        display: flex;
+      }
+      .LogDisplayLeft {
+        flex: none;
+        width: 124px;
+      }
+      .LogDisplayRight {
+        border-left: 1px solid #d7d7d7;
+        flex: none;
+        margin-left: 16px;
+        padding-left: 16px;
+        width: 790px;
+      }
+      .LogDisplayRight > .LogContent {
+        margin-top: 0;
+      }
+      .LogDisplayRight .LogText {
+        min-height: 40px;
+      }
+      .log-row-header {
+        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        min-height: 21px;
+      }
+      .log-row-header > .LogType,
+      .log-row-header > .LogDate {
+        min-width: 0;
+        width: 48%;
+      }
+      .log-row-header > .LogDate {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ctl00_ContentBody_CacheName">
+      <h2>Test Cache</h2>
+    </div>
+
+    <div id="cache_logs_container">
+      <table id="cache_logs_table" class="LogsTable">
+        <tbody>
+          <tr class="log-row">
+            <td>
+              <div class="log-row-body">
+                <div class="LogDisplayLeft"><a class="h5">SiteUser</a></div>
+                <div class="LogDisplayRight">
+                  <div class="LogText">An existing logbook entry.</div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script id="tmplCacheLogRow" type="text/x-jquery-tmpl">
+      <!-- Template placeholder - $.tmpl mock handles rendering -->
+    </script>
+  </body>
+</html>

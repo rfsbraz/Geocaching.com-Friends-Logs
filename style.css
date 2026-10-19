@@ -58,6 +58,16 @@
   margin-bottom: 0;
 }
 
-.gcfl-spacer {
-  display: none;
+/* Gap between a section's last log row and the next header (#141). The table copies the
+   site's .LogsTable class, so its cell borders and padding are reset here. */
+.gcfl-table .gcfl-spacer td {
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* No dark site border above a header, so each section reads as its own block */
+.gcfl-table .gcfl-header td {
+  border-top: none;
 }
