@@ -102,6 +102,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout first: it cleans the workspace, so it must run before the download.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -115,6 +121,21 @@ jobs:
           xpi-path: dist/*-firefox.zip
           jwt-issuer: ${{ secrets.AMO_JWT_ISSUER }}
           jwt-secret: ${{ secrets.AMO_JWT_SECRET }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      # The action cannot send release notes or previews, so this step does it with the
+      # same AMO key: the CHANGELOG.md section for this version becomes the release
+      # notes, and store-listing/assets/screenshot-N.png replace the listing previews.
+      # See store-listing/FIREFOX_RELEASE.md.
+      - name: Set AMO release notes and previews
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: node scripts/amo-release.js --apply
 
   publish-to-edge:
     needs: [release-please, build-release]
