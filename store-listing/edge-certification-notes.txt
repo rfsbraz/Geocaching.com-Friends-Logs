@@ -1,0 +1,6 @@
+Geocaching.com Friends Logs shows the logs that the user's geocaching.com friends wrote for a geocache at the top of that cache's page on www.geocaching.com. It runs only on geocache pages (www.geocaching.com/geocache/GC...), sends no data anywhere else and collects nothing.
+
+How to test:
+1. Sign in at www.geocaching.com. A free Basic account works. The extension reads the logbook the site shows to the signed-in user, so it does nothing when signed out.
+2. Open any geocache page, for example a popular cache with many logs. If the account has geocaching.com friends who logged that cache, a friends logs section (titled "N Friends Logs") appears above the regular logbook. An account without friends sees no new section; that is expected.
+3. Click the toolbar icon to open the settings popup. It has toggles for friends logs and for the user's own logs, and a limit for how many friends logs to show. Settings are stored locally in browser storage.

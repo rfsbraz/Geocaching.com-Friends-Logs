@@ -122,11 +122,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout first: it cleans the workspace, so it must run before the download.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
           name: browser-extensions
           path: dist
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      # Testing steps from store-listing/edge-certification-notes.txt plus the
+      # CHANGELOG.md section for this version. See store-listing/EDGE_CERTIFICATION.md.
+      - name: Build notes for certification
+        id: notes
+        run: node scripts/edge-cert-notes.js --github-output
 
       - name: Upload to Edge Add-ons
         uses: wdzeng/edge-addon@v2
@@ -135,3 +152,4 @@ jobs:
           client-id: ${{ secrets.EDGE_CLIENT_ID }}
           api-key: ${{ secrets.EDGE_API_KEY }}
           zip-path: dist/*-edge.zip
+          notes-for-certification: ${{ steps.notes.outputs.notes }}
