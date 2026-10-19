@@ -25,6 +25,10 @@ describe('popup.js', () => {
       expect(STORE_URLS).toHaveProperty('edge');
     });
 
+    test('points Opera users to the Chrome Web Store', () => {
+      expect(STORE_URLS.opera).toBe(STORE_URLS.chrome);
+    });
+
     test('all URLs are valid https URLs', () => {
       for (const url of Object.values(STORE_URLS)) {
         expect(url).toMatch(/^https:\/\//);
