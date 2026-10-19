@@ -9,11 +9,15 @@ The listing text for every store and language lives here, in one place. Change i
   - `defaultLocale`: the language whose text Chrome shows when it has no translation.
   - `locales`: the listing languages, in the order `CHROME_UPDATE.md` shows them.
   - `stores`: the stores each language is listed on.
+  - `storeIds`: the item on each store: Chrome Web Store item id, Edge Add-ons crx id, Firefox add-on guid.
   - `limits`: length limits per store and field, in characters (`min` and `max`).
 - `locales/<id>.json`: one file per language. `<id>` is a BCP 47 tag such as `sv` or `pt-PT`.
   - `language`: the heading used in `CHROME_UPDATE.md`.
   - `extensionLocale`: the matching `_locales` folder (`sv`, `pt_PT`).
-  - `storeLocales`: the language code each store uses. Firefox uses AMO codes (`en-US`, `sv-SE`, `pt-PT`). The Chrome and Edge codes are the ones their public listing pages take in `hl`.
+  - `storeLocales`: the language code each store uses, checked against the live stores:
+    - Chrome: the `hl` value of the public item page, which it echoes in `<html lang>` (`en`, `sv`, `pt-PT`).
+    - Edge: a language and region tag (`en-US`, `sv-SE`, `fr-FR`, `pt-PT`). Edge fills in a region for a bare language, and not always the expected one: `fr` becomes `fr-CA`.
+    - Firefox: the AMO locale (`en-US`, `sv-SE`, `pt-PT`, `cs`).
   - `summary`: the short description. It is also the manifest `description`, through `extDescription` in `_locales`.
   - `description`: the full description, one array entry per line. Empty strings are blank lines.
   - `screenshots`: file names in `assets/`.
@@ -26,6 +30,7 @@ The listing text for every store and language lives here, in one place. Change i
 npm run store-listing:check   # validate the listing
 npm run store-listing:build   # regenerate CHROME_UPDATE.md
 npm run store-listing:amo     # show how the live Firefox listing differs (dry run)
+npm run store-listing:drift   # compare the public Chrome, Edge and Firefox listings (writes drift/)
 ```
 
 `npm test` runs the same validation (`tests/unit/store-listing.test.js`) and fails when `CHROME_UPDATE.md` is out of date.
@@ -51,6 +56,20 @@ A listing language may exist before its `_locales` folder. Chrome and Edge then 
 The comparison ignores what AMO adds on display (links to its redirector, HTML escaping), line endings and trailing spaces.
 
 `.github/workflows/amo-listing.yml` runs the dry run and then `--apply` on every push to `main` that changes `listing.json`, `locales/` or the script. Run it by hand from Actions > AMO listing: unticked it is a dry run, with "apply" ticked it updates AMO.
+
+## Weekly drift check
+
+`scripts/store-drift.js` reads the public listing of every language on each store, with no login, no cookies and no secrets, and compares the summary and description with this folder:
+
+- Chrome: `https://chromewebstore.google.com/detail/<id>?hl=<code>`, the item page HTML.
+- Edge: `https://microsoftedge.microsoft.com/addons/getproductdetailsbycrxid/<id>?hl=<code>`, the public JSON the Edge item page loads.
+- Firefox: the public AMO v5 API, one request for all languages.
+
+Whitespace is ignored, because stores reflow it. Chrome and Edge take the summary from the package, so a language the package does not ship in `_locales` is expected to show the default language's summary there. A store that answers a language code with a different language is reported, so a wrong `storeLocales` value shows up.
+
+It writes `drift/<store>.md` for each store that differs, with the exact text to paste per language, and `drift/summary.json`. Locally that is all it does: it never creates issues.
+
+`.github/workflows/store-drift.yml` runs it every Monday and on demand (Actions > Store listing drift). For each store it opens or updates the issue "Store listing drift: <store>" with the report, and closes it once the store matches again. If a store cannot be read, its issue is left as it is and the run fails. Chrome and Edge text can only be changed in their dashboards; for Firefox, run the AMO listing workflow with "apply" ticked.
 
 ## Adding or changing a language
 
