@@ -3,7 +3,7 @@
   "extensionLocale": "sv",
   "storeLocales": {
     "chrome": "sv",
-    "edge": "sv",
+    "edge": "sv-SE",
     "firefox": "sv-SE"
   },
   "summary": "Se dina vänners loggar högst upp på varje cachesida på Geocaching.com. Slipp leta igenom loggboken för att hitta dem.",

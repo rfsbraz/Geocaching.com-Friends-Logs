@@ -3,7 +3,7 @@
   "extensionLocale": "fr",
   "storeLocales": {
     "chrome": "fr",
-    "edge": "fr",
+    "edge": "fr-FR",
     "firefox": "fr"
   },
   "summary": "Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.",
