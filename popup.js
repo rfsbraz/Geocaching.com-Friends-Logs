@@ -26,8 +26,9 @@ const STORE_URLS = {
  */
 function detectBrowser() {
   const ua = navigator.userAgent;
-  if (typeof browser !== 'undefined' && browser.runtime) {
-    // Firefox uses 'browser' namespace natively
+  // Check the user agent, not the `browser` namespace: recent Chromium
+  // versions expose `browser` to extensions too.
+  if (ua.includes('Firefox/')) {
     return 'firefox';
   }
   if (ua.includes('Edg/')) {
@@ -40,14 +41,70 @@ function detectBrowser() {
 }
 
 /**
+ * Returns the store page for the current browser
+ * @returns {string} Store URL
+ */
+function getStoreUrl() {
+  return STORE_URLS[detectBrowser()] || STORE_URLS.chrome;
+}
+
+/**
  * Updates the rate link to point to the correct store
  */
 function updateRateLink() {
   const rateLink = document.getElementById('rate-link');
   if (rateLink) {
-    const detectedBrowser = detectBrowser();
-    rateLink.href = STORE_URLS[detectedBrowser] || STORE_URLS.chrome;
+    rateLink.href = getStoreUrl();
   }
+}
+
+/**
+ * How long the extension must have been in use before the rating prompt shows
+ */
+const RATING_PROMPT_DELAY_MS = 21 * 24 * 60 * 60 * 1000;
+
+/**
+ * Shows the one-time rating prompt once the extension has been used for
+ * RATING_PROMPT_DELAY_MS. After "Rate it" or "Not now" it never shows again.
+ * @param {number} now - Current time in milliseconds
+ * @returns {Promise<void>}
+ */
+function initRatingPrompt(now = Date.now()) {
+  return new Promise(resolve => {
+    chrome.storage.local.get({ firstUsedAt: null, ratingPromptDone: false }, items => {
+      const prompt = document.getElementById('rating-prompt');
+      if (!prompt || items.ratingPromptDone) {
+        resolve();
+        return;
+      }
+      if (!items.firstUsedAt) {
+        chrome.storage.local.set({ firstUsedAt: now }, () => resolve());
+        return;
+      }
+      if (now - items.firstUsedAt < RATING_PROMPT_DELAY_MS) {
+        resolve();
+        return;
+      }
+
+      const text = document.getElementById('rating-prompt-text');
+      const rate = document.getElementById('rating-prompt-rate');
+      const dismiss = document.getElementById('rating-prompt-dismiss');
+      text.textContent = chrome.i18n.getMessage('ratingPromptText');
+      rate.textContent = chrome.i18n.getMessage('ratingPromptRate');
+      dismiss.textContent = chrome.i18n.getMessage('ratingPromptDismiss');
+      rate.href = getStoreUrl();
+
+      const done = () => {
+        prompt.hidden = true;
+        chrome.storage.local.set({ ratingPromptDone: true });
+      };
+      rate.addEventListener('click', done);
+      dismiss.addEventListener('click', done);
+
+      prompt.hidden = false;
+      resolve();
+    });
+  });
 }
 
 /**
@@ -62,7 +119,16 @@ function displayVersion() {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { DEFAULT_VALUES, STORE_URLS, detectBrowser, updateRateLink, displayVersion };
+  module.exports = {
+    DEFAULT_VALUES,
+    STORE_URLS,
+    RATING_PROMPT_DELAY_MS,
+    detectBrowser,
+    getStoreUrl,
+    updateRateLink,
+    displayVersion,
+    initRatingPrompt
+  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,6 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Display extension version
   displayVersion();
+
+  // Ask for a store rating once, after a few weeks of use
+  initRatingPrompt();
 
   // Load saved settings
   chrome.storage.local.get(DEFAULT_VALUES, items => {

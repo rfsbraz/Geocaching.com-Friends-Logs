@@ -48,8 +48,27 @@ function doInject() {
   });
 }
 
+/**
+ * Records when the extension was first used, so the popup can wait a few
+ * weeks before asking for a rating. Never moves an existing date.
+ * @param {number} now - Current time in milliseconds
+ * @returns {Promise<void>}
+ */
+function recordFirstUse(now = Date.now()) {
+  return new Promise(resolve => {
+    chrome.storage.local.get({ firstUsedAt: null }, items => {
+      if (items && items.firstUsedAt) {
+        resolve();
+        return;
+      }
+      chrome.storage.local.set({ firstUsedAt: now }, () => resolve());
+    });
+  });
+}
+
 console.log('[Friends Logs] Content script loaded');
 doInject();
+recordFirstUse();
 
 // Handle pages restored from bfcache (back/forward cache)
 window.addEventListener('pageshow', function (event) {
@@ -73,5 +92,5 @@ window.addEventListener('pageshow', function (event) {
 });
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { injectScript, doInject };
+  module.exports = { injectScript, doInject, recordFirstUse };
 }

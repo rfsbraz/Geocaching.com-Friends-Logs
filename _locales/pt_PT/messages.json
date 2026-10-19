@@ -1,0 +1,22 @@
+{
+  "extName": {
+    "message": "Geocaching.com Friends Logs",
+    "description": "Extension name. Keep the brand name as is."
+  },
+  "extDescription": {
+    "message": "Veja os logs dos seus amigos no topo de cada página de cache do Geocaching.com, sem ter de os procurar no logbook.",
+    "description": "Store summary and extension description. 132 characters or fewer."
+  },
+  "ratingPromptText": {
+    "message": "O Friends Logs é-lhe útil? Uma avaliação rápida na loja ajuda outros geocachers a encontrá-lo.",
+    "description": "Rating prompt shown once in the popup after a few weeks of use. Keep the name Friends Logs as is."
+  },
+  "ratingPromptRate": {
+    "message": "Avaliar",
+    "description": "Rating prompt button that opens the store page to leave a rating."
+  },
+  "ratingPromptDismiss": {
+    "message": "Agora não",
+    "description": "Rating prompt button that dismisses the prompt for good."
+  }
+}

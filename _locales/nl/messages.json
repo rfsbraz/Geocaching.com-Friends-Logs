@@ -6,5 +6,17 @@
   "extDescription": {
     "message": "Zie de logs van je vrienden bovenaan elke cachepagina op Geocaching.com. Nooit meer het logboek doorzoeken om ze te vinden.",
     "description": "Store summary and extension description. 132 characters or fewer."
+  },
+  "ratingPromptText": {
+    "message": "Vind je Friends Logs handig? Een snelle beoordeling in de store helpt andere geocachers het te vinden.",
+    "description": "Rating prompt shown once in the popup after a few weeks of use. Keep the name Friends Logs as is."
+  },
+  "ratingPromptRate": {
+    "message": "Beoordelen",
+    "description": "Rating prompt button that opens the store page to leave a rating."
+  },
+  "ratingPromptDismiss": {
+    "message": "Niet nu",
+    "description": "Rating prompt button that dismisses the prompt for good."
   }
 }
