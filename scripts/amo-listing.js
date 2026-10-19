@@ -40,18 +40,22 @@ const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' }
  * outgoing redirector and text is escaped. Turn that back into plain text.
  */
 function plainText(html) {
-  return String(html)
+  let text = String(html)
     .replace(/<a\b[^>]*>(.*?)<\/a>/gis, '$1')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&(#x[0-9a-f]+|#\d+|\w+);/gi, (m, e) => {
-      if (e[0] === '#') {
-        const code =
-          e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
-        return String.fromCodePoint(code);
-      }
-      return ENTITIES[e.toLowerCase()] ?? m;
-    });
+    .replace(/<br\s*\/?>/gi, '\n');
+  // Repeat until stable so removing one tag cannot leave another one behind.
+  let previous;
+  do {
+    previous = text;
+    text = text.replace(/<[^>]*>/g, '');
+  } while (text !== previous);
+  return text.replace(/&(#x[0-9a-f]+|#\d+|\w+);/gi, (m, e) => {
+    if (e[0] === '#') {
+      const code = e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return String.fromCodePoint(code);
+    }
+    return ENTITIES[e.toLowerCase()] ?? m;
+  });
 }
 
 /** Line endings and trailing spaces are not changes worth a PATCH. */

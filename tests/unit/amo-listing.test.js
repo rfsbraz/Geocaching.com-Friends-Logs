@@ -72,6 +72,10 @@ describe('AMO listing sync (#113)', () => {
     });
   });
 
+  test('plainText leaves no tag behind when tags are nested', () => {
+    expect(plainText('a<<b>script>alert(1)</<i>script>b')).not.toMatch(/<\w/);
+  });
+
   test('plainText removes AMO link wrapping and HTML escaping', () => {
     expect(plainText('a <a href="https://x/y" rel="nofollow">b.com</a> &gt; c &#39;d&#39;')).toBe(
       "a b.com > c 'd'"
