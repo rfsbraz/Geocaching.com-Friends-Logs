@@ -69,6 +69,10 @@ To test the extension in your browser:
 3. Test your changes on various geocache pages
 4. Verify the popup settings work correctly
 
+## Store listing text
+
+The store listing text for every store and language lives in `store-listing/listing.json` and `store-listing/locales/<id>.json`. See `store-listing/README.md` for the format. After changing it, run `npm run store-listing:build` to regenerate `store-listing/CHROME_UPDATE.md`; `npm test` fails if the listing breaks a store limit or no longer matches `_locales`.
+
 ## Store credentials check
 
 `.github/workflows/store-credentials.yml` runs every Monday and on demand (Actions > Store credentials > Run workflow). It runs `scripts/check-store-credentials.sh`, which only reads from the stores:
