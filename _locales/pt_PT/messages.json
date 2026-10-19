@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "Geocaching.com Friends Logs",
+    "description": "Extension name. Keep the brand name as is."
+  },
+  "extDescription": {
+    "message": "Veja os logs dos seus amigos no topo de cada página de cache do Geocaching.com, sem ter de os procurar no logbook.",
+    "description": "Store summary and extension description. 132 characters or fewer."
+  }
+}
