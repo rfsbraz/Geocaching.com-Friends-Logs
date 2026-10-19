@@ -18,7 +18,8 @@
         { "type": "ci", "hidden": true },
         { "type": "test", "hidden": true },
         { "type": "refactor", "hidden": true }
-      ]
+      ],
+      "extra-files": [{ "type": "json", "path": "manifest.json", "jsonpath": "$.version" }]
     }
   }
 }
