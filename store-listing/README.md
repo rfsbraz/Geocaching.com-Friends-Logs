@@ -25,6 +25,7 @@ The listing text for every store and language lives here, in one place. Change i
 ```bash
 npm run store-listing:check   # validate the listing
 npm run store-listing:build   # regenerate CHROME_UPDATE.md
+npm run store-listing:amo     # show how the live Firefox listing differs (dry run)
 ```
 
 `npm test` runs the same validation (`tests/unit/store-listing.test.js`) and fails when `CHROME_UPDATE.md` is out of date.
@@ -38,6 +39,18 @@ npm run store-listing:build   # regenerate CHROME_UPDATE.md
 - Every `_locales` folder the extension ships has a listing, and its `extName` and `extDescription` match `name` and `summary`.
 
 A listing language may exist before its `_locales` folder. Chrome and Edge then show the default language's summary for it, and the full description still applies.
+
+## Firefox (AMO) sync
+
+`scripts/amo-listing.js` keeps the Firefox Add-ons summary and description in line with this folder, for every language, using `storeLocales.firefox` as the AMO locale.
+
+- Dry run (the default): reads the live listing from the public AMO v5 API, no login, and prints a line diff per locale and field. Nothing is sent.
+- `--apply`: sends one `PATCH /api/v5/addons/addon/{guid}/` per locale that differs, with only that locale's `summary` and `description`. It signs each request with `AMO_JWT_ISSUER` and `AMO_JWT_SECRET`, the same AMO API key the release workflow uses to upload.
+- Locales that exist on AMO but not here are reported and left alone.
+
+The comparison ignores what AMO adds on display (links to its redirector, HTML escaping), line endings and trailing spaces.
+
+`.github/workflows/amo-listing.yml` runs the dry run and then `--apply` on every push to `main` that changes `listing.json`, `locales/` or the script. Run it by hand from Actions > AMO listing: unticked it is a dry run, with "apply" ticked it updates AMO.
 
 ## Adding or changing a language
 
