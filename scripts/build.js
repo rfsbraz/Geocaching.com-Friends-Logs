@@ -28,6 +28,7 @@ const REQUIRED_FILES = [
   '_locales/de/messages.json',
   '_locales/cs/messages.json',
   '_locales/fr/messages.json',
+  '_locales/pt_PT/messages.json',
   '_locales/sv/messages.json'
 ];
 
