@@ -1,0 +1,52 @@
+name: AMO listing
+
+# Keeps the Firefox Add-ons listing text (summary and description, every
+# language) in line with store-listing/. See store-listing/README.md.
+# A push to main that changes the listing syncs it. A manual run is a dry run
+# unless "apply" is ticked.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'store-listing/listing.json'
+      - 'store-listing/locales/**'
+      - 'scripts/amo-listing.js'
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Send the changes to AMO (unticked: only show the diff)'
+        type: boolean
+        default: false
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Diff against the live AMO listing
+        run: node scripts/amo-listing.js
+
+      - name: Update AMO
+        if: ${{ github.event_name == 'push' || inputs.apply }}
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: node scripts/amo-listing.js --apply

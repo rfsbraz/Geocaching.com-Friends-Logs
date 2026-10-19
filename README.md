@@ -7,7 +7,7 @@
 
 A browser extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
 
-![Example Screenshot](.github/screenshot.png)
+![Example Screenshot](store-listing/assets/screenshot-1.png)
 
 ## Features
 
@@ -24,7 +24,7 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 - **Chrome**: [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
 - **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/)
 - **Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/ddbfbobfccafkoabbcmpkbpofbkfgikc)
-- **Opera**: [Opera Add-ons](https://addons.opera.com/en/extensions/details/geocachingcom-friends-logs/)
+- **Opera**: Install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam) (Opera can install Chrome extensions)
 - **Brave**: Install from the [Chrome Web Store](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam) (Brave supports Chrome extensions natively)
 
 ### Manual Installation

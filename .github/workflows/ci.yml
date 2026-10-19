@@ -12,11 +12,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   lint-and-test:
     # Skip CI on release-please branches - code was already tested
     if: ${{ !startsWith(github.head_ref || github.ref_name, 'release-please--') }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -57,6 +62,8 @@ jobs:
     if: ${{ !startsWith(github.head_ref || github.ref_name, 'release-please--') }}
     needs: lint-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout

@@ -194,6 +194,20 @@
   }
 
   /**
+   * Check the logbook API response has the shape renderSection reads (#93).
+   * @param {*} response
+   * @returns {boolean}
+   */
+  function isLogbookResponse(response) {
+    return (
+      !!response &&
+      !!response.pageInfo &&
+      typeof response.pageInfo.rows === 'number' &&
+      Array.isArray(response.data)
+    );
+  }
+
+  /**
    * Load logs from the geocaching.com logbook API.
    * @param {number} pageIdx - Page index (0-based)
    * @param {string} showPersonal - "true" or "false" string
@@ -232,8 +246,16 @@
       decrypt: decrypt
     })
       .done(function (response) {
-        if (response.status !== 'success') {
-          console.warn('[Friends Logs] API returned non-success status:', response.status);
+        if (!response || response.status !== 'success') {
+          console.warn(
+            '[Friends Logs] API returned non-success status:',
+            response && response.status
+          );
+          return;
+        }
+
+        if (!isLogbookResponse(response)) {
+          console.warn('[Friends Logs] Unexpected logbook response shape, not rendering');
           return;
         }
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * Multi-browser build script for Chrome, Firefox, and Opera.
+ * Multi-browser build script for Chrome, Firefox, and Edge.
  * Creates browser-specific builds with appropriate manifest transformations.
  *
  * Usage:
  *   node scripts/build-multi.js --browser chrome
  *   node scripts/build-multi.js --browser firefox
- *   node scripts/build-multi.js --browser opera
+ *   node scripts/build-multi.js --browser edge
  *   node scripts/build-multi.js --browser all
  */
 
@@ -39,7 +39,7 @@ const EXTENSION_FILES = [
   '_locales/sv/messages.json'
 ];
 
-const BROWSERS = ['chrome', 'firefox', 'opera', 'edge'];
+const BROWSERS = ['chrome', 'firefox', 'edge'];
 
 /**
  * Parse command line arguments
@@ -50,7 +50,7 @@ function parseArgs() {
   const browserIndex = args.indexOf('--browser');
 
   if (browserIndex === -1 || !args[browserIndex + 1]) {
-    console.error('Usage: node build-multi.js --browser <chrome|firefox|opera|all>');
+    console.error('Usage: node build-multi.js --browser <chrome|firefox|edge|all>');
     process.exit(1);
   }
 
@@ -75,9 +75,8 @@ function transformManifest(manifest, browser) {
 
   switch (browser) {
     case 'chrome':
-    case 'opera':
     case 'edge':
-      // Chrome, Opera, and Edge don't need browser_specific_settings
+      // Chrome and Edge don't need browser_specific_settings
       delete transformed.browser_specific_settings;
       break;
     case 'firefox':

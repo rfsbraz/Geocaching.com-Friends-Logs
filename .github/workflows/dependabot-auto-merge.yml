@@ -3,13 +3,16 @@ name: Dependabot Auto-Merge
 on: pull_request
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   auto-merge:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    # gh pr merge --auto needs to merge (contents) and enable auto-merge (pull-requests).
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: dependabot/fetch-metadata@v3
         id: meta

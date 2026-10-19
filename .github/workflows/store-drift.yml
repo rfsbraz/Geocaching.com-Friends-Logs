@@ -1,0 +1,113 @@
+name: Store listing drift
+
+# Weekly check that the public Chrome, Edge and Firefox listings, in every
+# language, still match store-listing/. Reads public pages only: no login,
+# no cookies, no secrets. See store-listing/README.md.
+# On drift it opens or updates one issue per store with the text to paste,
+# and closes that store's issue once the listing matches again.
+
+on:
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      result: ${{ steps.check.outcome }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      - name: Compare the public listings with the source
+        id: check
+        run: |
+          status=0
+          node scripts/store-drift.js --out drift || status=$?
+          for f in drift/*.md; do
+            [ -e "$f" ] || continue
+            { echo "## $(basename "$f" .md)"; echo; cat "$f"; echo; } >> "$GITHUB_STEP_SUMMARY"
+          done
+          exit "$status"
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: store-drift
+          path: drift/
+          retention-days: 7
+
+  report:
+    needs: check
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Download reports
+        uses: actions/download-artifact@v8
+        with:
+          name: store-drift
+          path: drift
+
+      - name: Open, update or close one issue per store
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          for store in chrome edge firefox; do
+            status="$(jq -r ".$store.status" drift/summary.json)"
+            title="$(jq -r ".$store.title" drift/summary.json)"
+            number="$(gh issue list --state open --search "in:title \"$title\"" --json number,title \
+              --jq "map(select(.title == \"$title\")) | .[0].number // empty")"
+
+            case "$status" in
+              clean)
+                if [ -n "$number" ]; then
+                  gh issue close "$number" --comment "The listing matches store-listing/ again ($RUN_URL). Closing."
+                fi
+                ;;
+              drift)
+                { cat "drift/$store.md"; echo; echo "Last checked: $RUN_URL"; } > body.md
+                if [ -n "$number" ]; then
+                  gh issue edit "$number" --body-file body.md
+                else
+                  gh issue create --title "$title" --body-file body.md
+                fi
+                ;;
+              *)
+                # The store could not be read. Leave any open issue as it is.
+                echo "::warning title=$title::could not read the store; see the check job"
+                ;;
+            esac
+          done
+
+  keepalive:
+    # GitHub disables scheduled workflows after 60 days without repository activity.
+    # Re-enabling this workflow through the API resets that timer. No commits needed.
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Keep this schedule enabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/store-drift.yml/enable" --silent

@@ -29,3 +29,6 @@ npm-debug.log*
 .env
 .env.local
 .claude/
+
+# Store listing drift reports
+drift/
