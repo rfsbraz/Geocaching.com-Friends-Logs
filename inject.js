@@ -104,8 +104,9 @@
     const tbody = document.createElement('tbody');
     tbody.className = 'gcfl-header ' + className;
     const tr = document.createElement('tr');
+    // One column, like the site's log rows. Our table copies the logbook table's class,
+    // which is table-layout: fixed, so a colspan="2" first row split every log row in half (#141).
     const td = document.createElement('td');
-    td.colSpan = 2;
     td.textContent = label;
     tr.appendChild(td);
     tbody.appendChild(tr);
@@ -164,10 +165,12 @@
     }
     if (rowsBody.children.length) {
       // The site's infinite scroll measures $('.log-row:last-child'); keep our rows from
-      // ever being a last child so it keeps tracking the real logbook.
+      // ever being a last child so it keeps tracking the real logbook. The spacer is also
+      // the gap between this section and the next header (#141).
       const spacer = document.createElement('tr');
       spacer.className = 'gcfl-spacer';
       spacer.setAttribute('aria-hidden', 'true');
+      spacer.appendChild(document.createElement('td'));
       rowsBody.appendChild(spacer);
       own.appendChild(rowsBody);
     }
