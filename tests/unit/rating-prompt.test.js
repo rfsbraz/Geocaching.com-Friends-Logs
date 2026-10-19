@@ -158,7 +158,13 @@ describe('rating prompt', () => {
 
     test('opens Firefox Add-ons on Firefox', async () => {
       global.browser = { runtime: {} };
+      setUserAgent('Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0');
       expect(await rateHref()).toBe(popup.STORE_URLS.firefox);
+    });
+
+    test('opens the Chrome Web Store on Chrome that exposes the browser namespace', async () => {
+      global.browser = { runtime: {} };
+      expect(await rateHref()).toBe(popup.STORE_URLS.chrome);
     });
 
     test('matches the footer rate link', async () => {

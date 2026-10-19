@@ -44,9 +44,27 @@ describe('popup.js', () => {
       delete global.browser;
     });
 
-    test('returns "firefox" when browser.runtime is defined', () => {
+    test('returns "firefox" for Firefox user agent', () => {
       global.browser = { runtime: {} };
+      Object.defineProperty(global, 'navigator', {
+        value: {
+          userAgent: 'Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0'
+        },
+        writable: true,
+        configurable: true
+      });
       expect(detectBrowser()).toBe('firefox');
+    });
+
+    test('returns "chrome" when Chrome also exposes the browser namespace', () => {
+      // Recent Chromium versions define `browser` for extensions too.
+      global.browser = { runtime: {} };
+      Object.defineProperty(global, 'navigator', {
+        value: { userAgent: 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/141.0' },
+        writable: true,
+        configurable: true
+      });
+      expect(detectBrowser()).toBe('chrome');
     });
 
     test('returns "edge" for Edge user agent', () => {
