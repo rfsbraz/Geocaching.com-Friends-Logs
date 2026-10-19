@@ -23,7 +23,8 @@
     "test:e2e:real": "npx playwright test --project=real-page",
     "store-listing:check": "node scripts/store-listing.js check",
     "store-listing:build": "node scripts/store-listing.js build",
-    "store-listing:amo": "node scripts/amo-listing.js"
+    "store-listing:amo": "node scripts/amo-listing.js",
+    "store-listing:drift": "node scripts/store-drift.js"
   },
   "repository": {
     "type": "git",

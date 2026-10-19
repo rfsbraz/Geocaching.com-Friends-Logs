@@ -3,6 +3,11 @@
   "defaultLocale": "en",
   "locales": ["en", "nl", "de", "cs", "fr", "sv", "pt-PT"],
   "stores": ["chrome", "edge", "firefox"],
+  "storeIds": {
+    "chrome": "bgildcbomgimjfoblhlhmaehaeieeaam",
+    "edge": "ddbfbobfccafkoabbcmpkbpofbkfgikc",
+    "firefox": "geocaching-friends-logs@rfsbraz.github.io"
+  },
   "limits": {
     "chrome": {
       "name": {

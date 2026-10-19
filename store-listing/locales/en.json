@@ -3,7 +3,7 @@
   "extensionLocale": "en",
   "storeLocales": {
     "chrome": "en",
-    "edge": "en",
+    "edge": "en-US",
     "firefox": "en-US"
   },
   "summary": "See your friends' logs at the top of every Geocaching.com cache page. No more digging through the logbook to find them.",
