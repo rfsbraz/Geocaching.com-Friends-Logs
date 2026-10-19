@@ -48,9 +48,27 @@ describe('popup.js', () => {
       delete global.browser;
     });
 
-    test('returns "firefox" when browser.runtime is defined', () => {
+    test('returns "firefox" for Firefox user agent', () => {
       global.browser = { runtime: {} };
+      Object.defineProperty(global, 'navigator', {
+        value: {
+          userAgent: 'Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0'
+        },
+        writable: true,
+        configurable: true
+      });
       expect(detectBrowser()).toBe('firefox');
+    });
+
+    test('returns "chrome" when Chrome also exposes the browser namespace', () => {
+      // Recent Chromium versions define `browser` for extensions too.
+      global.browser = { runtime: {} };
+      Object.defineProperty(global, 'navigator', {
+        value: { userAgent: 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/141.0' },
+        writable: true,
+        configurable: true
+      });
+      expect(detectBrowser()).toBe('chrome');
     });
 
     test('returns "edge" for Edge user agent', () => {
@@ -105,6 +123,25 @@ describe('popup.js', () => {
 
       const link = document.getElementById('rate-link');
       expect(link.href).toBe(STORE_URLS.chrome);
+    });
+
+    // Every browser here exposes `browser`, as recent Chromium versions do.
+    test.each([
+      ['chrome', 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/141.0'],
+      ['edge', 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/141.0 Edg/141.0'],
+      ['opera', 'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/141.0 OPR/125.0'],
+      ['firefox', 'Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0']
+    ])('points %s users to their store', (store, userAgent) => {
+      global.browser = { runtime: {} };
+      Object.defineProperty(global, 'navigator', {
+        value: { userAgent },
+        writable: true,
+        configurable: true
+      });
+
+      updateRateLink();
+
+      expect(document.getElementById('rate-link').href).toBe(STORE_URLS[store]);
     });
   });
 

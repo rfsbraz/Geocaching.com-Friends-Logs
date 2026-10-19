@@ -27,8 +27,9 @@ const STORE_URLS = {
  */
 function detectBrowser() {
   const ua = navigator.userAgent;
-  if (typeof browser !== 'undefined' && browser.runtime) {
-    // Firefox uses 'browser' namespace natively
+  // Check the user agent, not the `browser` namespace: recent Chromium
+  // versions expose `browser` to extensions too.
+  if (ua.includes('Firefox/')) {
     return 'firefox';
   }
   if (ua.includes('Edg/')) {
