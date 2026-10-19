@@ -9,9 +9,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Read-only default. Jobs add only the scopes they use.
+permissions:
+  contents: read
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    # The action authenticates with RELEASE_PLEASE_TOKEN, not GITHUB_TOKEN,
+    # so release PRs still trigger CI. GITHUB_TOKEN needs nothing more.
+    permissions:
+      contents: read
 
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -29,6 +37,9 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    # contents: write lets action-gh-release attach dist/*.zip to the release.
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -63,6 +74,9 @@ jobs:
     needs: [release-please, build-release]
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
+    permissions:
+      contents: read
 
     steps:
       - name: Download artifacts
@@ -100,6 +114,9 @@ jobs:
     needs: [release-please, build-release]
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
+    permissions:
+      contents: read
 
     steps:
       # Checkout first: it cleans the workspace, so it must run before the download.
@@ -141,6 +158,9 @@ jobs:
     needs: [release-please, build-release]
     if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
+    # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
+    permissions:
+      contents: read
 
     steps:
       # Checkout first: it cleans the workspace, so it must run before the download.
