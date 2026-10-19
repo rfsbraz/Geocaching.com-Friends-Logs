@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "browser_specific_settings": {
     "gecko": {
       "id": "geocaching-friends-logs@rfsbraz.github.io",
