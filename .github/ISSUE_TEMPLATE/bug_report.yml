@@ -70,8 +70,19 @@ body:
     id: cache-url
     attributes:
       label: Cache Page URL
-      description: If the issue occurs on a specific cache, provide the URL or GC code.
+      description: Which cache page shows the problem? Paste its URL or GC code.
       placeholder: e.g., https://www.geocaching.com/geocache/GC12345 or GC12345
+    validations:
+      required: true
+
+  - type: textarea
+    id: console-output
+    attributes:
+      label: Browser Console Output
+      description: What does the console show on that page? Press F12 (Cmd+Option+I on a Mac), open the Console tab, reload, and paste everything.
+      render: text
+    validations:
+      required: true
 
   - type: textarea
     id: screenshots
