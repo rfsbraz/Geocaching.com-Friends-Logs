@@ -1,0 +1,36 @@
+{
+  "name": "Geocaching.com Friends Logs",
+  "defaultLocale": "en",
+  "locales": ["en", "nl", "de", "cs", "fr", "sv", "pt-PT"],
+  "stores": ["chrome", "edge", "firefox"],
+  "limits": {
+    "chrome": {
+      "name": {
+        "max": 75
+      },
+      "summary": {
+        "max": 132
+      },
+      "description": {
+        "max": 16000
+      }
+    },
+    "edge": {
+      "summary": {
+        "max": 132
+      },
+      "description": {
+        "min": 250,
+        "max": 10000
+      }
+    },
+    "firefox": {
+      "name": {
+        "max": 50
+      },
+      "summary": {
+        "max": 250
+      }
+    }
+  }
+}
