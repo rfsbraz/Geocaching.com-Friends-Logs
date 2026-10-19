@@ -506,6 +506,54 @@ describe('inject.js', () => {
     });
   });
 
+  describe('logbook response shape (#93)', () => {
+    // Synthetic fixture: built from the fields the site's tmplCacheLogRow template reads and the
+    // pageInfo/data shape inject.js uses. Not a real captured payload (that needs a logged-in session).
+    const fixture = require('../fixtures/logbook-response.json');
+
+    test('renders the fixture payload', () => {
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone(JSON.parse(JSON.stringify(fixture)));
+
+      expect(document.querySelectorAll('.gcfl-friends-log')).toHaveLength(fixture.data.length);
+      expect(document.querySelector('.gcfl-friends-header').textContent).toContain(
+        '2 Friends Logs'
+      );
+    });
+
+    const drifted = {
+      'pageInfo missing': r => delete r.pageInfo,
+      'pageInfo.rows missing': r => delete r.pageInfo.rows,
+      'pageInfo.rows not a number': r => (r.pageInfo.rows = '2'),
+      'data missing': r => delete r.data,
+      'data not an array': r => (r.data = { 0: r.data[0] })
+    };
+
+    test.each(Object.keys(drifted))('bails out with a console warning when %s', name => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation();
+      const before = document.body.innerHTML;
+      const response = JSON.parse(JSON.stringify(fixture));
+      drifted[name](response);
+
+      loadLogbookPage(0, 'false', 'true', 5);
+      expect(() => triggerDone(response)).not.toThrow();
+
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('Unexpected logbook response'));
+      expect(document.body.innerHTML).toBe(before);
+    });
+
+    test('bails out cleanly on an empty response body', () => {
+      const warn = jest.spyOn(console, 'warn').mockImplementation();
+      const before = document.body.innerHTML;
+
+      loadLogbookPage(0, 'false', 'true', 5);
+      expect(() => triggerDone(null)).not.toThrow();
+
+      expect(warn).toHaveBeenCalled();
+      expect(document.body.innerHTML).toBe(before);
+    });
+  });
+
   describe('waitForGlobalsAndLoad', () => {
     beforeEach(() => {
       jest.useFakeTimers();
