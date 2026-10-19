@@ -1,0 +1,39 @@
+{
+  "language": "Czech (Čeština)",
+  "extensionLocale": "cs",
+  "storeLocales": {
+    "chrome": "cs",
+    "edge": "cs",
+    "firefox": "cs"
+  },
+  "summary": "Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com. Už je nemusíte hledat v logbooku.",
+  "description": [
+    "Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com. Už je nemusíte pracně hledat v logbooku.",
+    "",
+    "Už vám neunikne žádné kačerské dobrodružství vašich přátel!",
+    "",
+    "Toto rozšíření vylepšuje Geocaching.com tím, že přesune logy vašich přátel na začátek každého listingu keše. Hned uvidíte, kdo z přátel keš navštívil a jak se mu líbila, bez procházení stovek logů.",
+    "",
+    "FUNKCE",
+    "  • Logy přátel se zobrazí nahoře na stránce keše",
+    "  • Vaše vlastní logy jsou zvýrazněné zvlášť",
+    "  • Nastavitelný počet zobrazených logů (5, 10, 20, 50 nebo 100)",
+    "  • Logy přátel a vlastní logy lze zapnout či vypnout nezávisle",
+    "  • Čistý, nenápadný vzhled, který ladí s Geocaching.com",
+    "",
+    "IDEÁLNÍ PRO",
+    "  • Plánování společných kešovacích výletů s přáteli",
+    "  • Objevování keší, které doporučují vaši přátelé",
+    "  • Vyhnutí se spoilerům od cizích lidí a čtení logů od těch, kterým věříte",
+    "  • Rychlou kontrolu, jestli už přátelé keš odlovili",
+    "",
+    "JAK TO FUNGUJE",
+    "  Stačí rozšíření nainstalovat, otevřít libovolnou stránku keše na Geocaching.com a logy přátel se automaticky objeví nahoře. Nastavení upravíte ve vyskakovacím menu.",
+    "",
+    "SOUKROMÍ",
+    "  Rozšíření běží pouze na Geocaching.com a nesbírá ani neodesílá žádné osobní údaje.",
+    "",
+    "Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs"
+  ],
+  "screenshots": ["screenshot-1.png"]
+}

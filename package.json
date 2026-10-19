@@ -21,7 +21,9 @@
     "test:e2e:chromium": "npx playwright test --project=chromium",
     "test:e2e:firefox": "npx playwright test --project=firefox",
     "test:e2e:screenshots": "npx playwright test --project=screenshots",
-    "test:e2e:real": "npx playwright test --project=real-page"
+    "test:e2e:real": "npx playwright test --project=real-page",
+    "store-listing:check": "node scripts/store-listing.js check",
+    "store-listing:build": "node scripts/store-listing.js build"
   },
   "repository": {
     "type": "git",

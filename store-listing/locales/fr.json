@@ -1,0 +1,39 @@
+{
+  "language": "French (Français)",
+  "extensionLocale": "fr",
+  "storeLocales": {
+    "chrome": "fr",
+    "edge": "fr",
+    "firefox": "fr"
+  },
+  "summary": "Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.",
+  "description": [
+    "Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.",
+    "",
+    "Ne manquez plus aucune aventure de géocaching de vos amis !",
+    "",
+    "Cette extension améliore Geocaching.com en plaçant les logs de vos amis en haut de chaque page de cache. Voyez tout de suite lesquels de vos amis ont visité une cache et ce qu'ils en ont pensé, sans faire défiler des centaines de logs.",
+    "",
+    "FONCTIONNALITÉS",
+    "  • Les logs de vos amis s'affichent en haut des pages de cache",
+    "  • Vos propres logs sont mis en évidence séparément",
+    "  • Nombre de logs affichés réglable (5, 10, 20, 50 ou 100)",
+    "  • Activez ou désactivez séparément les logs de vos amis et les vôtres",
+    "  • Design sobre et discret, assorti à Geocaching.com",
+    "",
+    "IDÉAL POUR",
+    "  • Préparer des sorties géocaching entre amis",
+    "  • Découvrir les caches que vos amis recommandent",
+    "  • Éviter les spoilers d'inconnus en lisant les avis de personnes de confiance",
+    "  • Vérifier rapidement si vos amis ont déjà trouvé une cache",
+    "",
+    "COMMENT ÇA MARCHE",
+    "  Installez l'extension, ouvrez n'importe quelle page de cache sur Geocaching.com et les logs de vos amis apparaissent automatiquement en haut. Le menu contextuel de l'extension vous permet de régler vos préférences.",
+    "",
+    "CONFIDENTIALITÉ",
+    "  Cette extension fonctionne uniquement sur Geocaching.com et ne collecte ni ne transmet aucune donnée personnelle.",
+    "",
+    "Open source : github.com/rfsbraz/Geocaching.com-Friends-Logs"
+  ],
+  "screenshots": ["screenshot-1.png"]
+}
