@@ -4,10 +4,21 @@ on:
   push:
     branches:
       - main
+  # Rebuilds and republishes an existing release tag to all three stores, with the
+  # same jobs as a release. For a release whose run never finished (#144).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to build and publish, e.g. v2.5.0'
+        required: true
+        type: string
 
+# Runs queue instead of cancelling each other: a run that has created a release tag
+# must reach the store jobs (#144). A queued run that GitHub replaces is harmless,
+# since the next run's release-please step picks up any release still pending.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 # Read-only default. Jobs add only the scopes they use.
 permissions:
@@ -15,6 +26,7 @@ permissions:
 
 jobs:
   release-please:
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     # The action authenticates with RELEASE_PLEASE_TOKEN, not GITHUB_TOKEN,
     # so release PRs still trigger CI. GITHUB_TOKEN needs nothing more.
@@ -31,11 +43,56 @@ jobs:
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
-          release-type: node
+          # No release-type input: with one, the action ignores release-please-config.json
+          # and .release-please-manifest.json, so the manifest.json extra-file never
+          # applied (#144). The release type lives in the config file.
+
+  # The tag to build: the one release-please just created, or the dispatch input.
+  target:
+    needs: release-please
+    if: ${{ !cancelled() && (github.event_name == 'workflow_dispatch' || needs.release-please.outputs.release_created) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+      ref: ${{ steps.tag.outputs.ref }}
+
+    steps:
+      - name: Resolve tag
+        id: tag
+        env:
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs.tag_name }}
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error title=Release::'$TAG' is not a release tag like v2.5.0."
+            exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "ref=refs/tags/$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.tag.outputs.ref }}
+          persist-credentials: false
+
+      # The build stamps manifest.json from package.json (npm run sync-version), and the
+      # AMO and Edge notes read package.json too, so the tag's package.json must match.
+      - name: Check package.json version matches the tag
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "v$VERSION" != "$TAG" ]; then
+            echo "::error title=Release::package.json at $TAG is $VERSION, expected ${TAG#v}."
+            exit 1
+          fi
 
   build-release:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
+    needs: target
+    if: ${{ !cancelled() && needs.target.result == 'success' }}
     runs-on: ubuntu-latest
     # contents: write lets action-gh-release attach dist/*.zip to the release.
     permissions:
@@ -44,6 +101,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.target.outputs.ref }}
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -60,7 +120,7 @@ jobs:
       - name: Upload release assets
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ needs.release-please.outputs.tag_name }}
+          tag_name: ${{ needs.target.outputs.tag }}
           files: dist/*.zip
 
       - name: Upload build artifacts
@@ -71,8 +131,8 @@ jobs:
           retention-days: 1
 
   publish-to-chrome:
-    needs: [release-please, build-release]
-    if: ${{ needs.release-please.outputs.release_created }}
+    needs: [target, build-release]
+    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:
@@ -111,8 +171,8 @@ jobs:
           glob: true
 
   publish-to-firefox:
-    needs: [release-please, build-release]
-    if: ${{ needs.release-please.outputs.release_created }}
+    needs: [target, build-release]
+    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:
@@ -123,6 +183,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          ref: ${{ needs.target.outputs.ref }}
           persist-credentials: false
 
       - name: Download artifacts
@@ -155,8 +216,8 @@ jobs:
         run: node scripts/amo-release.js --apply
 
   publish-to-edge:
-    needs: [release-please, build-release]
-    if: ${{ needs.release-please.outputs.release_created }}
+    needs: [target, build-release]
+    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:
@@ -167,6 +228,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
+          ref: ${{ needs.target.outputs.ref }}
           persist-credentials: false
 
       - name: Download artifacts
