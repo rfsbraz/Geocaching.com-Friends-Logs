@@ -82,4 +82,31 @@ describe('release workflow (#144)', () => {
       expect(jobBlock(job)).toMatch(/needs: \[?.*\btarget\b/);
     }
   );
+  // A dispatch can republish to some stores only (#147): rerunning v2.5.0 for the
+  // Firefox fix must not resubmit Chrome and Edge, which are in review.
+  test('workflow_dispatch has a stores input, default all', () => {
+    const inputs = workflow.match(/^ {2}workflow_dispatch:\n((?: {4,}.*\n)+)/m);
+    expect(inputs).not.toBeNull();
+    expect(inputs[1]).toMatch(/^ {6}stores:\n/m);
+    expect(inputs[1]).toMatch(/^ {8}default: 'all'$/m);
+  });
+
+  test('target resolves the stores: all on push, the input on a dispatch', () => {
+    const target = jobBlock('target');
+    expect(target).toMatch(/stores: \$\{\{ steps\.stores\.outputs\.stores \}\}/);
+    expect(target).toMatch(
+      /STORES: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.stores \|\| 'all' \}\}/
+    );
+  });
+
+  test.each([
+    ['publish-to-chrome', 'chrome'],
+    ['publish-to-edge', 'edge'],
+    ['publish-to-firefox', 'firefox']
+  ])('%s only runs when %s is in the stores', (job, store) => {
+    const condition = jobBlock(job).match(/^ {4}if: (.*)$/m);
+    expect(condition).not.toBeNull();
+    expect(condition[1]).toContain(`contains(needs.target.outputs.stores, ',${store},')`);
+    expect(condition[1]).toContain("needs.build-release.result == 'success'");
+  });
 });

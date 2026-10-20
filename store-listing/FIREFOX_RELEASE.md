@@ -20,4 +20,10 @@ node scripts/amo-release.js --version 2.4.0    # any version in CHANGELOG.md
 
 It prints the release notes payload and the preview sync: the screenshots it would upload, the AMO previews it would delete and any position changes. It sends nothing; the only requests are reads of the public listing and its preview images. No credentials are needed. The script never prints the AMO key.
 
-If the step fails in a release, the version itself is already uploaded. Rerun the failed `publish-to-firefox` job: it skips the upload and syncs the notes and previews again.
+If the step fails in a release, the version itself is already uploaded. Republish to Firefox only: Actions > Release > Run workflow, with `tag` set to the release tag (for example `v2.5.0`) and `stores` set to `firefox`. The job skips the upload and syncs the notes and previews again, and Chrome and Edge are not resubmitted, so a version in review there keeps its place. Rerunning the failed job of the old run is not the same: it reruns the workflow as it was then.
+
+`stores` takes `all` (the default) or a comma list of `chrome`, `edge` and `firefox`. A release from a push always publishes to all three.
+
+### Finishing 2.5.0
+
+Once this is on `main`, to finish 2.5.0 on Firefox (delete the stale preview 349679): Actions > Release > Run workflow on `main`, `tag` = `v2.5.0`, `stores` = `firefox`.
