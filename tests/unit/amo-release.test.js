@@ -87,14 +87,14 @@ describe('AMO release notes and previews (#114)', () => {
     expect(s).toBe(expected);
   });
 
-  test('apply sets notes, uploads new previews, then deletes the old ones', async () => {
+  test('apply sets notes, uploads previews AMO lacks, then deletes the ones the repo lacks', async () => {
     const plan = buildPlan({
       changelog,
       version: '2.5.0',
       assetsDir: fakeAssets(['screenshot-1.png', 'screenshot-2.png'])
     });
     const { calls, request } = recorder([7, 8]);
-    await applyPlan(plan, { request, log: () => {} });
+    await applyPlan(plan, { request, fetchImage: async () => null, log: () => {} });
     expect(calls.map(c => `${c.method} ${c.url}`)).toEqual([
       'PATCH addons/addon/geocaching-friends-logs@rfsbraz.github.io/versions/v2.5.0/',
       'GET addons/addon/geocaching-friends-logs@rfsbraz.github.io/',
@@ -119,7 +119,9 @@ describe('AMO release notes and previews (#114)', () => {
       }
       return base(method, url, body);
     };
-    await expect(applyPlan(plan, { request, log: () => {} })).rejects.toThrow(/upload rejected/);
+    await expect(
+      applyPlan(plan, { request, fetchImage: async () => null, log: () => {} })
+    ).rejects.toThrow(/upload rejected/);
     expect(calls.some(c => c.method === 'DELETE')).toBe(false);
   });
 });

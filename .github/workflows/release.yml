@@ -192,7 +192,24 @@ jobs:
           name: browser-extensions
           path: dist
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+
+      # A rerun for a version AMO already has must not upload again (AMO answers 409
+      # "Version X already exists"), but must still set the notes and previews.
+      - name: Check whether AMO already has this version
+        id: amo-version
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: node scripts/amo-release.js --check-version
+
       - name: Upload to Firefox Add-ons
+        id: upload
+        if: steps.amo-version.outputs.exists != 'true'
+        continue-on-error: true
         uses: wdzeng/firefox-addon@v1
         with:
           addon-guid: 'geocaching-friends-logs@rfsbraz.github.io'
@@ -200,14 +217,18 @@ jobs:
           jwt-issuer: ${{ secrets.AMO_JWT_ISSUER }}
           jwt-secret: ${{ secrets.AMO_JWT_SECRET }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '20'
+      # A failed upload is fine only if AMO has the version anyway (a 409 from a race
+      # with an earlier attempt). Otherwise the job fails here.
+      - name: Confirm AMO has this version
+        if: steps.upload.outcome == 'failure'
+        env:
+          AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
+          AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: node scripts/amo-release.js --check-version --require
 
       # The action cannot send release notes or previews, so this step does it with the
       # same AMO key: the CHANGELOG.md section for this version becomes the release
-      # notes, and store-listing/assets/screenshot-N.png replace the listing previews.
+      # notes, and the listing previews are synced to store-listing/assets/screenshot-N.png.
       # See store-listing/FIREFOX_RELEASE.md.
       - name: Set AMO release notes and previews
         env:
