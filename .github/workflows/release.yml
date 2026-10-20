@@ -217,6 +217,17 @@ jobs:
           ref: ${{ needs.target.outputs.ref }}
           persist-credentials: false
 
+      # The AMO script comes from the workflow's own commit, not the tag: a dispatch for
+      # an older tag would otherwise run that tag's script (#147). It reads
+      # CHANGELOG.md, the screenshots and the version from the tag checkout (--root .).
+      - name: Checkout release tools
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .release-tools
+          persist-credentials: false
+          sparse-checkout: scripts
+
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -235,7 +246,7 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --check-version
+        run: node .release-tools/scripts/amo-release.js --check-version --root .
 
       - name: Upload to Firefox Add-ons
         id: upload
@@ -255,7 +266,7 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --check-version --require
+        run: node .release-tools/scripts/amo-release.js --check-version --require --root .
 
       # The action cannot send release notes or previews, so this step does it with the
       # same AMO key: the CHANGELOG.md section for this version becomes the release
@@ -265,7 +276,7 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --apply
+        run: node .release-tools/scripts/amo-release.js --apply --root .
 
   publish-to-edge:
     needs: [target, build-release]

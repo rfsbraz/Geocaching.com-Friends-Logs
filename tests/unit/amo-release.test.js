@@ -2,7 +2,13 @@ const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { listPreviews, buildPlan, makeJwt, applyPlan } = require('../../scripts/amo-release');
+const {
+  listPreviews,
+  buildPlan,
+  makeJwt,
+  applyPlan,
+  parseArgs
+} = require('../../scripts/amo-release');
 
 const ROOT = path.join(__dirname, '..', '..');
 const changelog =
@@ -123,5 +129,12 @@ describe('AMO release notes and previews (#114)', () => {
       applyPlan(plan, { request, fetchImage: async () => null, log: () => {} })
     ).rejects.toThrow(/upload rejected/);
     expect(calls.some(c => c.method === 'DELETE')).toBe(false);
+  });
+  test('--root points the script at another checkout (the release tag)', () => {
+    expect(parseArgs(['--check-version', '--root', '/tag'])).toMatchObject({
+      checkVersion: true,
+      root: '/tag'
+    });
+    expect(parseArgs(['--apply']).root).toBe(ROOT);
   });
 });

@@ -109,4 +109,18 @@ describe('release workflow (#144)', () => {
     expect(condition[1]).toContain(`contains(needs.target.outputs.stores, ',${store},')`);
     expect(condition[1]).toContain("needs.build-release.result == 'success'");
   });
+  // A dispatch checks out the release tag, whose scripts/amo-release.js predates the
+  // fixes (#147). The job must run the AMO script from the workflow's own commit and
+  // point it at the tag checkout for CHANGELOG.md, the screenshots and the version.
+  test('publish-to-firefox runs the AMO script from the workflow commit, on the tag files', () => {
+    const job = jobBlock('publish-to-firefox');
+    expect(job).toMatch(
+      /uses: actions\/checkout@v\d+\n {8}with:\n {10}ref: \$\{\{ github\.sha \}\}\n {10}path: \.release-tools\n/
+    );
+    const runs = job.match(/node \S*amo-release\.js[^\n]*/g);
+    expect(runs.length).toBeGreaterThanOrEqual(3);
+    for (const run of runs) {
+      expect(run).toMatch(/^node \.release-tools\/scripts\/amo-release\.js .*--root \.( |$)/);
+    }
+  });
 });
