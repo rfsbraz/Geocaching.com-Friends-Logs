@@ -82,4 +82,45 @@ describe('release workflow (#144)', () => {
       expect(jobBlock(job)).toMatch(/needs: \[?.*\btarget\b/);
     }
   );
+  // A dispatch can republish to some stores only (#147): rerunning v2.5.0 for the
+  // Firefox fix must not resubmit Chrome and Edge, which are in review.
+  test('workflow_dispatch has a stores input, default all', () => {
+    const inputs = workflow.match(/^ {2}workflow_dispatch:\n((?: {4,}.*\n)+)/m);
+    expect(inputs).not.toBeNull();
+    expect(inputs[1]).toMatch(/^ {6}stores:\n/m);
+    expect(inputs[1]).toMatch(/^ {8}default: 'all'$/m);
+  });
+
+  test('target resolves the stores: all on push, the input on a dispatch', () => {
+    const target = jobBlock('target');
+    expect(target).toMatch(/stores: \$\{\{ steps\.stores\.outputs\.stores \}\}/);
+    expect(target).toMatch(
+      /STORES: \$\{\{ github\.event_name == 'workflow_dispatch' && inputs\.stores \|\| 'all' \}\}/
+    );
+  });
+
+  test.each([
+    ['publish-to-chrome', 'chrome'],
+    ['publish-to-edge', 'edge'],
+    ['publish-to-firefox', 'firefox']
+  ])('%s only runs when %s is in the stores', (job, store) => {
+    const condition = jobBlock(job).match(/^ {4}if: (.*)$/m);
+    expect(condition).not.toBeNull();
+    expect(condition[1]).toContain(`contains(needs.target.outputs.stores, ',${store},')`);
+    expect(condition[1]).toContain("needs.build-release.result == 'success'");
+  });
+  // A dispatch checks out the release tag, whose scripts/amo-release.js predates the
+  // fixes (#147). The job must run the AMO script from the workflow's own commit and
+  // point it at the tag checkout for CHANGELOG.md, the screenshots and the version.
+  test('publish-to-firefox runs the AMO script from the workflow commit, on the tag files', () => {
+    const job = jobBlock('publish-to-firefox');
+    expect(job).toMatch(
+      /uses: actions\/checkout@v\d+\n {8}with:\n {10}ref: \$\{\{ github\.sha \}\}\n {10}path: \.release-tools\n/
+    );
+    const runs = job.match(/node \S*amo-release\.js[^\n]*/g);
+    expect(runs.length).toBeGreaterThanOrEqual(3);
+    for (const run of runs) {
+      expect(run).toMatch(/^node \.release-tools\/scripts\/amo-release\.js .*--root \.( |$)/);
+    }
+  });
 });

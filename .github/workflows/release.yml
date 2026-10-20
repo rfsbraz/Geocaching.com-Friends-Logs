@@ -4,13 +4,19 @@ on:
   push:
     branches:
       - main
-  # Rebuilds and republishes an existing release tag to all three stores, with the
-  # same jobs as a release. For a release whose run never finished (#144).
+  # Rebuilds and republishes an existing release tag, with the same jobs as a release.
+  # For a release whose run never finished (#144). stores limits it to some stores, so
+  # a version already in review elsewhere is not resubmitted (#147).
   workflow_dispatch:
     inputs:
       tag:
         description: 'Existing release tag to build and publish, e.g. v2.5.0'
         required: true
+        type: string
+      stores:
+        description: 'Stores to publish to: all, or a comma list of chrome, edge, firefox'
+        required: false
+        default: 'all'
         type: string
 
 # Runs queue instead of cancelling each other: a run that has created a release tag
@@ -58,6 +64,7 @@ jobs:
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
       ref: ${{ steps.tag.outputs.ref }}
+      stores: ${{ steps.stores.outputs.stores }}
 
     steps:
       - name: Resolve tag
@@ -71,6 +78,30 @@ jobs:
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "ref=refs/tags/$TAG" >> "$GITHUB_OUTPUT"
+
+      # A push always publishes everywhere. The output is wrapped in commas, like
+      # ",chrome,firefox,", so each publish job can match its own name exactly.
+      - name: Resolve stores
+        id: stores
+        env:
+          STORES: ${{ github.event_name == 'workflow_dispatch' && inputs.stores || 'all' }}
+        run: |
+          list="$(echo "$STORES" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')"
+          if [ -z "$list" ] || [ "$list" = "all" ]; then
+            list="chrome,edge,firefox"
+          fi
+          IFS=',' read -ra names <<< "$list"
+          for name in "${names[@]}"; do
+            case "$name" in
+              chrome|edge|firefox) ;;
+              *)
+                echo "::error title=Release::Unknown store '$name'. Use all, or a comma list of chrome, edge, firefox."
+                exit 1
+                ;;
+            esac
+          done
+          echo "Publishing to: $list"
+          echo "stores=,$list," >> "$GITHUB_OUTPUT"
 
       - name: Checkout tag
         uses: actions/checkout@v7
@@ -132,7 +163,7 @@ jobs:
 
   publish-to-chrome:
     needs: [target, build-release]
-    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
+    if: ${{ !cancelled() && needs.build-release.result == 'success' && contains(needs.target.outputs.stores, ',chrome,') }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:
@@ -172,7 +203,7 @@ jobs:
 
   publish-to-firefox:
     needs: [target, build-release]
-    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
+    if: ${{ !cancelled() && needs.build-release.result == 'success' && contains(needs.target.outputs.stores, ',firefox,') }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:
@@ -185,6 +216,17 @@ jobs:
         with:
           ref: ${{ needs.target.outputs.ref }}
           persist-credentials: false
+
+      # The AMO script comes from the workflow's own commit, not the tag: a dispatch for
+      # an older tag would otherwise run that tag's script (#147). It reads
+      # CHANGELOG.md, the screenshots and the version from the tag checkout (--root .).
+      - name: Checkout release tools
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .release-tools
+          persist-credentials: false
+          sparse-checkout: scripts
 
       - name: Download artifacts
         uses: actions/download-artifact@v8
@@ -204,7 +246,7 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --check-version
+        run: node .release-tools/scripts/amo-release.js --check-version --root .
 
       - name: Upload to Firefox Add-ons
         id: upload
@@ -224,7 +266,7 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --check-version --require
+        run: node .release-tools/scripts/amo-release.js --check-version --require --root .
 
       # The action cannot send release notes or previews, so this step does it with the
       # same AMO key: the CHANGELOG.md section for this version becomes the release
@@ -234,11 +276,11 @@ jobs:
         env:
           AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
           AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: node scripts/amo-release.js --apply
+        run: node .release-tools/scripts/amo-release.js --apply --root .
 
   publish-to-edge:
     needs: [target, build-release]
-    if: ${{ !cancelled() && needs.build-release.result == 'success' }}
+    if: ${{ !cancelled() && needs.build-release.result == 'success' && contains(needs.target.outputs.stores, ',edge,') }}
     runs-on: ubuntu-latest
     # Store uploads use store secrets; GITHUB_TOKEN only reads the repo.
     permissions:

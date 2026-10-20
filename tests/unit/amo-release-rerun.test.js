@@ -210,7 +210,7 @@ describe('rerun for a version AMO already has (#147)', () => {
     expect(check).toBeLessThan(upload);
     expect(step('Check whether AMO already has this version')).toMatch(/id: amo-version/);
     expect(step('Check whether AMO already has this version')).toMatch(
-      /node scripts\/amo-release\.js --check-version/
+      /node \.release-tools\/scripts\/amo-release\.js --check-version/
     );
   });
 

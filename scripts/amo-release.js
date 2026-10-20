@@ -9,6 +9,10 @@
  *   node scripts/amo-release.js [--version 2.5.0] --apply   writes to AMO
  *   node scripts/amo-release.js --check-version [--require]  is the version on AMO?
  *
+ * --root <dir> reads package.json, CHANGELOG.md and store-listing/assets from another
+ * checkout (default: this repo). The release job uses it to run this script from the
+ * workflow's commit on the files of an older release tag.
+ *
  * --version defaults to package.json. The dry run never writes: it prints the notes
  * payload and the preview diff (read-only GETs). --check-version writes exists=true or
  * exists=false to $GITHUB_OUTPUT; with --require it fails when the version is missing.
@@ -383,7 +387,7 @@ async function applyPlan(
 }
 
 function parseArgs(argv) {
-  const args = { apply: false, checkVersion: false, require: false, version: null };
+  const args = { apply: false, checkVersion: false, require: false, version: null, root: ROOT_DIR };
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--apply') {
       args.apply = true;
@@ -393,6 +397,8 @@ function parseArgs(argv) {
       args.require = true;
     } else if (argv[i] === '--version') {
       args.version = argv[++i];
+    } else if (argv[i] === '--root') {
+      args.root = path.resolve(argv[++i]);
     } else {
       throw new Error(`Unknown argument: ${argv[i]}`);
     }
@@ -416,7 +422,7 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const version =
     args.version ||
-    JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8')).version;
+    JSON.parse(fs.readFileSync(path.join(args.root, 'package.json'), 'utf8')).version;
   const { AMO_JWT_ISSUER: issuer, AMO_JWT_SECRET: secret } = process.env;
   const signed = issuer && secret ? withRetry(amoClient(issuer, secret)) : null;
 
@@ -432,9 +438,9 @@ async function main() {
   }
 
   const plan = buildPlan({
-    changelog: fs.readFileSync(path.join(ROOT_DIR, 'CHANGELOG.md'), 'utf8'),
+    changelog: fs.readFileSync(path.join(args.root, 'CHANGELOG.md'), 'utf8'),
     version,
-    assetsDir: path.join(ROOT_DIR, 'store-listing', 'assets')
+    assetsDir: path.join(args.root, 'store-listing', 'assets')
   });
 
   if (args.apply) {
@@ -481,6 +487,7 @@ module.exports = {
   buildPlan,
   makeJwt,
   applyPlan,
+  parseArgs,
   withRetry,
   retryAfterMs,
   versionExists,
