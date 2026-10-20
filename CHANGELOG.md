@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.5.0...v2.5.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **release:** add a stores input to the Release dispatch and run the current AMO script on older tags ([#149](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/149)) ([5a285af](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/5a285af9f3ff7858dac5572a9d20d6c77f6f63ed))
+* **release:** retry AMO 429s, skip the Firefox upload on rerun, and sync previews by diff ([#148](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/148)) ([de58cb9](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/de58cb930cab91b314ca1238be8f523b76f74257))
+* **release:** use the release-please config, never cancel a release run, and bump manifest.json to 2.5.0 ([#145](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/145)) ([0127d93](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/0127d93c8de1753ba12bfa087ebb060801116135))
+
 ## [2.5.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.4.0...v2.5.0) (2026-10-19)
 
 
