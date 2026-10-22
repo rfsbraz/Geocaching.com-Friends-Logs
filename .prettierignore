@@ -8,3 +8,7 @@ test-results/
 tests/e2e/screenshots/
 tests/e2e/fixtures/real-pages/
 tests/fixtures/logbook-logged-out.html
+# release-please (extra-files) and scripts/sync-version.js rewrite manifest.json with
+# JSON.stringify, which puts every array item on its own line. Prettier collapses short
+# arrays, so the two can never agree and each release would fail format:check.
+manifest.json
