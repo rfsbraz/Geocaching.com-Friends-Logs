@@ -3,43 +3,7 @@
  * Handles loading and saving user preferences.
  */
 
-const DEFAULT_VALUES = {
-  showFriendsLogs: true,
-  showMyLogs: false,
-  limit: 5
-};
-
-/**
- * Store URLs for each browser
- */
-const STORE_URLS = {
-  chrome:
-    'https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam',
-  firefox: 'https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/',
-  opera:
-    'https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam',
-  edge: 'https://microsoftedge.microsoft.com/addons/detail/ddbfbobfccafkoabbcmpkbpofbkfgikc'
-};
-
-/**
- * Detects the current browser
- * @returns {string} Browser name: 'firefox', 'edge', 'opera', or 'chrome'
- */
-function detectBrowser() {
-  const ua = navigator.userAgent;
-  // Check the user agent, not the `browser` namespace: recent Chromium
-  // versions expose `browser` to extensions too.
-  if (ua.includes('Firefox/')) {
-    return 'firefox';
-  }
-  if (ua.includes('Edg/')) {
-    return 'edge';
-  }
-  if (ua.includes('OPR/') || ua.includes('Opera')) {
-    return 'opera';
-  }
-  return 'chrome';
-}
+/* global DEFAULT_VALUES, getStoreUrl */
 
 /**
  * Updates the rate link to point to the correct store
@@ -47,8 +11,7 @@ function detectBrowser() {
 function updateRateLink() {
   const rateLink = document.getElementById('rate-link');
   if (rateLink) {
-    const detectedBrowser = detectBrowser();
-    rateLink.href = STORE_URLS[detectedBrowser] || STORE_URLS.chrome;
+    rateLink.href = getStoreUrl();
   }
 }
 
@@ -64,7 +27,7 @@ function displayVersion() {
 }
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { DEFAULT_VALUES, STORE_URLS, detectBrowser, updateRateLink, displayVersion };
+  module.exports = { updateRateLink, displayVersion };
 }
 
 document.addEventListener('DOMContentLoaded', () => {

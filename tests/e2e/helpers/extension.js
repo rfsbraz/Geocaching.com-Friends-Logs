@@ -43,4 +43,41 @@ async function launchChromiumWithExtension() {
   return { context, extensionId };
 }
 
-module.exports = { launchChromiumWithExtension, EXTENSION_PATH };
+/**
+ * Read or write the extension's chrome.storage.local from one of its own pages.
+ * @param {import('@playwright/test').BrowserContext} context
+ * @param {string} extensionId
+ * @param {(items: object | null) => Promise<object>} fn - Runs in the extension page
+ * @param {object | null} arg
+ */
+async function inExtensionStorage(context, extensionId, fn, arg = null) {
+  const page = await context.newPage();
+  try {
+    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    return await page.evaluate(fn, arg);
+  } finally {
+    await page.close();
+  }
+}
+
+/** Write items to the extension's local storage. */
+function setExtensionStorage(context, extensionId, items) {
+  return inExtensionStorage(
+    context,
+    extensionId,
+    values => chrome.storage.local.set(values).then(() => null),
+    items
+  );
+}
+
+/** Read the extension's whole local storage. */
+function getExtensionStorage(context, extensionId) {
+  return inExtensionStorage(context, extensionId, () => chrome.storage.local.get(null));
+}
+
+module.exports = {
+  launchChromiumWithExtension,
+  setExtensionStorage,
+  getExtensionStorage,
+  EXTENSION_PATH
+};

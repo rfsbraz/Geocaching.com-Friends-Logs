@@ -1,7 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 const { test, expect } = require('@playwright/test');
-const { launchChromiumWithExtension } = require('./helpers/extension');
+const {
+  launchChromiumWithExtension,
+  setExtensionStorage,
+  getExtensionStorage
+} = require('./helpers/extension');
 const {
   friendsLogsResponse,
   layoutFriendsLogsResponse,
@@ -101,6 +105,9 @@ test.describe('Chromium E2E', () => {
 
   test.beforeAll(async () => {
     ({ context, extensionId } = await launchChromiumWithExtension());
+    // Every cache page with logs counts as a use. Keep the one-time rating prompt (#135)
+    // out of the other tests; its own tests reset it.
+    await setExtensionStorage(context, extensionId, { ratingPromptDone: true });
   });
 
   test.afterAll(async () => {
@@ -317,6 +324,121 @@ test.describe('Chromium E2E', () => {
           true
         );
       }
+    });
+  });
+
+  test.describe('rating prompt (#135)', () => {
+    const CHROME_STORE =
+      'https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam';
+
+    /** Start the count at `uses` cache pages with logs, prompt not done yet. */
+    async function resetPrompt(uses) {
+      await setExtensionStorage(context, extensionId, {
+        ratingPromptUses: uses,
+        ratingPromptDone: false
+      });
+    }
+
+    /** Open a cache page with friend logs and wait until the extension has rendered them. */
+    async function openCachePage() {
+      const page = await context.newPage();
+      await page.setViewportSize({ width: 1100, height: 900 });
+      await setupRoutes(page);
+      await page.goto('https://www.geocaching.com/geocache/GC12345');
+      await expect(page.locator('.gcfl-logbook-header td')).toBeVisible({ timeout: 10000 });
+      return page;
+    }
+
+    /** Wait until the content script has saved this page load's use. */
+    async function expectUses(uses) {
+      await expect
+        .poll(async () => (await getExtensionStorage(context, extensionId)).ratingPromptUses)
+        .toBe(uses);
+    }
+
+    test.afterAll(async () => {
+      await setExtensionStorage(context, extensionId, { ratingPromptDone: true });
+    });
+
+    test('shows on the 5th cache page with logs, above the Logbook header', async () => {
+      await resetPrompt(3);
+
+      const fourth = await openCachePage();
+      await expectUses(4);
+      await expect(fourth.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await fourth.close();
+
+      const fifth = await openCachePage();
+      const prompt = fifth.locator('.gcfl-rating-prompt');
+      await expect(prompt).toBeVisible();
+      await expect(prompt.locator('.gcfl-rating-text')).toHaveText(
+        'Is Friends Logs useful to you? A quick rating on the store helps other geocachers find it.'
+      );
+      await expect(prompt.locator('.gcfl-rating-rate')).toHaveText('Rate it');
+      await expect(prompt.locator('.gcfl-rating-dismiss')).toHaveText('Not now');
+      await expect(prompt.locator('.gcfl-rating-rate')).toHaveAttribute('href', CHROME_STORE);
+      await expect(prompt.locator('.gcfl-rating-rate')).toHaveAttribute('target', '_blank');
+
+      // Under the last friend log, above the Logbook header.
+      const box = await prompt.boundingBox();
+      const lastFriend = await fifth.locator('.gcfl-friends-log').last().boundingBox();
+      const logbook = await fifth.locator('.gcfl-logbook-header td').boundingBox();
+      expect(box.y).toBeGreaterThanOrEqual(lastFriend.y + lastFriend.height);
+      expect(box.y + box.height).toBeLessThanOrEqual(logbook.y);
+
+      await fifth.mouse.move(0, 0);
+      fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+      await fifth
+        .locator('table.gcfl-table')
+        .screenshot({ path: path.join(SCREENSHOTS_DIR, 'rating-prompt-135.png') });
+      await fifth.close();
+
+      // Not clicked on the 5th, so the 6th does not show it again.
+      const sixth = await openCachePage();
+      await expectUses(6);
+      await expect(sixth.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await sixth.close();
+    });
+
+    test('"Not now" hides it for good', async () => {
+      await resetPrompt(4);
+      const page = await openCachePage();
+      await page.locator('.gcfl-rating-dismiss').click();
+      await expect(page.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await expect
+        .poll(async () => (await getExtensionStorage(context, extensionId)).ratingPromptDone)
+        .toBe(true);
+
+      await setExtensionStorage(context, extensionId, { ratingPromptUses: 4 });
+      await page.reload();
+      await expect(page.locator('.gcfl-logbook-header td')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await page.close();
+    });
+
+    test('"Rate it" opens the store in a new tab and hides it for good', async () => {
+      await resetPrompt(4);
+      const page = await openCachePage();
+      // Abort the store request in the new tab so the test stays offline.
+      const storeRequest = context.waitForEvent('request', request =>
+        request.url().startsWith('https://chrome.google.com/')
+      );
+      await context.route('https://chrome.google.com/**', route => route.abort());
+      try {
+        const [store] = await Promise.all([
+          context.waitForEvent('page'),
+          page.locator('.gcfl-rating-rate').click()
+        ]);
+        expect((await storeRequest).url()).toBe(CHROME_STORE);
+        await store.close();
+      } finally {
+        await context.unroute('https://chrome.google.com/**');
+      }
+      await expect(page.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await expect
+        .poll(async () => (await getExtensionStorage(context, extensionId)).ratingPromptDone)
+        .toBe(true);
+      await page.close();
     });
   });
 });

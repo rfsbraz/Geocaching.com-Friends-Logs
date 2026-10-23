@@ -1,9 +1,5 @@
 /**
  * Jest setup file.
- * Defines globals that content_script.js expects to be loaded via init.js.
+ * Defines the globals that content_script.js and popup.js get from init.js.
  */
-global.DEFAULT_VALUES = {
-  showFriendsLogs: true,
-  showMyLogs: false,
-  limit: 5
-};
+Object.assign(global, require('../init'));
