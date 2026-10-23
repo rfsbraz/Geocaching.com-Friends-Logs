@@ -2,10 +2,69 @@ const path = require('path');
 const fs = require('fs');
 const { test, expect } = require('@playwright/test');
 const { launchChromiumWithExtension } = require('./helpers/extension');
-const { friendsLogsResponse } = require('./fixtures/mock-api-responses');
+const {
+  friendsLogsResponse,
+  layoutFriendsLogsResponse,
+  layoutPersonalLogsResponse
+} = require('./fixtures/mock-api-responses');
 
 const MOCK_PAGE_PATH = path.resolve(__dirname, 'fixtures', 'mock-geocache-page.html');
 const mockPageHTML = fs.readFileSync(MOCK_PAGE_PATH, 'utf-8');
+const LAYOUT_PAGE_PATH = path.resolve(__dirname, 'fixtures', 'mock-logbook-layout.html');
+const layoutPageHTML = fs.readFileSync(LAYOUT_PAGE_PATH, 'utf-8');
+const SCREENSHOTS_DIR = path.resolve(__dirname, 'screenshots');
+
+/** Serve the logbook layout fixture, with friend logs or my logs depending on sp. */
+async function setupLayoutRoutes(page) {
+  await page.route('**/geocache/GC*', async route => {
+    await route.fulfill({ status: 200, contentType: 'text/html', body: layoutPageHTML });
+  });
+  await page.route('**/seek/geocache.logbook*', async route => {
+    const params = new URL(route.request().url()).searchParams;
+    const response =
+      params.get('sp') === 'true' ? layoutPersonalLogsResponse : layoutFriendsLogsResponse;
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(response)
+    });
+  });
+}
+
+/** Toggle "Show my logs" in the popup. */
+async function toggleMyLogs(context, extensionId) {
+  const popupPage = await context.newPage();
+  await popupPage.goto(`chrome-extension://${extensionId}/popup.html`);
+  await popupPage.waitForTimeout(300);
+  await popupPage.locator('label:has(#own)').click();
+  await popupPage.waitForTimeout(500);
+  await popupPage.close();
+}
+
+/**
+ * Read the RGB of one page pixel from a real screenshot, so the check sees what is painted.
+ * @returns {Promise<number[]>}
+ */
+async function pixelAt(page, x, y) {
+  const png = await page.screenshot({
+    clip: { x: Math.round(x), y: Math.round(y), width: 1, height: 1 }
+  });
+  return page.evaluate(async b64 => {
+    const img = new Image();
+    img.src = 'data:image/png;base64,' + b64;
+    await img.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    return Array.from(ctx.getImageData(0, 0, 1, 1).data.slice(0, 3));
+  }, png.toString('base64'));
+}
+
+function isWhite(rgb) {
+  return rgb.every(c => c >= 250);
+}
 
 /** Set up page routes for intercepting geocache page and API calls. */
 async function setupRoutes(page) {
@@ -192,5 +251,72 @@ test.describe('Chromium E2E', () => {
     await popupPage.waitForTimeout(500);
 
     await popupPage.close();
+  });
+
+  /**
+   * Open the logbook layout fixture with friend logs and my logs, then run check(page).
+   * Saves a screenshot of our table as tests/e2e/screenshots/<shot>.
+   */
+  async function withLayoutPage(shot, check) {
+    await toggleMyLogs(context, extensionId);
+    const page = await context.newPage();
+    try {
+      await page.setViewportSize({ width: 1100, height: 900 });
+      await setupLayoutRoutes(page);
+      await page.goto('https://www.geocaching.com/geocache/GC12345');
+      await expect(page.locator('.gcfl-logbook-header')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('.gcfl-friends-log')).toHaveCount(2);
+      await expect(page.locator('.gcfl-my-log')).toHaveCount(1);
+      await page.mouse.move(0, 0);
+      fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+      await page.locator('table.gcfl-table').screenshot({ path: path.join(SCREENSHOTS_DIR, shot) });
+      await check(page);
+    } finally {
+      await page.close();
+      await toggleMyLogs(context, extensionId);
+    }
+  }
+
+  test('friend and my log highlight fills the whole row (#141)', async () => {
+    await withLayoutPage('logbook-layout-141.png', async page => {
+      const table = await page.locator('table.gcfl-table').boundingBox();
+      const rows = page.locator('.gcfl-friends-log, .gcfl-my-log');
+      for (let i = 0; i < (await rows.count()); i++) {
+        const row = rows.nth(i);
+        const cell = await row.locator('> td').boundingBox();
+        // The row's only cell spans the whole table, not one of two columns.
+        expect(Math.abs(cell.x + cell.width - (table.x + table.width))).toBeLessThanOrEqual(2);
+        // The tint is painted near the right edge of the row, at rest and on hover.
+        const x = table.x + table.width - 20;
+        const y = cell.y + cell.height / 2;
+        expect(isWhite(await pixelAt(page, x, y))).toBe(false);
+        await row.hover();
+        expect(isWhite(await pixelAt(page, x, y))).toBe(false);
+        await page.mouse.move(0, 0);
+      }
+    });
+  });
+
+  test('sections keep a white gap before the next header (#141)', async () => {
+    await withLayoutPage('logbook-layout-141.png', async page => {
+      const table = await page.locator('table.gcfl-table').boundingBox();
+      for (const header of ['.gcfl-my-header', '.gcfl-logbook-header']) {
+        const gap = await page.evaluate(selector => {
+          const headerRow = document.querySelector(selector).getBoundingClientRect();
+          const rowsAbove = Array.from(
+            document.querySelectorAll('.gcfl-friends-log, .gcfl-my-log')
+          ).filter(r => r.getBoundingClientRect().bottom <= headerRow.top + 1);
+          const last = rowsAbove[rowsAbove.length - 1].getBoundingClientRect();
+          return { top: last.bottom, bottom: headerRow.top };
+        }, header);
+        const height = gap.bottom - gap.top;
+        // The README screenshot has about 28px between a section's last row and the next header.
+        expect(height).toBeGreaterThanOrEqual(16);
+        expect(height).toBeLessThanOrEqual(40);
+        expect(isWhite(await pixelAt(page, table.x + table.width / 2, gap.top + height / 2))).toBe(
+          true
+        );
+      }
+    });
   });
 });

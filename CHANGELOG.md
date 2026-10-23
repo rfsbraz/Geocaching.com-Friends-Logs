@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.5.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.5.0...v2.5.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **release:** add a stores input to the Release dispatch and run the current AMO script on older tags ([#149](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/149)) ([5a285af](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/5a285af9f3ff7858dac5572a9d20d6c77f6f63ed))
+* **release:** retry AMO 429s, skip the Firefox upload on rerun, and sync previews by diff ([#148](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/148)) ([de58cb9](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/de58cb930cab91b314ca1238be8f523b76f74257))
+* **release:** use the release-please config, never cancel a release run, and bump manifest.json to 2.5.0 ([#145](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/145)) ([0127d93](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/0127d93c8de1753ba12bfa087ebb060801116135))
+
+## [2.5.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.4.0...v2.5.0) (2026-10-19)
+
+
+### Features
+
+* **i18n:** add European Portuguese translation ([#120](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/120)) ([cfb0b24](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/cfb0b24cde3c7e9bee40e3d02bd4e1eb72979738))
+
+
+### Bug Fixes
+
+* **inject:** make friend and my log highlights full width and restore section gaps ([#142](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/142)) ([4fd10bd](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/4fd10bd3d9a4fd1820a0781ae2f38cffa47220a7))
+* **logbook:** skip rendering when the logbook API response has an unexpected shape ([#133](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/133)) ([8511145](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/8511145d02befe3d924e91fbabfe8975577ccd32))
+* **popup:** detect Firefox from the user agent so Chrome users get the Chrome Web Store ([#138](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/138)) ([2ccf08d](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/2ccf08d828a8798cae9e2b03dad1fa251e4988f0))
+* **release:** keep manifest.json version in sync with package.json ([#124](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/124)) ([c14bb88](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/c14bb88320f9656c6869accd5c921bdcb94f56d3))
+
 ## [2.4.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.3.6...v2.4.0) (2026-10-13)
 
 
