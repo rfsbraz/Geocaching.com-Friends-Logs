@@ -1,20 +1,13 @@
 ## Summary
--
 
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Refactoring
-- [ ] Other (please describe):
+<!-- One or two lines: what changes and why. -->
 
-## Related Issues
-Fixes #(issue number)
+Closes #
 
-## Changes Made
--
+## Screenshots
 
-## Checklist
-- [ ] `npm run lint` and `npm run format:check` pass
-- [ ] Tested locally
-- [ ] Documentation updated (if needed)
+<!-- UI changes only. Delete this section otherwise. -->
+
+## Tested
+
+<!-- One line: what you ran, for example `npm run lint`, `npm run format:check` and `npm test`. -->
