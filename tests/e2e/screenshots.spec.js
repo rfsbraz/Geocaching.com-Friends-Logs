@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { test, expect } = require('@playwright/test');
-const { launchChromiumWithExtension } = require('./helpers/extension');
+const { launchChromiumWithExtension, setExtensionStorage } = require('./helpers/extension');
 const { friendsLogsResponse, personalLogsResponse } = require('./fixtures/mock-api-responses');
 const { discoverRealPages, prepareRealPage } = require('./helpers/real-page');
 
@@ -91,6 +91,8 @@ test.describe('Visual Screenshots', () => {
   test.beforeAll(async () => {
     fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
     ({ context, extensionId } = await launchChromiumWithExtension());
+    // Keep the one-time rating prompt (#135) out of these screenshots.
+    await setExtensionStorage(context, extensionId, { ratingPromptDone: true });
   });
 
   test.afterAll(async () => {
