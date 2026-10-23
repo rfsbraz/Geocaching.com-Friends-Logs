@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.5.1...v2.6.0) (2026-10-23)
+
+
+### Features
+
+* **content:** ask for a store rating once on the 5th cache page with logs ([#136](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/136)) ([fe66d30](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/fe66d307938726df0d34cbaecdfc0e2334538fbb))
+
+
+### Bug Fixes
+
+* **build:** keep manifest.json out of Prettier so release PRs pass format:check ([#151](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/151)) ([01599d2](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/01599d2d18de963631bf3f5ea4f66c6d01c0af61))
+
 ## [2.5.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.5.0...v2.5.1) (2026-10-20)
 
 
