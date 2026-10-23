@@ -9,14 +9,14 @@
   },
   "ratingPromptText": {
     "message": "Ist Friends Logs nützlich für dich? Eine kurze Bewertung im Store hilft anderen Geocachern, es zu finden.",
-    "description": "Rating prompt shown once in the popup after a few weeks of use. Keep the name Friends Logs as is."
+    "description": "Rating prompt shown once on the cache page, under the friends' logs, after a few cache pages with logs. Keep the name Friends Logs as is."
   },
   "ratingPromptRate": {
     "message": "Bewerten",
-    "description": "Rating prompt button that opens the store page to leave a rating."
+    "description": "Button in the rating prompt on the cache page that opens the store page to leave a rating."
   },
   "ratingPromptDismiss": {
     "message": "Jetzt nicht",
-    "description": "Rating prompt button that dismisses the prompt for good."
+    "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
   }
 }

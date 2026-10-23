@@ -9,14 +9,14 @@
   },
   "ratingPromptText": {
     "message": "Har du nytta av Friends Logs? Ett snabbt betyg i butiken hjälper andra geocachare att hitta det.",
-    "description": "Rating prompt shown once in the popup after a few weeks of use. Keep the name Friends Logs as is."
+    "description": "Rating prompt shown once on the cache page, under the friends' logs, after a few cache pages with logs. Keep the name Friends Logs as is."
   },
   "ratingPromptRate": {
     "message": "Betygsätt",
-    "description": "Rating prompt button that opens the store page to leave a rating."
+    "description": "Button in the rating prompt on the cache page that opens the store page to leave a rating."
   },
   "ratingPromptDismiss": {
     "message": "Inte nu",
-    "description": "Rating prompt button that dismisses the prompt for good."
+    "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
   }
 }

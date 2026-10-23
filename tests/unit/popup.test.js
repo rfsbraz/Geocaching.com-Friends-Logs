@@ -1,10 +1,5 @@
-const {
-  DEFAULT_VALUES,
-  STORE_URLS,
-  detectBrowser,
-  updateRateLink,
-  displayVersion
-} = require('../../popup');
+const { DEFAULT_VALUES, STORE_URLS, detectBrowser } = require('../../init');
+const { updateRateLink, displayVersion } = require('../../popup');
 
 describe('popup.js', () => {
   describe('DEFAULT_VALUES', () => {

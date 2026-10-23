@@ -417,27 +417,28 @@ test.describe('Chromium E2E', () => {
     });
 
     test('"Rate it" opens the store in a new tab and hides it for good', async () => {
-      await context.route('https://chrome.google.com/**', route =>
-        route.fulfill({ status: 200, contentType: 'text/html', body: '<title>store</title>' })
+      await resetPrompt(4);
+      const page = await openCachePage();
+      // Abort the store request in the new tab so the test stays offline.
+      const storeRequest = context.waitForEvent('request', request =>
+        request.url().startsWith('https://chrome.google.com/')
       );
+      await context.route('https://chrome.google.com/**', route => route.abort());
       try {
-        await resetPrompt(4);
-        const page = await openCachePage();
         const [store] = await Promise.all([
           context.waitForEvent('page'),
           page.locator('.gcfl-rating-rate').click()
         ]);
-        await store.waitForLoadState();
-        expect(store.url()).toBe(CHROME_STORE);
+        expect((await storeRequest).url()).toBe(CHROME_STORE);
         await store.close();
-        await expect(page.locator('.gcfl-rating-prompt')).toHaveCount(0);
-        await expect
-          .poll(async () => (await getExtensionStorage(context, extensionId)).ratingPromptDone)
-          .toBe(true);
-        await page.close();
       } finally {
         await context.unroute('https://chrome.google.com/**');
       }
+      await expect(page.locator('.gcfl-rating-prompt')).toHaveCount(0);
+      await expect
+        .poll(async () => (await getExtensionStorage(context, extensionId)).ratingPromptDone)
+        .toBe(true);
+      await page.close();
     });
   });
 });

@@ -71,3 +71,73 @@
 .gcfl-table .gcfl-header td {
   border-top: none;
 }
+
+/* One-time store rating prompt (#135), above the Logbook header */
+.gcfl-table .gcfl-rating td {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.gcfl-rating-prompt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border-left: 4px solid #f5a623;
+  background: linear-gradient(135deg, #fff8e1 0%, #fffdf5 100%);
+  color: #5d4037;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.gcfl-rating-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: #f5a623;
+}
+
+.gcfl-rating-text {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.gcfl-rating-actions {
+  flex: none;
+  display: flex;
+  gap: 8px;
+}
+
+.gcfl-rating-actions a,
+.gcfl-rating-actions button {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.gcfl-rating-rate {
+  background: #00874d;
+  border: 1px solid #00874d;
+  color: #fff !important;
+}
+
+.gcfl-rating-rate:hover {
+  background: #006b3d;
+}
+
+.gcfl-rating-dismiss {
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  color: #616161;
+}
+
+.gcfl-rating-dismiss:hover {
+  background: #f5f5f5;
+}
