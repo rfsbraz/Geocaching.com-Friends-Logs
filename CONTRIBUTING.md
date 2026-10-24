@@ -95,8 +95,22 @@ To test locally with fake values, export the secrets above plus `EDGE_API_KEY_EX
 1. Ensure all checks pass (`npm run lint && npm run format:check && npm run build`)
 2. Push your branch to your fork
 3. Open a Pull Request against the `main` branch
-4. Fill out the PR template with a clear description of changes
+4. Fill out the PR template, including the AI use section
 5. Wait for review and address any feedback
+
+## Low-effort and automated PRs
+
+Geocaching Friends Logs is maintained in my spare time, and every PR takes real time to review. I'm happy to get contributions from people who use Geocaching Friends Logs and want to make it better.
+
+I will close, without review, PRs that look like contribution farming: accounts opening many PRs across unrelated projects, or changes made mainly to collect contributions rather than to fix something you ran into. This applies even when the change itself is correct.
+
+AI-assisted PRs are fine if you've read and understood the change and can answer questions about it. Please say so in the PR.
+
+The easiest way to get a PR merged is to start with an issue, agree on the approach there, and then open the PR.
+
+## Code of Conduct
+
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 ## Reporting Issues
 
