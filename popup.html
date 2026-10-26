@@ -15,32 +15,40 @@
         <label class="toggle">
           <input type="checkbox" id="friends" />
           <span class="toggle-slider"></span>
-          <span class="toggle-label">Show friends' logs</span>
+          <span class="toggle-label" data-i18n="popupShowFriends">Show friends' logs</span>
         </label>
-        <p class="setting-description">Highlight logs from your friends list</p>
+        <p class="setting-description" data-i18n="popupShowFriendsHint">
+          Highlight logs from your friends list
+        </p>
       </div>
 
       <div class="setting-group">
         <label class="toggle">
           <input type="checkbox" id="own" />
           <span class="toggle-slider"></span>
-          <span class="toggle-label">Show my logs</span>
+          <span class="toggle-label" data-i18n="popupShowMine">Show my logs</span>
         </label>
-        <p class="setting-description">Highlight your own logs on cache pages</p>
+        <p class="setting-description" data-i18n="popupShowMineHint">
+          Highlight your own logs on cache pages
+        </p>
       </div>
 
       <div class="setting-group">
-        <label class="select-label" for="limit">Friends logs limit</label>
+        <label class="select-label" for="limit" data-i18n="popupLimitLabel"
+          >Friends logs limit</label
+        >
         <div class="select-wrapper">
           <select class="select" id="limit">
-            <option value="5">5 logs</option>
-            <option value="10">10 logs</option>
-            <option value="20">20 logs</option>
-            <option value="50">50 logs</option>
-            <option value="100">100 logs</option>
+            <option value="5" data-i18n="popupLimitOption" data-i18n-args="5">5 logs</option>
+            <option value="10" data-i18n="popupLimitOption" data-i18n-args="10">10 logs</option>
+            <option value="20" data-i18n="popupLimitOption" data-i18n-args="20">20 logs</option>
+            <option value="50" data-i18n="popupLimitOption" data-i18n-args="50">50 logs</option>
+            <option value="100" data-i18n="popupLimitOption" data-i18n-args="100">100 logs</option>
           </select>
         </div>
-        <p class="setting-description">Maximum number of friends' logs to display</p>
+        <p class="setting-description" data-i18n="popupLimitHint">
+          Maximum number of friends' logs to display
+        </p>
       </div>
     </main>
 
@@ -57,7 +65,7 @@
               d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
             />
           </svg>
-          Rate extension
+          <span data-i18n="popupRate">Rate extension</span>
         </a>
         <a
           class="footer-link"
@@ -69,7 +77,7 @@
               d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
             />
           </svg>
-          Report issue
+          <span data-i18n="popupReport">Report issue</span>
         </a>
       </div>
       <span class="footer-version" id="version"></span>

@@ -506,6 +506,69 @@ describe('inject.js', () => {
     });
   });
 
+  describe('translated headers (#122)', () => {
+    const PT_LABELS = {
+      friendsLog: '1 log de amigo',
+      friendsLogs: '{count} logs de amigos',
+      myLog: 'O meu log',
+      myLogs: 'Os meus logs',
+      logbook: 'Logbook'
+    };
+
+    function setLabels(labels) {
+      const script = document.createElement('script');
+      script.id = 'inject';
+      script.setAttribute('data-labels', JSON.stringify(labels));
+      document.body.appendChild(script);
+    }
+
+    const headerText = selector => document.querySelector(selector).textContent;
+
+    test('uses the labels the content script passed, with the count filled in', () => {
+      setLabels(PT_LABELS);
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 3 }, data: [{ logID: 1 }] });
+
+      expect(headerText('.gcfl-friends-header')).toBe('3 logs de amigos');
+      expect(headerText('.gcfl-logbook-header')).toBe('Logbook');
+    });
+
+    test('uses the singular label for one friend log', () => {
+      setLabels(PT_LABELS);
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+
+      expect(headerText('.gcfl-friends-header')).toBe('1 log de amigo');
+    });
+
+    test('translates the my logs header', () => {
+      setLabels(PT_LABELS);
+      loadLogbookPage(0, 'true', 'false', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 2 }, data: [{ logID: 1 }] });
+
+      expect(headerText('.gcfl-my-header')).toBe('Os meus logs');
+    });
+
+    test('falls back to English for labels that are missing or unreadable', () => {
+      setLabels({ logbook: 'Logboek' });
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 2 }, data: [{ logID: 1 }] });
+
+      expect(headerText('.gcfl-friends-header')).toBe('2 Friends Logs');
+      expect(headerText('.gcfl-logbook-header')).toBe('Logboek');
+
+      document.body.innerHTML = '<table id="cache_logs_table"></table>';
+      const script = document.createElement('script');
+      script.id = 'inject';
+      script.setAttribute('data-labels', '{not json');
+      document.body.appendChild(script);
+      loadLogbookPage(0, 'false', 'true', 5);
+      triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+
+      expect(headerText('.gcfl-friends-header')).toBe('1 Friend Log');
+    });
+  });
+
   describe('logbook response shape (#93)', () => {
     // Synthetic fixture: built from the fields the site's tmplCacheLogRow template reads and the
     // pageInfo/data shape inject.js uses. Not a real captured payload (that needs a logged-in session).

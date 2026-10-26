@@ -97,6 +97,31 @@
     return own;
   }
 
+  // English section headers, used when the content script passed no translation.
+  const DEFAULT_LABELS = {
+    friendsLog: '1 Friend Log',
+    friendsLogs: '{count} Friends Logs',
+    myLog: 'My Log',
+    myLogs: 'My Logs',
+    logbook: 'Logbook'
+  };
+
+  /**
+   * Section headers in the browser's language, from the data-labels attribute the
+   * content script sets on our script element (#122).
+   * @returns {Object<string, string>}
+   */
+  function getLabels() {
+    const el = document.getElementById('inject');
+    let passed = {};
+    try {
+      passed = JSON.parse((el && el.getAttribute('data-labels')) || '{}') || {};
+    } catch {
+      console.warn('[Friends Logs] Could not read translated labels, using English');
+    }
+    return Object.assign({}, DEFAULT_LABELS, passed);
+  }
+
   /**
    * Append a section header tbody to our table.
    */
@@ -119,15 +144,16 @@
   function renderSection(logTable, response, showFriends, showPersonal, loadPersonalAfter) {
     const own = getOwnTable(logTable);
     const count = response.pageInfo.rows;
+    const labels = getLabels();
 
     if (showFriends === 'true') {
       appendHeader(
         own,
         'gcfl-friends-header',
-        count === 1 ? '1 Friend Log' : count + ' Friends Logs'
+        count === 1 ? labels.friendsLog : labels.friendsLogs.replace('{count}', count)
       );
     } else if (showPersonal === 'true') {
-      appendHeader(own, 'gcfl-my-header', count === 1 ? 'My Log' : 'My Logs');
+      appendHeader(own, 'gcfl-my-header', count === 1 ? labels.myLog : labels.myLogs);
     }
 
     // Check for template function
@@ -192,7 +218,7 @@
 
     // Add main logbook header if not loading personal logs after
     if (typeof loadPersonalAfter === 'undefined') {
-      appendHeader(own, 'gcfl-logbook-header', 'Logbook');
+      appendHeader(own, 'gcfl-logbook-header', labels.logbook);
     }
   }
 

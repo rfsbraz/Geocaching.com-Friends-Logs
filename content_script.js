@@ -6,6 +6,35 @@
  * are not accessible from the content script context.
  */
 
+/**
+ * Section headers inject.js writes on the cache page, keyed by the name inject.js reads.
+ * cacheFriendsLogs gets {count}, which inject.js swaps for the number of friend logs.
+ */
+const CACHE_LABEL_MESSAGES = {
+  friendsLog: ['cacheFriendsLog'],
+  friendsLogs: ['cacheFriendsLogs', ['{count}']],
+  myLog: ['cacheMyLog'],
+  myLogs: ['cacheMyLogs'],
+  logbook: ['cacheLogbook']
+};
+
+/**
+ * The cache page headers in the browser's language. inject.js runs in the page and
+ * cannot call chrome.i18n, so it gets them from the script element. Missing messages
+ * are left out and inject.js keeps its English for them.
+ * @returns {Object<string, string>}
+ */
+function cacheLabels() {
+  const labels = {};
+  for (const [name, [key, substitutions]] of Object.entries(CACHE_LABEL_MESSAGES)) {
+    const message = chrome.i18n.getMessage(key, substitutions);
+    if (message) {
+      labels[name] = message;
+    }
+  }
+  return labels;
+}
+
 function injectScript(file, node, showMyLogs, showFriendsLogs, limit) {
   const th = document.getElementsByTagName(node)[0];
   if (!th) {
@@ -20,6 +49,7 @@ function injectScript(file, node, showMyLogs, showFriendsLogs, limit) {
   s.setAttribute('showFriendsLogs', String(showFriendsLogs));
   s.setAttribute('showMyLogs', String(showMyLogs));
   s.setAttribute('limit', String(limit));
+  s.setAttribute('data-labels', JSON.stringify(cacheLabels()));
   th.appendChild(s);
 }
 
