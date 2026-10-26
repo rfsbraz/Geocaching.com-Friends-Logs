@@ -135,7 +135,12 @@ describe('cache page text', () => {
       friendsLogs: '{count} logs de amigos',
       myLog: 'O meu log',
       myLogs: 'Os meus logs',
-      logbook: 'Logbook'
+      logbook: 'Logbook',
+      errorLead: 'Não foi possível carregar o Friends Logs nesta página.',
+      errorDetail:
+        'O Geocaching.com pode ter mudado. Comunicar o problema ajuda a corrigi-lo depressa.',
+      errorReport: 'Comunicar problema',
+      errorDismiss: 'Fechar'
     });
   });
 
@@ -147,7 +152,11 @@ describe('cache page text', () => {
       friendsLogs: '{count} Friends Logs',
       myLog: 'My Log',
       myLogs: 'My Logs',
-      logbook: 'Logbook'
+      logbook: 'Logbook',
+      errorLead: "Friends Logs couldn't load on this page.",
+      errorDetail: 'Geocaching.com may have changed. A quick report helps get it fixed.',
+      errorReport: 'Report issue',
+      errorDismiss: 'Dismiss'
     });
   });
 
@@ -155,5 +164,37 @@ describe('cache page text', () => {
     chrome.i18n.getMessage.mockImplementation(() => '');
     contentScript.injectScript('inject.js', 'body', false, true, 5);
     expect(labels()).toEqual({});
+  });
+});
+
+describe('error banner text (#87)', () => {
+  const ERROR_KEYS = [
+    'cacheErrorLead',
+    'cacheErrorDetail',
+    'cacheErrorReport',
+    'cacheErrorDismiss'
+  ];
+  const LOCALES = ['cs', 'de', 'en', 'fr', 'nl', 'pt_PT', 'sv'];
+  const english = getMessageFor('en');
+
+  test.each(LOCALES)('%s has every banner string', locale => {
+    const getMessage = getMessageFor(locale);
+    for (const key of ERROR_KEYS) {
+      expect(getMessage(key).trim()).not.toBe('');
+    }
+  });
+
+  test.each(LOCALES.filter(locale => locale !== 'en'))(
+    '%s translates the banner text instead of keeping the English',
+    locale => {
+      const getMessage = getMessageFor(locale);
+      for (const key of ERROR_KEYS) {
+        expect(getMessage(key)).not.toBe(english(key));
+      }
+    }
+  );
+
+  test.each(LOCALES)('%s keeps the name Friends Logs in the lead', locale => {
+    expect(getMessageFor(locale)('cacheErrorLead')).toContain('Friends Logs');
   });
 });

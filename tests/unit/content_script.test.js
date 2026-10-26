@@ -30,6 +30,13 @@ describe('content_script.js', () => {
       expect(script.getAttribute('src')).toMatch(/^inject\.js\?t=\d+$/);
     });
 
+    test('passes the extension version for the error report link (#87)', () => {
+      chrome.runtime.getManifest.mockReturnValueOnce({ manifest_version: 3, version: '2.6.0' });
+      injectScript('inject.js', 'body', 'false', 'true', '5');
+
+      expect(document.getElementById('inject').getAttribute('data-version')).toBe('2.6.0');
+    });
+
     test('does nothing if target node is not found', () => {
       injectScript('inject.js', 'header', 'false', 'true', '5');
 
