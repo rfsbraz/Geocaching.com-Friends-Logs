@@ -88,19 +88,19 @@
     "description": "Header on the cache page above the site's own logbook, after the extension's logs."
   },
   "cacheErrorLead": {
-    "message": "Friends Logs kon niet laden op deze pagina.",
+    "message": "Friends Logs couldn't load on this page.",
     "description": "Bold start of the error banner on the cache page when the extension can't load or read the page. Keep the name Friends Logs as is."
   },
   "cacheErrorDetail": {
-    "message": "Misschien is Geocaching.com veranderd. Een korte melding helpt om het snel op te lossen.",
+    "message": "Geocaching.com may have changed. A quick report helps get it fixed.",
     "description": "Rest of the error banner text, after the bold start. Says the site may have changed and asks for a report."
   },
   "cacheErrorReport": {
-    "message": "Probleem melden",
+    "message": "Report issue",
     "description": "Button in the error banner that opens a prefilled bug report on GitHub."
   },
   "cacheErrorDismiss": {
-    "message": "Sluiten",
+    "message": "Dismiss",
     "description": "Button in the error banner that hides it until the next page load."
   }
 }
