@@ -7,7 +7,8 @@
  */
 
 /**
- * Section headers inject.js writes on the cache page, keyed by the name inject.js reads.
+ * Text inject.js writes on the cache page (section headers and the error banner), keyed by
+ * the name inject.js reads.
  * cacheFriendsLogs gets {count}, which inject.js swaps for the number of friend logs.
  */
 const CACHE_LABEL_MESSAGES = {
@@ -15,7 +16,11 @@ const CACHE_LABEL_MESSAGES = {
   friendsLogs: ['cacheFriendsLogs', ['{count}']],
   myLog: ['cacheMyLog'],
   myLogs: ['cacheMyLogs'],
-  logbook: ['cacheLogbook']
+  logbook: ['cacheLogbook'],
+  errorLead: ['cacheErrorLead'],
+  errorDetail: ['cacheErrorDetail'],
+  errorReport: ['cacheErrorReport'],
+  errorDismiss: ['cacheErrorDismiss']
 };
 
 /**
@@ -50,6 +55,8 @@ function injectScript(file, node, showMyLogs, showFriendsLogs, limit) {
   s.setAttribute('showMyLogs', String(showMyLogs));
   s.setAttribute('limit', String(limit));
   s.setAttribute('data-labels', JSON.stringify(cacheLabels()));
+  // For the prefilled report link on the error banner (#87)
+  s.setAttribute('data-version', chrome.runtime.getManifest().version || '');
   th.appendChild(s);
 }
 

@@ -1,4 +1,11 @@
-const { loadLogbookPage, waitForGlobalsAndLoad, findLogTable } = require('../../inject');
+const {
+  loadLogbookPage,
+  waitForGlobalsAndLoad,
+  findLogTable,
+  showErrorBanner,
+  buildReportUrl,
+  describeBrowser
+} = require('../../inject');
 
 /**
  * Creates a jQuery-like wrapper that performs REAL DOM operations.
@@ -592,20 +599,24 @@ describe('inject.js', () => {
       'data not an array': r => (r.data = { 0: r.data[0] })
     };
 
-    test.each(Object.keys(drifted))('bails out with a console warning when %s', name => {
-      const warn = jest.spyOn(console, 'warn').mockImplementation();
-      const before = document.body.innerHTML;
-      const response = JSON.parse(JSON.stringify(fixture));
-      drifted[name](response);
+    test.each(Object.keys(drifted))(
+      'bails out with a console warning and the error banner when %s',
+      name => {
+        const warn = jest.spyOn(console, 'warn').mockImplementation();
+        const before = document.body.innerHTML;
+        const response = JSON.parse(JSON.stringify(fixture));
+        drifted[name](response);
 
-      loadLogbookPage(0, 'false', 'true', 5);
-      expect(() => triggerDone(response)).not.toThrow();
+        loadLogbookPage(0, 'false', 'true', 5);
+        expect(() => triggerDone(response)).not.toThrow();
 
-      expect(warn).toHaveBeenCalledWith(expect.stringContaining('Unexpected logbook response'));
-      expect(document.body.innerHTML).toBe(before);
-    });
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining('Unexpected logbook response'));
+        document.querySelector('.gcfl-error').closest('table').remove();
+        expect(document.body.innerHTML).toBe(before);
+      }
+    );
 
-    test('bails out cleanly on an empty response body', () => {
+    test('bails out cleanly with the error banner on an empty response body', () => {
       const warn = jest.spyOn(console, 'warn').mockImplementation();
       const before = document.body.innerHTML;
 
@@ -613,6 +624,7 @@ describe('inject.js', () => {
       expect(() => triggerDone(null)).not.toThrow();
 
       expect(warn).toHaveBeenCalled();
+      document.querySelector('.gcfl-error').closest('table').remove();
       expect(document.body.innerHTML).toBe(before);
     });
   });
@@ -713,6 +725,297 @@ describe('inject.js', () => {
       // Two calls to loadLogbookPage will produce two headers at this level;
       // the DOM guard in the IIFE prevents the second *script execution*
       expect(friendHeaders.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe('error banner (#87)', () => {
+    const REPORT_PREFIX = 'https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/new?';
+    const banner = () => document.querySelector('.gcfl-error-banner');
+
+    function setInjectElement(attrs = {}) {
+      const script = document.createElement('script');
+      script.id = 'inject';
+      for (const [name, value] of Object.entries(attrs)) {
+        script.setAttribute(name, value);
+      }
+      document.body.appendChild(script);
+    }
+
+    function reportParams() {
+      const href = document.querySelector('.gcfl-error-report').getAttribute('href');
+      expect(href.startsWith(REPORT_PREFIX)).toBe(true);
+      return new URLSearchParams(href.slice(REPORT_PREFIX.length));
+    }
+
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockImplementation();
+      jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      delete global.isLoggedIn;
+      delete window.__gcflErrorDismissed;
+    });
+
+    describe('shows when Friends Logs cannot load or parse the page', () => {
+      test('the logbook request fails', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerFail({ status: 500 }, 'error', 'Internal Server Error');
+        expect(banner()).not.toBeNull();
+        expect(reportParams().get('body')).toContain(
+          '- Failure: logbook request failed (HTTP 500)'
+        );
+      });
+
+      test('the logbook API returns a non-success status', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'error', pageInfo: { rows: 0 }, data: [] });
+        expect(banner()).not.toBeNull();
+      });
+
+      test('the logbook response has an unexpected shape', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', data: [] });
+        expect(banner()).not.toBeNull();
+        expect(reportParams().get('body')).toContain('- Failure: unexpected logbook response');
+      });
+
+      test('the log row template is missing', () => {
+        delete global.$.tmpl;
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+        expect(banner()).not.toBeNull();
+      });
+
+      test('rendering the logs throws', () => {
+        global.$.tmpl = jest.fn(() => {
+          throw new Error('template not compiled');
+        });
+        loadLogbookPage(0, 'false', 'true', 5);
+        expect(() =>
+          triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] })
+        ).not.toThrow();
+        expect(banner()).not.toBeNull();
+      });
+
+      test('the page globals never appear', () => {
+        jest.useFakeTimers();
+        delete global.userToken;
+        waitForGlobalsAndLoad(1, 'false', 'true', 5);
+        jest.advanceTimersByTime(500);
+        jest.useRealTimers();
+        expect(banner()).not.toBeNull();
+        expect(reportParams().get('body')).toContain('- Failure: page globals not found');
+      });
+
+      test('the logbook table never appears', () => {
+        jest.useFakeTimers();
+        document.getElementById('cache_logs_table').remove();
+        document.body.insertAdjacentHTML(
+          'afterbegin',
+          '<div class="UserSuppliedContent"><span id="ctl00_ContentBody_LongDescription">Desc</span></div>'
+        );
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+        expect(banner()).toBeNull();
+        jest.advanceTimersByTime(20000);
+        jest.useRealTimers();
+        expect(banner()).not.toBeNull();
+        expect(reportParams().get('body')).toContain('- Failure: logbook table not found');
+      });
+
+      test('stays hidden when there are simply no friend logs', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', pageInfo: { rows: 0 }, data: [] });
+        expect(banner()).toBeNull();
+      });
+
+      test('stays hidden when the logs render', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+        expect(banner()).toBeNull();
+      });
+
+      test('stays hidden for logged-out visitors', () => {
+        global.isLoggedIn = false;
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerFail({ status: 401 }, 'error', 'Unauthorized');
+        expect(banner()).toBeNull();
+      });
+
+      test('shows only one banner when several requests fail', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        showErrorBanner('logbook request failed (HTTP 502)');
+        expect(document.querySelectorAll('.gcfl-error-banner')).toHaveLength(1);
+      });
+    });
+
+    describe('content', () => {
+      test('uses the translated text the content script passed', () => {
+        setInjectElement({
+          'data-labels': JSON.stringify({
+            errorLead: 'Não foi possível carregar o Friends Logs nesta página.',
+            errorDetail: 'O Geocaching.com pode ter mudado.',
+            errorReport: 'Comunicar problema',
+            errorDismiss: 'Fechar'
+          })
+        });
+        showErrorBanner('logbook request failed (HTTP 500)');
+        expect(banner().querySelector('strong').textContent).toBe(
+          'Não foi possível carregar o Friends Logs nesta página.'
+        );
+        expect(banner().textContent).toContain('O Geocaching.com pode ter mudado.');
+        expect(document.querySelector('.gcfl-error-report').textContent).toBe('Comunicar problema');
+        expect(document.querySelector('.gcfl-error-dismiss').textContent).toBe('Fechar');
+      });
+
+      test('falls back to English when no translation was passed', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        expect(banner().querySelector('strong').textContent).toBe(
+          "Friends Logs couldn't load on this page."
+        );
+        expect(banner().textContent).toContain(
+          'Geocaching.com may have changed. A quick report helps get it fixed.'
+        );
+        expect(document.querySelector('.gcfl-error-report').textContent).toBe('Report issue');
+        expect(document.querySelector('.gcfl-error-dismiss').textContent).toBe('Dismiss');
+      });
+
+      test('is announced to screen readers', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        expect(banner().getAttribute('role')).toBe('alert');
+      });
+    });
+
+    describe('dismiss', () => {
+      test('removes the banner', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        document.querySelector('.gcfl-error-dismiss').click();
+        expect(banner()).toBeNull();
+        expect(document.querySelector('.gcfl-error')).toBeNull();
+      });
+
+      test('keeps it hidden for the rest of the page load', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        document.querySelector('.gcfl-error-dismiss').click();
+        showErrorBanner('logbook table not found');
+        expect(banner()).toBeNull();
+      });
+
+      test('leaves the site logbook alone', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        document.querySelector('.gcfl-error-dismiss').click();
+        expect(document.querySelectorAll('#cache_logs_table tbody')).toHaveLength(2);
+      });
+    });
+
+    describe('report issue link', () => {
+      test('opens a prefilled bug report in a new tab', () => {
+        setInjectElement({ 'data-version': '2.6.0' });
+        window.history.replaceState(null, '', '/geocache/GC9P5DP_in-memorium?foo=bar');
+        showErrorBanner('logbook request failed (HTTP 500)');
+
+        const link = document.querySelector('.gcfl-error-report');
+        expect(link.getAttribute('target')).toBe('_blank');
+        expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+
+        const params = reportParams();
+        expect(params.get('title')).toBe('Friends Logs did not load (v2.6.0)');
+        expect(params.get('labels')).toBe('bug');
+        expect(params.get('body')).toBe(
+          'Friends Logs did not load on a cache page.\n\n' +
+            '- Version: 2.6.0\n' +
+            `- Browser: ${describeBrowser(navigator.userAgent)}\n` +
+            '- Failure: logbook request failed (HTTP 500)\n' +
+            '- Page: /geocache/GC9P5DP\n'
+        );
+        window.history.replaceState(null, '', '/');
+      });
+
+      test('matches the approved example link', () => {
+        expect(
+          buildReportUrl({
+            version: '2.6.0',
+            browser: 'Chrome 141 on Linux',
+            reason: 'logbook request failed (HTTP 500)',
+            page: '/geocache/GC9P5DP'
+          })
+        ).toBe(
+          REPORT_PREFIX +
+            'title=Friends+Logs+did+not+load+%28v2.6.0%29&labels=bug&body=Friends+Logs+did+not+load+on+a+cache+page.%0A%0A-+Version%3A+2.6.0%0A-+Browser%3A+Chrome+141+on+Linux%0A-+Failure%3A+logbook+request+failed+%28HTTP+500%29%0A-+Page%3A+%2Fgeocache%2FGC9P5DP%0A'
+        );
+      });
+
+      test('says unknown when the version was not passed', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        expect(reportParams().get('title')).toBe('Friends Logs did not load (vunknown)');
+      });
+
+      test.each([
+        [
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
+          'Chrome 141 on Linux'
+        ],
+        [
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0',
+          'Firefox 144 on Windows'
+        ],
+        [
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.3537.71',
+          'Edge 141 on Windows'
+        ],
+        [
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 OPR/124.0.0.0',
+          'Opera 124 on macOS'
+        ],
+        [
+          'Mozilla/5.0 (Android 15; Mobile; rv:144.0) Gecko/144.0 Firefox/144.0',
+          'Firefox 144 on Android'
+        ],
+        ['something else', 'unknown browser']
+      ])('describes the browser from %s', (ua, expected) => {
+        expect(describeBrowser(ua)).toBe(expected);
+      });
+    });
+
+    describe('placement', () => {
+      test('sits in our own table right above the site logbook', () => {
+        showErrorBanner('logbook request failed (HTTP 500)');
+        const own = document.querySelector('table.gcfl-table');
+        expect(own).not.toBeNull();
+        expect(own.contains(banner())).toBe(true);
+        expect(own.nextElementSibling.id).toBe('cache_logs_table');
+        expect(document.getElementById('cache_logs_table').contains(banner())).toBe(false);
+      });
+
+      test('goes above logs that already rendered', () => {
+        loadLogbookPage(0, 'false', 'true', 5);
+        triggerDone({ status: 'success', pageInfo: { rows: 1 }, data: [{ logID: 1 }] });
+        showErrorBanner('logbook request failed (HTTP 500)');
+        const own = document.querySelector('table.gcfl-table');
+        expect(own.firstElementChild.classList.contains('gcfl-error')).toBe(true);
+      });
+
+      test('falls back to right after the cache description when the logbook table is missing', () => {
+        document.getElementById('cache_logs_table').remove();
+        document.body.insertAdjacentHTML(
+          'afterbegin',
+          '<div class="UserSuppliedContent" id="desc"><span id="ctl00_ContentBody_LongDescription">Desc</span></div><p id="after-desc">Hints</p>'
+        );
+        showErrorBanner('logbook table not found');
+
+        const desc = document.getElementById('desc');
+        expect(desc.nextElementSibling.contains(banner())).toBe(true);
+        expect(desc.nextElementSibling.classList.contains('gcfl-error-standalone')).toBe(true);
+        expect(desc.contains(banner())).toBe(false);
+        expect(document.querySelector('table.gcfl-table')).toBeNull();
+      });
+
+      test('stays out of the page when neither spot exists', () => {
+        document.getElementById('cache_logs_table').remove();
+        showErrorBanner('logbook table not found');
+        expect(banner()).toBeNull();
+      });
     });
   });
 });

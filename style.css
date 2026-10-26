@@ -141,3 +141,83 @@
 .gcfl-rating-dismiss:hover {
   background: #f5f5f5;
 }
+
+/* Visible error state (#87): shown when Friends Logs can't load or read the page.
+   Sits in our own table above the site's logbook, or after the cache description
+   when the logbook table is missing. */
+.gcfl-table .gcfl-error td {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+.gcfl-error-standalone {
+  margin: 16px 0;
+}
+
+.gcfl-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border-left: 4px solid #e53935;
+  background: linear-gradient(135deg, #ffebee 0%, #fff8f8 100%);
+  color: #7f2424;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.gcfl-error-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: #e53935;
+}
+
+.gcfl-error-text {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.gcfl-error-text strong {
+  font-weight: 600;
+}
+
+.gcfl-error-actions {
+  flex: none;
+  display: flex;
+  gap: 8px;
+}
+
+.gcfl-error-actions a,
+.gcfl-error-actions button {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.gcfl-error-report {
+  background: #00874d;
+  border: 1px solid #00874d;
+  color: #fff !important;
+}
+
+.gcfl-error-report:hover {
+  background: #006b3d;
+}
+
+.gcfl-error-dismiss {
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  color: #616161;
+}
+
+.gcfl-error-dismiss:hover {
+  background: #f5f5f5;
+}

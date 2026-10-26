@@ -16,6 +16,7 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 - **Configurable limits** — Choose to show 5, 10, 20, 50, or 100 friend logs
 - **Clean design** — Matches the native Geocaching.com interface
 - **Privacy-focused** — No data collection, all preferences stored locally
+- **Tells you when it breaks**: if Geocaching.com changes and the logs can't load, a small banner says so and links to a prefilled bug report
 
 ## Installation
 

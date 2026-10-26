@@ -17,6 +17,7 @@ export default [
         ...globals.jquery,
         userToken: 'readonly',
         decryptLogs: 'readonly',
+        isLoggedIn: 'readonly',
         module: 'readonly',
       },
     },
