@@ -20,23 +20,23 @@
     "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
   },
   "popupShowFriends": {
-    "message": "Afficher les logs des amis",
+    "message": "Show friends' logs",
     "description": "Popup toggle that shows the friends' logs at the top of cache pages."
   },
   "popupShowFriendsHint": {
-    "message": "Mettre en avant les logs de votre liste d'amis",
+    "message": "Highlight logs from your friends list",
     "description": "Popup hint under the friends' logs toggle."
   },
   "popupShowMine": {
-    "message": "Afficher mes logs",
+    "message": "Show my logs",
     "description": "Popup toggle that shows the user's own logs at the top of cache pages."
   },
   "popupShowMineHint": {
-    "message": "Mettre en avant vos propres logs sur les pages de cache",
+    "message": "Highlight your own logs on cache pages",
     "description": "Popup hint under the own logs toggle."
   },
   "popupLimitLabel": {
-    "message": "Limite de logs des amis",
+    "message": "Friends logs limit",
     "description": "Popup label for the menu that picks how many friends' logs to show."
   },
   "popupLimitOption": {
@@ -50,23 +50,23 @@
     }
   },
   "popupLimitHint": {
-    "message": "Nombre maximum de logs des amis à afficher",
+    "message": "Maximum number of friends' logs to display",
     "description": "Popup hint under the limit menu."
   },
   "popupRate": {
-    "message": "Noter l'extension",
+    "message": "Rate extension",
     "description": "Popup footer link to the store page to rate the extension."
   },
   "popupReport": {
-    "message": "Signaler un problème",
+    "message": "Report issue",
     "description": "Popup footer link to the GitHub issues page."
   },
   "cacheFriendsLog": {
-    "message": "1 log d'ami",
+    "message": "1 Friend Log",
     "description": "Header on the cache page above a single friend log."
   },
   "cacheFriendsLogs": {
-    "message": "$COUNT$ logs d'amis",
+    "message": "$COUNT$ Friends Logs",
     "description": "Header on the cache page above the friends' logs when there are 0 or 2 or more. COUNT is the number of logs.",
     "placeholders": {
       "count": {
@@ -76,11 +76,11 @@
     }
   },
   "cacheMyLog": {
-    "message": "Mon log",
+    "message": "My Log",
     "description": "Header on the cache page above the user's own log when there is one."
   },
   "cacheMyLogs": {
-    "message": "Mes logs",
+    "message": "My Logs",
     "description": "Header on the cache page above the user's own logs when there are several."
   },
   "cacheLogbook": {
