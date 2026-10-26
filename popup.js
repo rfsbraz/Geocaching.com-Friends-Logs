@@ -26,14 +26,32 @@ function displayVersion() {
   }
 }
 
+/**
+ * Replaces the English text of every [data-i18n] element with the message for the
+ * browser's language. data-i18n-args holds the substitutions, comma separated.
+ * Elements keep their English text when a message is missing.
+ * @param {Document|Element} root
+ */
+function localizePopup(root) {
+  root.querySelectorAll('[data-i18n]').forEach(el => {
+    const args = el.dataset.i18nArgs ? el.dataset.i18nArgs.split(',') : undefined;
+    const message = chrome.i18n.getMessage(el.dataset.i18n, args);
+    if (message) {
+      el.textContent = message;
+    }
+  });
+}
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { updateRateLink, displayVersion };
+  module.exports = { updateRateLink, displayVersion, localizePopup };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const friendsCheckbox = document.getElementById('friends');
   const ownCheckbox = document.getElementById('own');
   const limitSelect = document.getElementById('limit');
+
+  localizePopup(document);
 
   // Update rate link to correct store
   updateRateLink();

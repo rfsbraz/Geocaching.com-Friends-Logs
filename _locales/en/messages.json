@@ -18,5 +18,73 @@
   "ratingPromptDismiss": {
     "message": "Not now",
     "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
+  },
+  "popupShowFriends": {
+    "message": "Show friends' logs",
+    "description": "Popup toggle that shows the friends' logs at the top of cache pages."
+  },
+  "popupShowFriendsHint": {
+    "message": "Highlight logs from your friends list",
+    "description": "Popup hint under the friends' logs toggle."
+  },
+  "popupShowMine": {
+    "message": "Show my logs",
+    "description": "Popup toggle that shows the user's own logs at the top of cache pages."
+  },
+  "popupShowMineHint": {
+    "message": "Highlight your own logs on cache pages",
+    "description": "Popup hint under the own logs toggle."
+  },
+  "popupLimitLabel": {
+    "message": "Friends logs limit",
+    "description": "Popup label for the menu that picks how many friends' logs to show."
+  },
+  "popupLimitOption": {
+    "message": "$COUNT$ logs",
+    "description": "Option in the popup limit menu. COUNT is 5, 10, 20, 50 or 100.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "popupLimitHint": {
+    "message": "Maximum number of friends' logs to display",
+    "description": "Popup hint under the limit menu."
+  },
+  "popupRate": {
+    "message": "Rate extension",
+    "description": "Popup footer link to the store page to rate the extension."
+  },
+  "popupReport": {
+    "message": "Report issue",
+    "description": "Popup footer link to the GitHub issues page."
+  },
+  "cacheFriendsLog": {
+    "message": "1 Friend Log",
+    "description": "Header on the cache page above a single friend log."
+  },
+  "cacheFriendsLogs": {
+    "message": "$COUNT$ Friends Logs",
+    "description": "Header on the cache page above the friends' logs when there are 0 or 2 or more. COUNT is the number of logs.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "cacheMyLog": {
+    "message": "My Log",
+    "description": "Header on the cache page above the user's own log when there is one."
+  },
+  "cacheMyLogs": {
+    "message": "My Logs",
+    "description": "Header on the cache page above the user's own logs when there are several."
+  },
+  "cacheLogbook": {
+    "message": "Logbook",
+    "description": "Header on the cache page above the site's own logbook, after the extension's logs."
   }
 }

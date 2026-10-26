@@ -18,5 +18,73 @@
   "ratingPromptDismiss": {
     "message": "Teď ne",
     "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
+  },
+  "popupShowFriends": {
+    "message": "Zobrazit logy přátel",
+    "description": "Popup toggle that shows the friends' logs at the top of cache pages."
+  },
+  "popupShowFriendsHint": {
+    "message": "Zvýrazní logy od lidí z vašeho seznamu přátel",
+    "description": "Popup hint under the friends' logs toggle."
+  },
+  "popupShowMine": {
+    "message": "Zobrazit moje logy",
+    "description": "Popup toggle that shows the user's own logs at the top of cache pages."
+  },
+  "popupShowMineHint": {
+    "message": "Zvýrazní vaše vlastní logy na stránkách keší",
+    "description": "Popup hint under the own logs toggle."
+  },
+  "popupLimitLabel": {
+    "message": "Limit logů přátel",
+    "description": "Popup label for the menu that picks how many friends' logs to show."
+  },
+  "popupLimitOption": {
+    "message": "Logy: $COUNT$",
+    "description": "Option in the popup limit menu. COUNT is 5, 10, 20, 50 or 100.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "popupLimitHint": {
+    "message": "Nejvyšší počet zobrazených logů přátel",
+    "description": "Popup hint under the limit menu."
+  },
+  "popupRate": {
+    "message": "Ohodnotit rozšíření",
+    "description": "Popup footer link to the store page to rate the extension."
+  },
+  "popupReport": {
+    "message": "Nahlásit problém",
+    "description": "Popup footer link to the GitHub issues page."
+  },
+  "cacheFriendsLog": {
+    "message": "1 log přítele",
+    "description": "Header on the cache page above a single friend log."
+  },
+  "cacheFriendsLogs": {
+    "message": "Logy přátel: $COUNT$",
+    "description": "Header on the cache page above the friends' logs when there are 0 or 2 or more. COUNT is the number of logs.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "cacheMyLog": {
+    "message": "Můj log",
+    "description": "Header on the cache page above the user's own log when there is one."
+  },
+  "cacheMyLogs": {
+    "message": "Moje logy",
+    "description": "Header on the cache page above the user's own logs when there are several."
+  },
+  "cacheLogbook": {
+    "message": "Logbook",
+    "description": "Header on the cache page above the site's own logbook, after the extension's logs."
   }
 }

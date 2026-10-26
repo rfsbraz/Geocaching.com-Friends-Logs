@@ -18,5 +18,73 @@
   "ratingPromptDismiss": {
     "message": "Inte nu",
     "description": "Button in the rating prompt on the cache page that dismisses the prompt for good."
+  },
+  "popupShowFriends": {
+    "message": "Visa vänners loggar",
+    "description": "Popup toggle that shows the friends' logs at the top of cache pages."
+  },
+  "popupShowFriendsHint": {
+    "message": "Lyft fram loggar från din vänlista",
+    "description": "Popup hint under the friends' logs toggle."
+  },
+  "popupShowMine": {
+    "message": "Visa mina loggar",
+    "description": "Popup toggle that shows the user's own logs at the top of cache pages."
+  },
+  "popupShowMineHint": {
+    "message": "Lyft fram dina egna loggar på cachesidor",
+    "description": "Popup hint under the own logs toggle."
+  },
+  "popupLimitLabel": {
+    "message": "Gräns för vänners loggar",
+    "description": "Popup label for the menu that picks how many friends' logs to show."
+  },
+  "popupLimitOption": {
+    "message": "$COUNT$ loggar",
+    "description": "Option in the popup limit menu. COUNT is 5, 10, 20, 50 or 100.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "popupLimitHint": {
+    "message": "Högsta antal vänloggar som visas",
+    "description": "Popup hint under the limit menu."
+  },
+  "popupRate": {
+    "message": "Betygsätt tillägget",
+    "description": "Popup footer link to the store page to rate the extension."
+  },
+  "popupReport": {
+    "message": "Rapportera problem",
+    "description": "Popup footer link to the GitHub issues page."
+  },
+  "cacheFriendsLog": {
+    "message": "1 vänlogg",
+    "description": "Header on the cache page above a single friend log."
+  },
+  "cacheFriendsLogs": {
+    "message": "$COUNT$ vänloggar",
+    "description": "Header on the cache page above the friends' logs when there are 0 or 2 or more. COUNT is the number of logs.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "cacheMyLog": {
+    "message": "Min logg",
+    "description": "Header on the cache page above the user's own log when there is one."
+  },
+  "cacheMyLogs": {
+    "message": "Mina loggar",
+    "description": "Header on the cache page above the user's own logs when there are several."
+  },
+  "cacheLogbook": {
+    "message": "Loggbok",
+    "description": "Header on the cache page above the site's own logbook, after the extension's logs."
   }
 }

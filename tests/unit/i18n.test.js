@@ -7,9 +7,7 @@ const ROOT = path.join(__dirname, '..', '..');
 const POPUP_HTML = fs.readFileSync(path.join(ROOT, 'popup.html'), 'utf8');
 
 function readMessages(locale) {
-  return JSON.parse(
-    fs.readFileSync(path.join(ROOT, '_locales', locale, 'messages.json'), 'utf8')
-  );
+  return JSON.parse(fs.readFileSync(path.join(ROOT, '_locales', locale, 'messages.json'), 'utf8'));
 }
 
 /**
@@ -100,8 +98,8 @@ describe('popup text', () => {
       '50 logs',
       '100 logs',
       'Número máximo de logs de amigos a mostrar',
-      'Avaliar a extensão',
-      'Comunicar um problema'
+      'Avaliar',
+      'Comunicar problema'
     ]);
   });
 
