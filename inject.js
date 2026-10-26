@@ -59,6 +59,7 @@
     }
     if (typeof MutationObserver === 'undefined') {
       console.error('[Friends Logs] Logbook table not found');
+      showErrorBanner('logbook table not found');
       return;
     }
     let timer = null;
@@ -76,6 +77,7 @@
       console.error(
         '[Friends Logs] Logbook table not found (logged out, or the site markup changed)'
       );
+      showErrorBanner('logbook table not found');
     }, LOG_TABLE_TIMEOUT_MS);
   }
 
@@ -103,7 +105,11 @@
     friendsLogs: '{count} Friends Logs',
     myLog: 'My Log',
     myLogs: 'My Logs',
-    logbook: 'Logbook'
+    logbook: 'Logbook',
+    errorLead: "Friends Logs couldn't load on this page.",
+    errorDetail: 'Geocaching.com may have changed. A quick report helps get it fixed.',
+    errorReport: 'Report issue',
+    errorDismiss: 'Dismiss'
   };
 
   /**
@@ -159,6 +165,7 @@
     // Check for template function
     if (typeof $.tmpl !== 'function') {
       console.error('[Friends Logs] jQuery template plugin not found');
+      showErrorBanner('log row template not found');
       return;
     }
 
@@ -222,6 +229,199 @@
     }
   }
 
+  const REPORT_URL = 'https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/new';
+  const ERROR_ICON_PATH = 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z';
+
+  /**
+   * Short browser and OS name for bug reports, like "Chrome 141 on Linux".
+   * @param {string} ua - navigator.userAgent
+   * @returns {string}
+   */
+  function describeBrowser(ua) {
+    const browsers = [
+      ['Firefox', /Firefox\/(\d+)/],
+      ['Edge', /Edg\/(\d+)/],
+      ['Opera', /OPR\/(\d+)/],
+      ['Chrome', /Chrome\/(\d+)/],
+      ['Safari', /Version\/(\d+).*Safari\//]
+    ];
+    const systems = [
+      ['Android', /Android/],
+      ['iOS', /iPhone|iPad/],
+      ['ChromeOS', /CrOS/],
+      ['Windows', /Windows/],
+      ['macOS', /Mac OS X|Macintosh/],
+      ['Linux', /Linux/]
+    ];
+    const browser = browsers.find(([, re]) => re.test(ua));
+    if (!browser) {
+      return 'unknown browser';
+    }
+    const system = systems.find(([, re]) => re.test(ua));
+    const name = browser[0] + ' ' + ua.match(browser[1])[1];
+    return system ? name + ' on ' + system[0] : name;
+  }
+
+  /**
+   * Prefilled GitHub bug report for a failed load (#87). Only the cache page path goes
+   * in, never the query string or anything about the user.
+   * @param {{version: string, browser: string, reason: string, page: string}} details
+   * @returns {string}
+   */
+  function buildReportUrl(details) {
+    const body =
+      'Friends Logs did not load on a cache page.\n\n' +
+      '- Version: ' +
+      details.version +
+      '\n' +
+      '- Browser: ' +
+      details.browser +
+      '\n' +
+      '- Failure: ' +
+      details.reason +
+      '\n' +
+      '- Page: ' +
+      details.page +
+      '\n';
+    const query = new URLSearchParams({
+      title: 'Friends Logs did not load (v' + details.version + ')',
+      labels: 'bug',
+      body: body
+    });
+    return REPORT_URL + '?' + query.toString();
+  }
+
+  /**
+   * The cache page path without the title slug, e.g. /geocache/GC9P5DP.
+   * @returns {string}
+   */
+  function cachePagePath() {
+    const match = location.pathname.match(/^\/geocache\/GC[A-Z0-9]+/i);
+    return match ? match[0] : location.pathname;
+  }
+
+  /**
+   * Build the banner element: icon, text, Report issue link and Dismiss button.
+   * @param {string} reason - Short English failure reason for the report
+   * @param {function(): void} onDismiss
+   * @returns {HTMLDivElement}
+   */
+  function createErrorBanner(reason, onDismiss) {
+    const labels = getLabels();
+    const el = document.getElementById('inject');
+    const version = (el && el.getAttribute('data-version')) || 'unknown';
+
+    const box = document.createElement('div');
+    box.className = 'gcfl-error-banner';
+    box.setAttribute('role', 'alert');
+    box.setAttribute('aria-label', 'Friends Logs');
+
+    const svgNs = 'http://www.w3.org/2000/svg';
+    const icon = document.createElementNS(svgNs, 'svg');
+    icon.setAttribute('class', 'gcfl-error-icon');
+    icon.setAttribute('viewBox', '0 0 24 24');
+    icon.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS(svgNs, 'path');
+    path.setAttribute('d', ERROR_ICON_PATH);
+    icon.appendChild(path);
+
+    const text = document.createElement('p');
+    text.className = 'gcfl-error-text';
+    const lead = document.createElement('strong');
+    lead.textContent = labels.errorLead;
+    text.append(lead, ' ' + labels.errorDetail);
+
+    const actions = document.createElement('div');
+    actions.className = 'gcfl-error-actions';
+    const report = document.createElement('a');
+    report.className = 'gcfl-error-report';
+    report.href = buildReportUrl({
+      version: version,
+      browser: describeBrowser(navigator.userAgent),
+      reason: reason,
+      page: cachePagePath()
+    });
+    report.target = '_blank';
+    report.rel = 'noopener noreferrer';
+    report.textContent = labels.errorReport;
+    const dismiss = document.createElement('button');
+    dismiss.type = 'button';
+    dismiss.className = 'gcfl-error-dismiss';
+    dismiss.textContent = labels.errorDismiss;
+    dismiss.addEventListener('click', onDismiss);
+
+    actions.append(report, dismiss);
+    box.append(icon, text, actions);
+    return box;
+  }
+
+  /**
+   * Where the banner goes when the logbook table is missing: right after the cache
+   * description, which the site renders server side whether or not the logbook loads.
+   * @returns {Element|null} The element to insert the banner after
+   */
+  function findFallbackSpot() {
+    const description = document.getElementById('ctl00_ContentBody_LongDescription');
+    if (!description) {
+      return null;
+    }
+    return description.closest('.UserSuppliedContent') || description;
+  }
+
+  /**
+   * Show a dismissible banner when Friends Logs can't load or read the page (#87),
+   * instead of failing with only a console error. One banner per page load; Dismiss
+   * hides it until the next page load. Logged-out visitors never see it, since the
+   * extension has nothing to show them.
+   * @param {string} reason - Short English failure reason for the report link
+   * @returns {Element|null} The banner, or null if none was shown
+   */
+  function showErrorBanner(reason) {
+    if (typeof isLoggedIn !== 'undefined' && isLoggedIn === false) {
+      return null;
+    }
+    if (window.__gcflErrorDismissed || document.querySelector('.gcfl-error-banner')) {
+      return null;
+    }
+
+    let wrapper;
+    const remove = function () {
+      window.__gcflErrorDismissed = true;
+      wrapper.remove();
+    };
+    const box = createErrorBanner(reason, remove);
+
+    const logTable = findLogTable();
+    if (logTable) {
+      const own = getOwnTable(logTable);
+      wrapper = document.createElement('tbody');
+      wrapper.className = 'gcfl-error';
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.appendChild(box);
+      tr.appendChild(td);
+      // Same gap below the banner as after a section's log rows (#141).
+      const spacer = document.createElement('tr');
+      spacer.className = 'gcfl-spacer';
+      spacer.setAttribute('aria-hidden', 'true');
+      spacer.appendChild(document.createElement('td'));
+      wrapper.append(tr, spacer);
+      own.insertBefore(wrapper, own.firstChild);
+      return box;
+    }
+
+    const spot = findFallbackSpot();
+    if (!spot) {
+      console.error('[Friends Logs] Nowhere to show the error banner');
+      return null;
+    }
+    wrapper = document.createElement('div');
+    wrapper.className = 'gcfl-error-standalone';
+    wrapper.appendChild(box);
+    spot.parentNode.insertBefore(wrapper, spot.nextSibling);
+    return box;
+  }
+
   /**
    * Check the logbook API response has the shape renderSection reads (#93).
    * @param {*} response
@@ -247,11 +447,13 @@
     // Check for required page dependencies
     if (typeof userToken === 'undefined') {
       console.error('[Friends Logs] userToken not found on page');
+      showErrorBanner('page globals not found (userToken)');
       return;
     }
 
     if (typeof $ === 'undefined' || typeof $.getJSON !== 'function') {
       console.error('[Friends Logs] jQuery not found on page');
+      showErrorBanner('page globals not found (jQuery)');
       return;
     }
 
@@ -280,11 +482,15 @@
             '[Friends Logs] API returned non-success status:',
             response && response.status
           );
+          showErrorBanner(
+            'logbook API returned ' + (response ? 'status ' + response.status : 'no body')
+          );
           return;
         }
 
         if (!isLogbookResponse(response)) {
           console.warn('[Friends Logs] Unexpected logbook response shape, not rendering');
+          showErrorBanner('unexpected logbook response');
           return;
         }
 
@@ -293,7 +499,13 @@
         }
 
         whenLogTable(function (logTable) {
-          renderSection(logTable, response, showFriends, showPersonal, loadPersonalAfter);
+          try {
+            renderSection(logTable, response, showFriends, showPersonal, loadPersonalAfter);
+          } catch (err) {
+            console.error('[Friends Logs] Could not render logs:', err);
+            showErrorBanner('could not render logs (' + ((err && err.message) || err) + ')');
+            return;
+          }
 
           // Load personal logs after friends if both were requested
           if (loadPersonalAfter === 'true') {
@@ -303,6 +515,12 @@
       })
       .fail(function (jqXHR, textStatus, errorThrown) {
         console.error('[Friends Logs] API request failed:', textStatus, errorThrown);
+        const status = jqXHR && jqXHR.status;
+        showErrorBanner(
+          'logbook request failed (' +
+            (status ? 'HTTP ' + status : textStatus || 'no response') +
+            ')'
+        );
       });
   }
 
@@ -322,6 +540,11 @@
 
     if (retries <= 0) {
       console.error('[Friends Logs] Page globals not available after retries');
+      showErrorBanner(
+        'page globals not found (' +
+          (typeof userToken === 'undefined' ? 'userToken' : 'jQuery') +
+          ')'
+      );
       return;
     }
 
@@ -333,7 +556,15 @@
 
   // Enable testing - this block is ignored in the browser
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { loadLogbookPage, waitForGlobalsAndLoad, findLogTable, whenLogTable };
+    module.exports = {
+      loadLogbookPage,
+      waitForGlobalsAndLoad,
+      findLogTable,
+      whenLogTable,
+      showErrorBanner,
+      buildReportUrl,
+      describeBrowser
+    };
     return; // Skip auto-execution in test environment
   }
 

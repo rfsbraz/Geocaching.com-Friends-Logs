@@ -441,4 +441,69 @@ test.describe('Chromium E2E', () => {
       await page.close();
     });
   });
+
+  test.describe('error banner (#87)', () => {
+    const MANIFEST_VERSION = JSON.parse(
+      fs.readFileSync(path.resolve(__dirname, '..', '..', 'manifest.json'), 'utf-8')
+    ).version;
+
+    /** Open a cache page whose logbook request fails with HTTP 500. */
+    async function openFailingPage() {
+      const page = await context.newPage();
+      await page.setViewportSize({ width: 1100, height: 900 });
+      await page.route('**/geocache/GC*', route =>
+        route.fulfill({ status: 200, contentType: 'text/html', body: mockPageHTML })
+      );
+      await page.route('**/seek/geocache.logbook*', route =>
+        route.fulfill({ status: 500, contentType: 'text/plain', body: 'Internal Server Error' })
+      );
+      await page.goto('https://www.geocaching.com/geocache/GC12345_test-cache');
+      return page;
+    }
+
+    test('shows above the site logbook when the logbook request fails', async () => {
+      const page = await openFailingPage();
+      const banner = page.locator('.gcfl-error-banner');
+      await expect(banner).toBeVisible({ timeout: 10000 });
+      await expect(banner.locator('strong')).toHaveText("Friends Logs couldn't load on this page.");
+      await expect(banner.locator('.gcfl-error-dismiss')).toHaveText('Dismiss');
+
+      const report = banner.locator('.gcfl-error-report');
+      await expect(report).toHaveText('Report issue');
+      const href = new URL(await report.getAttribute('href'));
+      expect(href.origin + href.pathname).toBe(
+        'https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/new'
+      );
+      expect(href.searchParams.get('title')).toBe(
+        `Friends Logs did not load (v${MANIFEST_VERSION})`
+      );
+      // The fixture's $.getJSON stub reports a failure without an HTTP status.
+      expect(href.searchParams.get('body')).toContain('- Failure: logbook request failed (');
+      expect(href.searchParams.get('body')).toContain('- Page: /geocache/GC12345\n');
+      expect(href.searchParams.get('body')).toMatch(/- Browser: Chrome \d+ on /);
+
+      const box = await banner.boundingBox();
+      const siteLogbook = await page.locator('#cache_logs_table').boundingBox();
+      expect(box.y + box.height).toBeLessThanOrEqual(siteLogbook.y);
+
+      fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+      await page
+        .locator('table.gcfl-table')
+        .screenshot({ path: path.join(SCREENSHOTS_DIR, 'error-banner-87.png') });
+
+      await banner.locator('.gcfl-error-dismiss').click();
+      await expect(page.locator('.gcfl-error-banner')).toHaveCount(0);
+      await expect(page.locator('#cache_logs_table')).toBeVisible();
+      await page.close();
+    });
+
+    test('stays hidden when the logs load', async () => {
+      const page = await context.newPage();
+      await setupRoutes(page);
+      await page.goto('https://www.geocaching.com/geocache/GC12345');
+      await expect(page.locator('.gcfl-logbook-header td')).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('.gcfl-error-banner')).toHaveCount(0);
+      await page.close();
+    });
+  });
 });
