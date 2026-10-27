@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.7.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.6.0...v2.7.0) (2026-10-27)
+
+
+### Features
+
+* **content:** show an error banner when Friends Logs can't load ([#159](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/159)) ([3a7d26f](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/3a7d26f2a7ba0a24fe7bcb89763b45132e9348bc))
+* **i18n:** translate the popup and cache page text ([#157](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/157)) ([c136201](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/c1362010e621130b0c63ff35864aec02697bc7f9))
+
+
+### Bug Fixes
+
+* **i18n:** use English placeholders for unchecked banner strings ([#160](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/160)) ([8caf281](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/8caf281da566b6a9a1a0b615888d21560a44fe04))
+
+
+### Documentation
+
+* **github:** slim PR template, contributor guidelines and code of conduct ([#156](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/156)) ([29884cf](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/29884cf4aa1bbb8ab4fdc826d85d188fb48b2fcd))
+
 ## [2.6.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.5.1...v2.6.0) (2026-10-23)
 
 
