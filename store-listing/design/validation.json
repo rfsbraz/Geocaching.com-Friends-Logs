@@ -1,0 +1,12 @@
+{
+  "images_verified": 33,
+  "screenshots": 8,
+  "promotional_images": 4,
+  "icon_pngs": 12,
+  "store_metadata_variants": 6,
+  "source_repository_listing_check": "passed with overlay in isolated copy",
+  "layout_checks": "12 layouts passed",
+  "chrome_icon_padding": "16px transparent on every side",
+  "opaque_screenshots_and_promos": true,
+  "published": false
+}

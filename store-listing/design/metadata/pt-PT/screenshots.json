@@ -1,0 +1,18 @@
+[
+  {
+    "file": "screenshots/pt-PT/1-friends-1280x800.png",
+    "caption": "Logs dos amigos antes do logbook habitual. Dados fictícios de demonstração."
+  },
+  {
+    "file": "screenshots/pt-PT/2-own-1280x800.png",
+    "caption": "O teu log numa secção separada. Dados fictícios de demonstração."
+  },
+  {
+    "file": "screenshots/pt-PT/3-settings-1280x800.png",
+    "caption": "Menu real com logs dos amigos, os teus logs e limite de resultados."
+  },
+  {
+    "file": "screenshots/pt-PT/4-error-1280x800.png",
+    "caption": "Aviso real de falha, com ligação para reportar o problema. Falha simulada."
+  }
+]

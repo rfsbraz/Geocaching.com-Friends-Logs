@@ -1,0 +1,238 @@
+{
+  "source_commit": "434a18e7965de207fbb579dabfcaaf455d63dd8e",
+  "version": "2.7.0",
+  "generated": "2026-11-03",
+  "assets": [
+    {
+      "file": "captures/en/error.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 98219,
+      "sha256": "b4cd8ac6498fb592638d01ede94f57954e22b3842cdf0ee703e1d4e8a9c55100"
+    },
+    {
+      "file": "captures/en/friends.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 97141,
+      "sha256": "c7b477a02db9d2a02323ebd8f57f684c7975f3e9fb23b8933a31f51291ea02d4"
+    },
+    {
+      "file": "captures/en/own.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 101358,
+      "sha256": "e8c89a7cc61d116a2e6ccd33bb546de807fe7a599e178d5658f5f2ec42ff7a21"
+    },
+    {
+      "file": "captures/en/popup.png",
+      "width": 640,
+      "height": 972,
+      "bytes": 69290,
+      "sha256": "c56c401237cef3839972d4008c8930b531376d472feafa25b1a479dd5de58ccc"
+    },
+    {
+      "file": "captures/pt-PT/error.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 106817,
+      "sha256": "18e06c4d34f8261b5602c5a87ee4586ef2da19085fbf0eb1f7eef67fba2ce0d4"
+    },
+    {
+      "file": "captures/pt-PT/friends.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 99801,
+      "sha256": "8f0540b6dd156543d93b2160a50bdec3e6aa64b3c6718a83890f4a846e70e87c"
+    },
+    {
+      "file": "captures/pt-PT/own.png",
+      "width": 2200,
+      "height": 1400,
+      "bytes": 105844,
+      "sha256": "755e0e70934b73e9595df781e158f2b84379b706008ab8bcd09341c8f064e659"
+    },
+    {
+      "file": "captures/pt-PT/popup.png",
+      "width": 640,
+      "height": 1008,
+      "bytes": 73310,
+      "sha256": "18d92f7ca04d1a44e3be6de3397a112667821db379364177fa768629f232d0be"
+    },
+    {
+      "file": "icons/chrome-store-128.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 3897,
+      "sha256": "493f75af7dfc833f36a3181ed4304a1b48a99941dd4e5881996a1b4a17427393"
+    },
+    {
+      "file": "icons/icon-1024.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 40367,
+      "sha256": "eea17e61ee3192d4bc5e54eb279b0a2d8f1dd9addce8ebb37c5471ecd139ff69"
+    },
+    {
+      "file": "icons/icon-128.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4451,
+      "sha256": "1385a4833c377ee48c6a4130929560c5bfb4ee104dd51fbb92e528b8e394832d"
+    },
+    {
+      "file": "icons/icon-16.png",
+      "width": 16,
+      "height": 16,
+      "bytes": 553,
+      "sha256": "fd6f7877804e94d486636e3d80418a14c27e7531b16dc7945e661d63a7384137"
+    },
+    {
+      "file": "icons/icon-24.png",
+      "width": 24,
+      "height": 24,
+      "bytes": 870,
+      "sha256": "7e82586d5998c4b739cf49816d32f2d4c969c2ef1b10ab01a0753bffa556b274"
+    },
+    {
+      "file": "icons/icon-256.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 8930,
+      "sha256": "e49604e0529fe42f6028d079cafafce87ba3c93e49c3c526ab26cd9c3048c394"
+    },
+    {
+      "file": "icons/icon-300.png",
+      "width": 300,
+      "height": 300,
+      "bytes": 10726,
+      "sha256": "f1b16987700c377a8afd29f0424a827e70cf8fd743bdfb78d4bf2e8571eeaab2"
+    },
+    {
+      "file": "icons/icon-32.png",
+      "width": 32,
+      "height": 32,
+      "bytes": 1161,
+      "sha256": "31d5897827287accebb245f84ca43f03704f15a4419f133d5acb9cea4c4d5fe8"
+    },
+    {
+      "file": "icons/icon-48.png",
+      "width": 48,
+      "height": 48,
+      "bytes": 1684,
+      "sha256": "c0924456a9474c9ccf8dbcb7f0952f28cec01b9db566d391e804a5e1bffbd857"
+    },
+    {
+      "file": "icons/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 18252,
+      "sha256": "a34079c0c03d20bcef98c8e57e985348e381ca8aef0feca267a0b33d2306ba8b"
+    },
+    {
+      "file": "icons/icon-64.png",
+      "width": 64,
+      "height": 64,
+      "bytes": 2274,
+      "sha256": "07460522579d06b0fb3b369078dc8db8d4760073c2a226d230576ac08711f717"
+    },
+    {
+      "file": "icons/icon-96.png",
+      "width": 96,
+      "height": 96,
+      "bytes": 3378,
+      "sha256": "70faa3e363afef8182d8736a06d39b1d43756d2575a21f2b771c08e250fa948f"
+    },
+    {
+      "file": "preview.png",
+      "width": 1400,
+      "height": 1120,
+      "bytes": 172598,
+      "sha256": "6ed46af3e94ce86807ea208482aeb22439b9b52295b85a3358d50d27d3b35476"
+    },
+    {
+      "file": "promo/en/1400x560.png",
+      "width": 1400,
+      "height": 560,
+      "bytes": 56458,
+      "sha256": "c859acf8ec28b3165c9b53680a110a76add564d7576a24121a686ede0b989ff1"
+    },
+    {
+      "file": "promo/en/440x280.png",
+      "width": 440,
+      "height": 280,
+      "bytes": 22545,
+      "sha256": "1f741856ddf866c44ab73f7072e2074a56d45e052e91bef9e1d4bc29954a4938"
+    },
+    {
+      "file": "promo/pt-PT/1400x560.png",
+      "width": 1400,
+      "height": 560,
+      "bytes": 62609,
+      "sha256": "57d99634a0508fe5c53db6049b1d8e60bf9f5be6986a21b3bebc25182d0c6de2"
+    },
+    {
+      "file": "promo/pt-PT/440x280.png",
+      "width": 440,
+      "height": 280,
+      "bytes": 24483,
+      "sha256": "c8dc97bc7ac3273f9d610821b156e1348e40f5b00c3b1db49f4104df5000d2fe"
+    },
+    {
+      "file": "screenshots/en/1-friends-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 97881,
+      "sha256": "3fb0635dbf891779cf3142098ccfcbb581f2203eb2c0733ff402125457722945"
+    },
+    {
+      "file": "screenshots/en/2-own-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 98537,
+      "sha256": "ae76efb79887c212f397e6f12fb7b2b51768b8f1ad6c63cd85e0f0583aada1bf"
+    },
+    {
+      "file": "screenshots/en/3-settings-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 110138,
+      "sha256": "eeead822a92511d954eb639729012a5142a603849e84cf6f7331715b5d8d9799"
+    },
+    {
+      "file": "screenshots/en/4-error-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 93179,
+      "sha256": "34ea995b2c6848485cdaaaf44cc1e787a9a68de90c06b65fa5cace722184223d"
+    },
+    {
+      "file": "screenshots/pt-PT/1-friends-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 106059,
+      "sha256": "d2b7abed4a7639ca3a3a0b6b8170cbd47ecd94572586cb64a0670f5aca3a3baa"
+    },
+    {
+      "file": "screenshots/pt-PT/2-own-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 107020,
+      "sha256": "3b2598b060ca1b08a7983e30243e70a25a6d8033233e23ba88bee1b53e5a049c"
+    },
+    {
+      "file": "screenshots/pt-PT/3-settings-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 119105,
+      "sha256": "18a1669ed063d91deb3a1ae14cedfa4db2d32aa6c9b1ebc0bd236b59b050c215"
+    },
+    {
+      "file": "screenshots/pt-PT/4-error-1280x800.png",
+      "width": 1280,
+      "height": 800,
+      "bytes": 99252,
+      "sha256": "1ca107f12fa022c5b625db9f85ac9bb923d0dc00a3980c3496f7246f76bc4677"
+    }
+  ]
+}

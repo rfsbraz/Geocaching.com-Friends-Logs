@@ -1,22 +1,34 @@
 # Geocaching Friends Logs
 
+<img src="icons/icon128.png" alt="Geocaching Friends Logs icon" width="96" height="96" />
+
 [![CI](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml/badge.svg)](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/actions/workflows/ci.yml)
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/bgildcbomgimjfoblhlhmaehaeieeaam)](https://chrome.google.com/webstore/detail/geocachingcom-friends-log/bgildcbomgimjfoblhlhmaehaeieeaam)
 [![Firefox Add-on Users](https://img.shields.io/amo/users/geocaching-friends-logs)](https://addons.mozilla.org/firefox/addon/geocaching-com-friends-logs/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A browser extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again — instantly see which friends have visited a cache and what they thought about it.
+A browser extension that displays your friends' geocaching logs at the top of every cache listing page. Never scroll through hundreds of logs again - instantly see which friends have visited a cache and what they thought about it.
 
-![Example Screenshot](store-listing/assets/screenshot-1.png)
+![Friends logs above the logbook](store-listing/assets/en-1-friends-1280x800.png)
+
+_Actual extension components on a reduced cache-page fixture, with fictional names and logs. The popup previews the new icon._
 
 ## Features
 
-- **Friends logs first** — Your friends' logs appear at the top of cache pages
-- **Your own logs** — Optionally display your own logs separately
-- **Configurable limits** — Choose to show 5, 10, 20, 50, or 100 friend logs
-- **Clean design** — Matches the native Geocaching.com interface
-- **Privacy-focused** — No data collection, all preferences stored locally
+- **Friends logs first** - Your friends' logs appear at the top of cache pages
+- **Your own logs** - Optionally display your own logs separately
+- **Configurable limits** - Choose to show 5, 10, 20, 50, or 100 friend logs
+- **Clean design** - Matches the native Geocaching.com interface
+- **Privacy-focused** - No data collection, all preferences stored locally
 - **Tells you when it breaks**: if Geocaching.com changes and the logs can't load, a small banner says so and links to a prefilled bug report
+
+### Screenshots
+
+| Your own logs                                                                     | Display preferences                                                                     |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| ![Your own log in a separate section](store-listing/assets/en-2-own-1280x800.png) | ![Friends, own logs and display limit](store-listing/assets/en-3-settings-1280x800.png) |
+
+[Browse all English and Portuguese screenshots, icons and promotional assets](store-listing/design/README.md).
 
 ## Installation
 
@@ -31,6 +43,7 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 ### Manual Installation
 
 #### Chrome (incl. Brave) / Edge / Opera
+
 1. Download the latest release for your browser from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
    - For Brave, download the Chrome/Chromium release zip.
 2. Unzip the file
@@ -43,6 +56,7 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 5. Click "Load unpacked" and select the unzipped folder
 
 #### Firefox
+
 1. Download the Firefox `.xpi` file from the [Releases page](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/releases)
 2. Open Firefox and navigate to `about:addons`
 3. Click the gear icon and select "Install Add-on From File..."
@@ -50,8 +64,8 @@ A browser extension that displays your friends' geocaching logs at the top of ev
 
 ## Usage
 
-1. Visit any geocache page on [Geocaching.com](https://www.geocaching.com)
-2. Your friends' logs will automatically appear at the top of the logs section
+1. Sign in to [Geocaching.com](https://www.geocaching.com) and visit a cache page. A free Basic account works.
+2. Matching logs from your friends appear above the regular logbook. If no friends have logged the cache, no empty section is added.
 3. Click the extension icon to customize settings:
    - Toggle your own logs visibility
    - Toggle friends logs visibility
@@ -120,7 +134,7 @@ For security concerns, please see our [Security Policy](SECURITY.md).
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 

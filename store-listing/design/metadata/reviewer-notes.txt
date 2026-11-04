@@ -1,0 +1,9 @@
+Geocaching.com Friends Logs 2.7.0 - listing artwork refresh
+
+1. Install the extension and sign in to Geocaching.com. A free Basic account works. No additional extension account is required.
+2. Open a cache page where a person on that account's friends list has written a log. Friends' logs appear above the regular logbook. No matching friends means no extra friends section; this is expected.
+3. Open the toolbar popup. Toggle friends' logs and your own logs independently, and choose 5, 10, 20, 50 or 100 friend logs.
+4. Reload the cache page after changing settings. Your own logs appear separately when enabled and present for that cache.
+5. When the page contract or a request fails, a notice offers a prefilled GitHub issue link. Nothing is submitted automatically.
+
+Artwork uses actual popup and injected UI code from commit 434a18e7965de207fbb579dabfcaaf455d63dd8e (2.7.0), in a local fixture. Names, logs and cache titles are fictional. Marketing frames/headlines are outside the UI. The popup previews the new icon. The surrounding cache page is a reduced test fixture, not a complete live-site screenshot. No personal accounts or real logs were used. No test credentials are included.

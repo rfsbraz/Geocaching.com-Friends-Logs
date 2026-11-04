@@ -76,3 +76,10 @@ It writes `drift/<store>.md` for each store that differs, with the exact text to
 1. Edit or add `locales/<id>.json` and, for a new language, add `<id>` to `locales` in `listing.json`.
 2. If the extension ships that language, put the same summary in `_locales/<extensionLocale>/messages.json` as `extDescription`.
 3. Run `npm run store-listing:build` and `npm test`.
+
+
+## Visual identity and screenshots
+
+The refreshed English and Portuguese listings use four screenshots each: friends' logs, own logs, settings and a loading error. See [the visual kit guide](design/README.md) for previews, upload sizes, source artwork and reproduction instructions.
+
+`assets/` and `locales/` remain the source of truth used by publication tooling. `design/metadata/` contains the reviewed export snapshot for reference; regenerate or update it when changing canonical listing text. The five other listing languages retain their existing copy and screenshot. Store IDs and publishing workflows are unchanged.

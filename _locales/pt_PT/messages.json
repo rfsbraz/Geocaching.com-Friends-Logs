@@ -4,7 +4,7 @@
     "description": "Extension name. Keep the brand name as is."
   },
   "extDescription": {
-    "message": "Veja os logs dos seus amigos no topo de cada página de cache do Geocaching.com, sem ter de os procurar no logbook.",
+    "message": "Vê primeiro os logs dos amigos, destaca as tuas descobertas e escolhe quantos logs mostrar no Geocaching.com.",
     "description": "Store summary and extension description. 132 characters or fewer."
   },
   "ratingPromptText": {

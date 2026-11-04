@@ -1,0 +1,26 @@
+{
+  "name": "Geocaching.com Friends Logs",
+  "locale": "en-US",
+  "summary": "See friends' geocaching logs first, highlight your own finds and choose how many logs to show on Geocaching.com.",
+  "description": "See familiar names before the rest of the logbook.\n\nGeocaching Friends Logs brings your friends' logs to the top of Geocaching.com cache pages. Check who has visited, read their experiences and revisit your own finds without searching through the full logbook.\n\nFriends first\nA separate highlighted section shows logs from people on your Geocaching.com friends list, above the regular logbook. The site's existing logs remain available below.\n\nYour own visits, too\nTurn on your own logs to display them in a separate section. Friends' logs and your own logs can be switched on or off independently.\n\nChoose the right amount\nSelect a limit of 5, 10, 20, 50 or 100 friend logs in the extension's toolbar popup. Your preferences are saved locally in the browser.\n\nClear feedback when loading fails\nIf the extension cannot load logs, a notice on the cache page links to a prefilled issue report. You can review it before submitting.\n\nGetting started\nInstall the extension, sign in to Geocaching.com and open a cache page. A free Basic account works. Friends' logs are shown when people on your friends list have logged that cache. If there are no matching logs, an empty friends section is not added. Open the toolbar popup to enable your own logs or change the limit.\n\nPrivacy\nThe extension runs on Geocaching.com cache pages and requests logbook entries from Geocaching.com using the page's signed-in session. Settings and small local usage flags remain in your browser. It has no analytics and does not send logs to a developer-operated server. Reporting an issue or opening a store link is a deliberate action.\n\nAvailable for Chrome, Firefox and Microsoft Edge. The interface supports English, Dutch, German, Czech, French, Swedish and Portuguese (Portugal).\n\nIndependent, open-source extension. Not affiliated with or endorsed by Geocaching.com or Groundspeak.\nSource and support: https://github.com/rfsbraz/Geocaching.com-Friends-Logs\n",
+  "screenshots": [
+    "screenshots/en/1-friends-1280x800.png",
+    "screenshots/en/2-own-1280x800.png",
+    "screenshots/en/3-settings-1280x800.png",
+    "screenshots/en/4-error-1280x800.png"
+  ],
+  "icon": "icons/icon-300.png",
+  "support_url": "https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues",
+  "source_url": "https://github.com/rfsbraz/Geocaching.com-Friends-Logs",
+  "privacy_policy_url": null,
+  "summary_characters": 112,
+  "search_terms": [
+    "geocaching",
+    "friends logs",
+    "cache logbook",
+    "geocache",
+    "friends"
+  ],
+  "small_promo": "promo/en/440x280.png",
+  "large_promo": "promo/en/1400x560.png"
+}

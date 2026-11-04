@@ -1,0 +1,18 @@
+[
+  {
+    "file": "screenshots/en/1-friends-1280x800.png",
+    "caption": "Friends' logs above the regular logbook. Fictional demonstration data."
+  },
+  {
+    "file": "screenshots/en/2-own-1280x800.png",
+    "caption": "Your own log in a separate section. Fictional demonstration data."
+  },
+  {
+    "file": "screenshots/en/3-settings-1280x800.png",
+    "caption": "Real preferences popup with friend logs, own logs and display limit."
+  },
+  {
+    "file": "screenshots/en/4-error-1280x800.png",
+    "caption": "Real loading-failure notice with a link to report the problem. Simulated failure."
+  }
+]

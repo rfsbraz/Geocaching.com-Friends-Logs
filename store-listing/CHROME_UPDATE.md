@@ -11,9 +11,9 @@ Dashboard: https://chrome.google.com/webstore/devconsole , pick the extension, t
 Chrome does not let you edit these in the dashboard. They come from `manifest.json`:
 
 - `name`: `Geocaching.com Friends Logs`
-- `description` (max 132 characters, this one is 119):
+- `description` (max 132 characters, this one is 112):
 
-  > See your friends' logs at the top of every Geocaching.com cache page. No more digging through the logbook to find them.
+  > See friends' geocaching logs first, highlight your own finds and choose how many logs to show on Geocaching.com.
 
 These change only after a new version with the updated manifest is uploaded and approved. The manifest change is being done in a separate PR.
 
@@ -22,32 +22,32 @@ These change only after a new version with the updated manifest is uploaded and 
 Paste this into **Description** on the Store listing tab:
 
 ```text
-See your friends' logs at the top of every Geocaching.com cache page. No more digging through the logbook to find them.
+See familiar names before the rest of the logbook.
 
-Never miss a friend's geocaching adventure again!
+Geocaching Friends Logs brings your friends' logs to the top of Geocaching.com cache pages. Check who has visited, read their experiences and revisit your own finds without searching through the full logbook.
 
-This extension enhances Geocaching.com by moving your friends' logs to the top of every cache listing page. Instantly see who among your friends has visited a cache and what they thought about it, without scrolling through hundreds of logs.
+Friends first
+A separate highlighted section shows logs from people on your Geocaching.com friends list, above the regular logbook. The site's existing logs remain available below.
 
-FEATURES
-  • Friends logs appear at the top of cache pages
-  • See your own logs highlighted separately
-  • Configurable display limit (5, 10, 20, 50, or 100 logs)
-  • Toggle friends logs and your own logs independently
-  • Clean, non-intrusive design that matches Geocaching.com
+Your own visits, too
+Turn on your own logs to display them in a separate section. Friends' logs and your own logs can be switched on or off independently.
 
-PERFECT FOR
-  • Planning group caching trips with friends
-  • Discovering caches your friends recommend
-  • Avoiding spoilers from strangers while reading trusted reviews
-  • Quickly checking if friends have already found a cache
+Choose the right amount
+Select a limit of 5, 10, 20, 50 or 100 friend logs in the extension's toolbar popup. Your preferences are saved locally in the browser.
 
-HOW IT WORKS
-  Simply install the extension, visit any cache page on Geocaching.com, and your friends' logs will automatically appear at the top. Use the popup menu to customize your preferences.
+Clear feedback when loading fails
+If the extension cannot load logs, a notice on the cache page links to a prefilled issue report. You can review it before submitting.
 
-PRIVACY
-  This extension only runs on Geocaching.com and does not collect or transmit any personal data.
+Getting started
+Install the extension, sign in to Geocaching.com and open a cache page. A free Basic account works. Friends' logs are shown when people on your friends list have logged that cache. If there are no matching logs, an empty friends section is not added. Open the toolbar popup to enable your own logs or change the limit.
 
-Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
+Privacy
+The extension runs on Geocaching.com cache pages and requests logbook entries from Geocaching.com using the page's signed-in session. Settings and small local usage flags remain in your browser. It has no analytics and does not send logs to a developer-operated server. Reporting an issue or opening a store link is a deliberate action.
+
+Available for Chrome, Firefox and Microsoft Edge. The interface supports English, Dutch, German, Czech, French, Swedish and Portuguese (Portugal).
+
+Independent, open-source extension. Not affiliated with or endorsed by Geocaching.com or Groundspeak.
+Source and support: https://github.com/rfsbraz/Geocaching.com-Friends-Logs
 ```
 
 ## 3. Category and language
@@ -266,37 +266,37 @@ Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
 
 Summary (only used if the package has `_locales/pt_PT/messages.json`):
 
-> Veja os logs dos seus amigos no topo de cada página de cache do Geocaching.com, sem ter de os procurar no logbook.
+> Vê primeiro os logs dos amigos, destaca as tuas descobertas e escolhe quantos logs mostrar no Geocaching.com.
 
 Description:
 
 ```text
-Veja os logs dos seus amigos no topo de cada página de cache do Geocaching.com, sem ter de os procurar no logbook.
+Os nomes que conheces, antes do resto do logbook.
 
-Nunca mais perca uma aventura dos seus amigos!
+O Geocaching Friends Logs coloca os logs dos amigos no topo das páginas de cache do Geocaching.com. Vê quem já lá esteve, lê as suas experiências e recorda as tuas descobertas sem procurar no logbook inteiro.
 
-Esta extensão coloca os logs dos seus amigos no topo da página de cada cache no Geocaching.com. Fica logo a saber quem já lá esteve e o que achou, sem ter de percorrer centenas de logs.
+Os amigos primeiro
+Uma secção destacada mostra os logs das pessoas da tua lista de amigos do Geocaching.com, antes do logbook habitual. Os logs existentes do site continuam disponíveis abaixo.
 
-FUNCIONALIDADES
-  • Os logs dos amigos aparecem no topo da página da cache
-  • Os seus próprios logs aparecem destacados numa secção à parte
-  • Escolha quantos logs mostrar (5, 10, 20, 50 ou 100)
-  • Ligue ou desligue os logs dos amigos e os seus de forma independente
-  • Design simples e discreto, a condizer com o Geocaching.com
+As tuas visitas também
+Ativa os teus próprios logs para os veres numa secção separada. Podes ligar ou desligar os logs dos amigos e os teus de forma independente.
 
-IDEAL PARA
-  • Planear saídas de grupo com amigos
-  • Descobrir caches que os seus amigos recomendam
-  • Evitar spoilers de desconhecidos e ler opiniões de quem conhece
-  • Ver rapidamente se algum amigo já encontrou uma cache
+Escolhe a quantidade
+No menu da extensão, escolhe um limite de 5, 10, 20, 50 ou 100 logs de amigos. As preferências ficam guardadas localmente no navegador.
 
-COMO FUNCIONA
-  Basta instalar a extensão e abrir qualquer página de cache no Geocaching.com. Os logs dos seus amigos aparecem automaticamente no topo. No menu da extensão pode ajustar as preferências.
+Um aviso quando algo falha
+Se a extensão não conseguir carregar os logs, aparece um aviso na página da cache com uma ligação para um relatório de erro pré-preenchido. Podes revê-lo antes de o enviar.
 
-PRIVACIDADE
-  Esta extensão só funciona no Geocaching.com e não recolhe nem envia quaisquer dados pessoais.
+Como começar
+Instala a extensão, inicia sessão no Geocaching.com e abre uma página de cache. Uma conta Basic gratuita é suficiente. Os logs dos amigos aparecem quando alguém da tua lista de amigos registou essa cache. Se não existirem logs correspondentes, não é acrescentada uma secção vazia. Abre o menu da extensão para ativar os teus logs ou alterar o limite.
 
-Código aberto: github.com/rfsbraz/Geocaching.com-Friends-Logs
+Privacidade
+A extensão funciona nas páginas de cache do Geocaching.com e pede os logs ao próprio Geocaching.com, usando a sessão iniciada na página. As preferências e pequenos indicadores de utilização ficam no navegador. Não tem analytics nem envia logs para um servidor do programador. Reportar um problema ou abrir uma ligação para a loja é uma ação deliberada.
+
+Disponível para Chrome, Firefox e Microsoft Edge. A interface suporta inglês, neerlandês, alemão, checo, francês, sueco e português de Portugal.
+
+Extensão independente e de código aberto. Não é afiliada nem apoiada pelo Geocaching.com ou pela Groundspeak.
+Código e suporte: https://github.com/rfsbraz/Geocaching.com-Friends-Logs
 ```
 
 ## 6. Privacy practices tab
