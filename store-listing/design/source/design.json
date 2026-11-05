@@ -1,0 +1,17 @@
+{
+  "palette": {
+    "teal": "#087F75",
+    "navy": "#173A43",
+    "blue": "#2265A8",
+    "ice": "#EDF6F4",
+    "white": "#FFFFFF",
+    "ochre": "#C69A36"
+  },
+  "type": {
+    "headings": "Bahnschrift",
+    "body": "Segoe UI"
+  },
+  "concept": "A location marker containing two people. Quiet contour lines reference outdoor exploration; the real logbook is the focus.",
+  "alignment": "Left-aligned headings; wide, readable interface crops.",
+  "sourceVersion": "2.7.0"
+}

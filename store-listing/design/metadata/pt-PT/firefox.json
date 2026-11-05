@@ -1,0 +1,17 @@
+{
+  "name": "Geocaching.com Friends Logs",
+  "locale": "pt-PT",
+  "summary": "Vê primeiro os logs dos amigos, destaca as tuas descobertas e escolhe quantos logs mostrar no Geocaching.com.",
+  "description": "Os nomes que conheces, antes do resto do logbook.\n\nO Geocaching Friends Logs coloca os logs dos amigos no topo das páginas de cache do Geocaching.com. Vê quem já lá esteve, lê as suas experiências e recorda as tuas descobertas sem procurar no logbook inteiro.\n\nOs amigos primeiro\nUma secção destacada mostra os logs das pessoas da tua lista de amigos do Geocaching.com, antes do logbook habitual. Os logs existentes do site continuam disponíveis abaixo.\n\nAs tuas visitas também\nAtiva os teus próprios logs para os veres numa secção separada. Podes ligar ou desligar os logs dos amigos e os teus de forma independente.\n\nEscolhe a quantidade\nNo menu da extensão, escolhe um limite de 5, 10, 20, 50 ou 100 logs de amigos. As preferências ficam guardadas localmente no navegador.\n\nUm aviso quando algo falha\nSe a extensão não conseguir carregar os logs, aparece um aviso na página da cache com uma ligação para um relatório de erro pré-preenchido. Podes revê-lo antes de o enviar.\n\nComo começar\nInstala a extensão, inicia sessão no Geocaching.com e abre uma página de cache. Uma conta Basic gratuita é suficiente. Os logs dos amigos aparecem quando alguém da tua lista de amigos registou essa cache. Se não existirem logs correspondentes, não é acrescentada uma secção vazia. Abre o menu da extensão para ativar os teus logs ou alterar o limite.\n\nPrivacidade\nA extensão funciona nas páginas de cache do Geocaching.com e pede os logs ao próprio Geocaching.com, usando a sessão iniciada na página. As preferências e pequenos indicadores de utilização ficam no navegador. Não tem analytics nem envia logs para um servidor do programador. Reportar um problema ou abrir uma ligação para a loja é uma ação deliberada.\n\nDisponível para Chrome, Firefox e Microsoft Edge. A interface suporta inglês, neerlandês, alemão, checo, francês, sueco e português de Portugal.\n\nExtensão independente e de código aberto. Não é afiliada nem apoiada pelo Geocaching.com ou pela Groundspeak.\nCódigo e suporte: https://github.com/rfsbraz/Geocaching.com-Friends-Logs\n",
+  "screenshots": [
+    "screenshots/pt-PT/1-friends-1280x800.png",
+    "screenshots/pt-PT/2-own-1280x800.png",
+    "screenshots/pt-PT/3-settings-1280x800.png",
+    "screenshots/pt-PT/4-error-1280x800.png"
+  ],
+  "icon": "icons/icon-64.png",
+  "support_url": "https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues",
+  "source_url": "https://github.com/rfsbraz/Geocaching.com-Friends-Logs",
+  "privacy_policy_url": null,
+  "summary_characters": 109
+}
