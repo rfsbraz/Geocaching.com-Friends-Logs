@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.7.0...v2.8.0) (2026-11-05)
+
+
+### Features
+
+* **branding:** refresh icons and bilingual store materials ([#164](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/164)) ([f13f15f](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/f13f15f3710ee982b8d7e7dd2831f22016a9c722))
+
 ## [2.7.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.6.0...v2.7.0) (2026-10-27)
 
 
