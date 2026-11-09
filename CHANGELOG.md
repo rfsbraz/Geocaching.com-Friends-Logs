@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.8.1](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.8.0...v2.8.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** bump minimatch to &gt;=11.0.1 (Dependabot [#60](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/60)) ([#167](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/167)) ([631b68e](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/631b68e4de86d762030aaabb98e412a78382aab2))
+* **deps:** replace deepmerge 4.3.1 (Dependabot [#57](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/57)) ([#169](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/issues/169)) ([9446615](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/commit/9446615e70456b12e4c04992fb01daafbb3752a3))
+
 ## [2.8.0](https://github.com/rfsbraz/Geocaching.com-Friends-Logs/compare/v2.7.0...v2.8.0) (2026-11-05)
 
 
