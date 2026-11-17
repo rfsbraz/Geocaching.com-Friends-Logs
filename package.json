@@ -34,15 +34,15 @@
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.64.1",
+    "@playwright/test": "^1.65.1",
     "archiver": "^8.0.0",
-    "eslint": "^10.14.0",
+    "eslint": "^10.15.0",
     "globals": "^17.14.0",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
     "jest-webextension-mock": "^4.2.0",
     "playwright-webextext": "^0.0.5",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "tslib": "^2.9.1"
   },
   "engines": {
