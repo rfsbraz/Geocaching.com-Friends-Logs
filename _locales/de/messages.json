@@ -4,7 +4,7 @@
     "description": "Extension name. Keep the brand name as is."
   },
   "extDescription": {
-    "message": "Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein Durchsuchen des Logbuchs mehr.",
+    "message": "Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com, auch Funde älter als die letzten 7 Tage.",
     "description": "Store summary and extension description. 132 characters or fewer."
   },
   "ratingPromptText": {
