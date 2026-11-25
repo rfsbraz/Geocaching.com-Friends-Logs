@@ -4,7 +4,7 @@
     "description": "Extension name. Keep the brand name as is."
   },
   "extDescription": {
-    "message": "Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.",
+    "message": "Les logs de vos amis en haut de chaque page de cache sur Geocaching.com, y compris les visites de plus de 7 jours.",
     "description": "Store summary and extension description. 132 characters or fewer."
   },
   "ratingPromptText": {

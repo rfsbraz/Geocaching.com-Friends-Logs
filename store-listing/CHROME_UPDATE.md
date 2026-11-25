@@ -11,9 +11,9 @@ Dashboard: https://chrome.google.com/webstore/devconsole , pick the extension, t
 Chrome does not let you edit these in the dashboard. They come from `manifest.json`:
 
 - `name`: `Geocaching.com Friends Logs`
-- `description` (max 132 characters, this one is 112):
+- `description` (max 132 characters, this one is 113):
 
-  > See friends' geocaching logs first, highlight your own finds and choose how many logs to show on Geocaching.com.
+  > See your friends' logs at the top of every Geocaching.com cache page, including finds older than the last 7 days.
 
 These change only after a new version with the updated manifest is uploaded and approved. The manifest change is being done in a separate PR.
 
@@ -81,7 +81,7 @@ Full texts are also in `locales/<lang>.json`. None of them have been checked by 
 
 Summary (only used if the package has `_locales/nl/messages.json`):
 
-> Zie de logs van je vrienden bovenaan elke cachepagina op Geocaching.com. Nooit meer het logboek doorzoeken om ze te vinden.
+> Zie de logs van je vrienden bovenaan elke cachepagina op Geocaching.com, ook vondsten ouder dan de laatste 7 dagen.
 
 Description:
 
@@ -118,7 +118,7 @@ Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
 
 Summary (only used if the package has `_locales/de/messages.json`):
 
-> Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com. Kein Durchsuchen des Logbuchs mehr.
+> Sieh die Logs deiner Freunde ganz oben auf jeder Cache-Seite von Geocaching.com, auch Funde älter als die letzten 7 Tage.
 
 Description:
 
@@ -155,7 +155,7 @@ Open Source: github.com/rfsbraz/Geocaching.com-Friends-Logs
 
 Summary (only used if the package has `_locales/cs/messages.json`):
 
-> Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com. Už je nemusíte hledat v logbooku.
+> Logy přátel uvidíte hned nahoře na každé stránce keše na Geocaching.com, včetně nálezů starších než posledních 7 dní.
 
 Description:
 
@@ -192,7 +192,7 @@ Open source: github.com/rfsbraz/Geocaching.com-Friends-Logs
 
 Summary (only used if the package has `_locales/fr/messages.json`):
 
-> Les logs de vos amis en haut de chaque page de cache sur Geocaching.com. Plus besoin de fouiller le logbook pour les trouver.
+> Les logs de vos amis en haut de chaque page de cache sur Geocaching.com, y compris les visites de plus de 7 jours.
 
 Description:
 
@@ -229,7 +229,7 @@ Open source : github.com/rfsbraz/Geocaching.com-Friends-Logs
 
 Summary (only used if the package has `_locales/sv/messages.json`):
 
-> Se dina vänners loggar högst upp på varje cachesida på Geocaching.com. Slipp leta igenom loggboken för att hitta dem.
+> Se dina vänners loggar högst upp på varje cachesida på Geocaching.com, även fynd äldre än de senaste 7 dagarna.
 
 Description:
 
