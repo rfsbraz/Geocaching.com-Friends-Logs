@@ -11,9 +11,9 @@ Dashboard: https://chrome.google.com/webstore/devconsole , pick the extension, t
 Chrome does not let you edit these in the dashboard. They come from `manifest.json`:
 
 - `name`: `Geocaching.com Friends Logs`
-- `description` (max 132 characters, this one is 112):
+- `description` (max 132 characters, this one is 113):
 
-  > See friends' geocaching logs first, highlight your own finds and choose how many logs to show on Geocaching.com.
+  > See your friends' logs at the top of every Geocaching.com cache page, including finds older than the last 7 days.
 
 These change only after a new version with the updated manifest is uploaded and approved. The manifest change is being done in a separate PR.
 
