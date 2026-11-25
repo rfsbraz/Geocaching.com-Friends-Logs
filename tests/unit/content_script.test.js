@@ -122,5 +122,51 @@ describe('content_script.js', () => {
       // Storage should be read again (the old element was removed and re-injection requested)
       expect(chrome.storage.local.get.mock.calls.length).toBeGreaterThanOrEqual(2);
     });
+
+    function restoreFromBfcache() {
+      const event = new Event('pageshow');
+      Object.defineProperty(event, 'persisted', { value: true });
+      window.dispatchEvent(event);
+    }
+
+    function injectOnce() {
+      chrome.runtime.getURL.mockReturnValue('chrome-extension://test/inject.js');
+      doInject();
+      const cb = chrome.storage.local.get.mock.calls.at(-1)[1];
+      cb({ showFriendsLogs: true, showMyLogs: true, limit: 5 });
+    }
+
+    test('keeps preserved content as it is: no second script and no storage read (#53)', () => {
+      injectOnce();
+      // inject.js rendered its sections before the page went into bfcache.
+      document.body.insertAdjacentHTML(
+        'beforeend',
+        '<table class="gcfl-table"><tbody class="gcfl-header gcfl-friends-header"><tr><td>1 Friend Log</td></tr></tbody></table>'
+      );
+      const script = document.getElementById('inject');
+      const reads = chrome.storage.local.get.mock.calls.length;
+
+      restoreFromBfcache();
+
+      expect(chrome.storage.local.get.mock.calls.length).toBe(reads);
+      expect(document.querySelectorAll('script#inject')).toHaveLength(1);
+      expect(document.getElementById('inject')).toBe(script);
+      expect(document.querySelectorAll('.gcfl-header')).toHaveLength(1);
+    });
+
+    test('restores lost content with exactly one fresh script (#53)', () => {
+      injectOnce();
+      const stale = document.getElementById('inject');
+
+      restoreFromBfcache();
+      const cb = chrome.storage.local.get.mock.calls.at(-1)[1];
+      cb({ showFriendsLogs: true, showMyLogs: true, limit: 5 });
+
+      const scripts = document.querySelectorAll('script#inject');
+      expect(scripts).toHaveLength(1);
+      expect(scripts[0]).not.toBe(stale);
+      expect(scripts[0].getAttribute('showMyLogs')).toBe('true');
+      expect(scripts[0].getAttribute('showFriendsLogs')).toBe('true');
+    });
   });
 });

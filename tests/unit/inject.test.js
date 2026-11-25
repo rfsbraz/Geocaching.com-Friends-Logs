@@ -1019,3 +1019,132 @@ describe('inject.js', () => {
     });
   });
 });
+
+/**
+ * #53: the logged-in user's own log and friends' logs land only in their own sections. The logbook
+ * endpoint is mocked like the site answers it: sf=true returns friends' logs and sp=true returns the
+ * user's own logs, never both. Each row is attributed to the header above it in our table.
+ */
+describe('own and friends sections stay apart (#53)', () => {
+  const OWN = [{ LogID: 900, UserName: 'MeTheCacher', LogText: 'my find' }];
+  const FRIENDS = [
+    { LogID: 101, UserName: 'FriendAda', LogText: 'tftc' },
+    { LogID: 102, UserName: 'FriendBea', LogText: 'dnf' },
+    { LogID: 103, UserName: 'FriendCid', LogText: 'note' }
+  ];
+
+  let calls;
+
+  beforeEach(() => {
+    const jq = setupJQuery();
+    global.$ = jq.$;
+    global.userToken = 'test-token-123';
+    global.decryptLogs = false;
+    calls = [];
+    // Answers synchronously, like a cached response, so the second request runs right after the first.
+    global.$.getJSON = jest.fn((_url, params) => {
+      calls.push({ sp: params.sp, sf: params.sf });
+      const data = params.sf === 'true' ? FRIENDS : params.sp === 'true' ? OWN : [];
+      return {
+        done(cb) {
+          cb({ status: 'success', pageInfo: { rows: data.length }, data });
+          return this;
+        },
+        fail() {
+          return this;
+        }
+      };
+    });
+    document.body.innerHTML =
+      '<table id="cache_logs_table"><tbody><tr><td>Existing log</td></tr></tbody></table>';
+  });
+
+  afterEach(() => {
+    delete global.$;
+    delete global.userToken;
+    delete global.decryptLogs;
+    jest.restoreAllMocks();
+  });
+
+  /** Section header class -> user names of the log rows under it, in page order. */
+  function sections() {
+    const out = {};
+    let current = null;
+    const own = document.querySelector('table.gcfl-table');
+    for (const row of own.querySelectorAll('tr, tbody.log-row')) {
+      const header = ['gcfl-friends-header', 'gcfl-my-header', 'gcfl-logbook-header'].find(c =>
+        row.closest('tbody').classList.contains(c)
+      );
+      if (header && row.tagName === 'TR') {
+        current = header;
+        out[current] = out[current] || [];
+        continue;
+      }
+      if (row.classList.contains('log-row')) {
+        out[current].push(row.textContent.split(' - ')[0]);
+      }
+    }
+    return out;
+  }
+
+  test('both sections: friends only under Friends Logs, the own log only under My Log', () => {
+    loadLogbookPage(0, 'true', 'true', 10);
+
+    expect(calls).toEqual([
+      { sp: 'false', sf: 'true' },
+      { sp: 'true', sf: 'false' }
+    ]);
+    expect(sections()).toEqual({
+      'gcfl-friends-header': ['FriendAda', 'FriendBea', 'FriendCid'],
+      'gcfl-my-header': ['MeTheCacher'],
+      'gcfl-logbook-header': []
+    });
+    expect([...document.querySelectorAll('.gcfl-my-log')].map(r => r.textContent)).toEqual([
+      'MeTheCacher - my find'
+    ]);
+    expect(document.querySelectorAll('.gcfl-friends-log')).toHaveLength(3);
+    expect(document.querySelectorAll('.gcfl-friends-log.gcfl-my-log')).toHaveLength(0);
+  });
+
+  test('My Log only: the own log, no friends section', () => {
+    loadLogbookPage(0, 'true', 'false', 10);
+
+    expect(calls).toEqual([{ sp: 'true', sf: 'false' }]);
+    expect(sections()).toEqual({ 'gcfl-my-header': ['MeTheCacher'], 'gcfl-logbook-header': [] });
+  });
+
+  test('Friends Logs only: friends, no My Log section', () => {
+    loadLogbookPage(0, 'false', 'true', 10);
+
+    expect(calls).toEqual([{ sp: 'false', sf: 'true' }]);
+    expect(sections()).toEqual({
+      'gcfl-friends-header': ['FriendAda', 'FriendBea', 'FriendCid'],
+      'gcfl-logbook-header': []
+    });
+  });
+
+  test('a second inject.js run over a page that kept our content (Firefox bfcache) adds nothing', () => {
+    loadLogbookPage(0, 'true', 'true', 10);
+    const before = document.querySelector('table.gcfl-table').outerHTML;
+    const script = document.createElement('script');
+    script.id = 'inject';
+    script.setAttribute('showMyLogs', 'true');
+    script.setAttribute('showFriendsLogs', 'true');
+    script.setAttribute('limit', '10');
+    document.body.appendChild(script);
+    calls = [];
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    // Exercise the DOM guard on its own, as when the window flag did not survive but our content did.
+    const flag = window.__gcflExecuted;
+    delete window.__gcflExecuted;
+
+    // As the browser runs it: no CommonJS module, so the script auto-executes past its guards.
+    const source = require('fs').readFileSync(require.resolve('../../inject'), 'utf8');
+    new Function(source)();
+    window.__gcflExecuted = flag;
+
+    expect(calls).toEqual([]);
+    expect(document.querySelectorAll('table.gcfl-table')).toHaveLength(1);
+    expect(document.querySelector('table.gcfl-table').outerHTML).toBe(before);
+  });
+});
